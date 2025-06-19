@@ -1,0 +1,45 @@
+.projectList {
+    background-color: var(--color-background-lighter);
+    border-radius: var(--radius-m);
+    list-style-type: none;
+    padding: var(--spacing-l);
+    width: 100%;
+}
+
+.listItem, .listHeader{
+    display: flex;
+    flex-direction: row;
+    padding: var(--spacing-s);
+    margin: var(--spacing-m);
+}
+
+.listItem {
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-m);
+    background-color: var(--color-background);
+}
+
+.listHeader {
+    font-weight: bold;
+}
+
+.listItem p, .listHeader p {
+    width: 20%;
+    text-align: left;
+    margin-right: var(--spacing-s);
+    display: flex;
+    align-items: center;
+}
+
+.projectActions {
+    width: 40%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+}
+
+.projectActions button, .projectActions a {
+    width: 45%;
+}

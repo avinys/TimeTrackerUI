@@ -1,0 +1,72 @@
+@import './variables.css';
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-dark);
+  font-family: var(--font-family);
+  text-align: center;
+  font-size: var(--fs-m); 
+}
+
+.page-title  {
+  margin-bottom: var(--spacing-m);
+  text-align:center;
+}
+
+.container {
+  margin: var(--spacing-l) auto;
+  max-width: 1440px;
+}
+
+.btn {
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  padding: var(--spacing-s);
+  border: 1px solid var(--color-secondary-hover);
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-m);
+}
+
+.btn:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-dark);
+}
+
+.btn-alt {
+  background-color: var(--color-secondary);
+  color: var(--color-text-light);
+  padding: var(--spacing-s);
+  border: 1px solid var(--color-secondary-hover);
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: var(--radius-m);
+}
+
+.btn-alt:hover {
+  background-color: var(--color-secondary-hover);
+  color: var(--color-text-dark);
+}
+
+.actions-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  box-sizing: border-box;
+  margin-left: var(--spacing-l);
+  margin-right: var(--spacing-l);
+}
+
+.actions-container a {
+  width: 45%;
+  padding: var(--spacing-m);
+  font-size: var(--fs-m);
+}
