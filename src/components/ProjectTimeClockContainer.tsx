@@ -1,0 +1,60 @@
+import { differenceInSeconds } from "date-fns";
+import { useProjectTimes } from "../context/ProjectTimesContext";
+import { ProjectTimeService } from "../services/ProjectTimeService";
+import type { ProjectTimeDto } from "../types/projectTime.types";
+import ProjectTimeClock from "./ProjectTimeClock";
+import ProjectTimeClockActions from "./ProjectTimeClockActions";
+
+type ProjectTimeContainerProps = {
+	projectId: number;
+};
+
+export default function ProjectTimeClockContainer({
+	projectId,
+}: ProjectTimeContainerProps) {
+	const { projectTimes, setProjectTimes } = useProjectTimes();
+	const lastTime = projectTimes[projectTimes.length - 1] || null;
+	const startedTime = lastTime && lastTime.endTime ? null : lastTime;
+	const elapsedTime =
+		startedTime && !startedTime.endTime
+			? differenceInSeconds(new Date(), startedTime.startTime)
+			: 0;
+
+	const handleStart = async () => {
+		const newProjectTime = await ProjectTimeService.createProjectTime({
+			projectId,
+		});
+		setProjectTimes([...projectTimes, newProjectTime]);
+	};
+
+	const handleStop = async () => {
+		if (!lastTime) {
+			return;
+		}
+
+		const updatedProjectTime: ProjectTimeDto =
+			await ProjectTimeService.updateProjectTime({
+				projectTimeId: lastTime.id,
+				startTime: new Date(lastTime.startTime).toISOString(),
+			});
+
+		setProjectTimes(
+			projectTimes.map((pt) =>
+				pt.id === updatedProjectTime.id ? updatedProjectTime : pt
+			)
+		);
+	};
+
+	return (
+		<div>
+			<ProjectTimeClock
+				startedTime={startedTime}
+				elapsedTime={elapsedTime}
+			/>
+			<ProjectTimeClockActions
+				handleStart={handleStart}
+				handleStop={handleStop}
+			/>
+		</div>
+	);
+}
