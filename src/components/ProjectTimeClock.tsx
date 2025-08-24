@@ -1,23 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "../styles/projectTimeClock.module.css";
-import type { ProjectTimeDto } from "../types/projectTime.types";
 import { formatTime } from "../util/formatTime";
 
 type ProjectTimeClockProps = {
-	startedTime: ProjectTimeDto | null;
+	isOngoing: boolean;
 	elapsedTime: number;
 };
 
 export default function ProjectTimeClock({
-	startedTime,
+	isOngoing,
 	elapsedTime,
 }: ProjectTimeClockProps) {
 	const [elapsed, setElapsed] = useState(elapsedTime);
 	const intervalRef = useRef<number | null>(null);
-
-	const start = startedTime ? startedTime.startTime : null;
-	const end = startedTime?.endTime ? startedTime.endTime : null;
-	const isOngoing = start && !end;
 
 	useEffect(() => {
 		if (elapsedTime) setElapsed(elapsedTime);

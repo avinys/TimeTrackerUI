@@ -20,7 +20,13 @@ export default function ProjectTimeClockContainer({
 			? differenceInSeconds(new Date(), startedTime.startTime)
 			: 0;
 
+	const start = startedTime ? startedTime.startTime : null;
+	const end = startedTime?.endTime ? startedTime.endTime : null;
+	const isOngoing = !!start && !end;
+
 	const handleStart = async () => {
+		if (isOngoing) return;
+
 		const newProjectTime = await ProjectTimeService.createProjectTime({
 			projectId,
 		});
@@ -28,7 +34,7 @@ export default function ProjectTimeClockContainer({
 	};
 
 	const handleStop = async () => {
-		if (!lastTime) {
+		if (!isOngoing || !lastTime) {
 			return;
 		}
 
@@ -47,11 +53,9 @@ export default function ProjectTimeClockContainer({
 
 	return (
 		<div>
-			<ProjectTimeClock
-				startedTime={startedTime}
-				elapsedTime={elapsedTime}
-			/>
+			<ProjectTimeClock isOngoing={isOngoing} elapsedTime={elapsedTime} />
 			<ProjectTimeClockActions
+				isOngoing={isOngoing}
 				handleStart={handleStart}
 				handleStop={handleStop}
 			/>
