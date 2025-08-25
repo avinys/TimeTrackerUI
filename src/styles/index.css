@@ -34,6 +34,7 @@ body {
 	text-decoration: none;
 	cursor: pointer;
 	border-radius: var(--radius-m);
+	transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
 .btn:hover {
@@ -49,6 +50,7 @@ body {
 	text-decoration: none;
 	cursor: pointer;
 	border-radius: var(--radius-m);
+	transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 }
 
 .btn-alt:hover {
