@@ -9,6 +9,7 @@ import type { HourlyTimeEntry, SelectedDateRange } from "../types/summary.types"
 import { formatDate } from "../util/formatTime";
 import { filterHourlyEntries, filterProjectTimes, groupTimes } from "../util/getWeeksInMonth";
 import styles from "../styles/summary.module.css";
+import ProjectTimeList from "../components/ProjectTimeList";
 
 export default function SummaryPage() {
 	const [selectedRange, setSelectedRange] = useState<SelectedDateRange>();
@@ -90,14 +91,11 @@ export default function SummaryPage() {
 					the selected range.
 				</p>
 			)}
-			<ul>
-				{selectedProjectTimes?.map((p) => (
-					<li key={p.id}>
-						{p.id} --- {formatDate(p.startTime)} ---{" "}
-						{formatDate(p.endTime ? p.endTime : "")}
-					</li>
-				))}
-			</ul>
+			{selectedProjectTimes.length > 0 && (
+				<div className={styles.listContainer}>
+					<ProjectTimeList rows={selectedProjectTimes} />
+				</div>
+			)}
 		</div>
 	);
 }
