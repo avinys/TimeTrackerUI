@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import DateRangeSelector from "../components/DateRangeSelector";
+import ProjectTimeList from "../components/ProjectTimeList";
 import SummaryGraph from "../components/SummaryGraph";
 import { ProjectService } from "../services/ProjectService";
 import { ProjectTimeService } from "../services/ProjectTimeService";
+import styles from "../styles/summary.module.css";
 import type { ProjectDto } from "../types/project.types";
 import type { ProjectTimeDto } from "../types/projectTime.types";
 import type { HourlyTimeEntry, SelectedDateRange } from "../types/summary.types";
-import { formatDate } from "../util/formatTime";
 import { filterHourlyEntries, filterProjectTimes, groupTimes } from "../util/getWeeksInMonth";
-import styles from "../styles/summary.module.css";
-import ProjectTimeList from "../components/ProjectTimeList";
 
 export default function SummaryPage() {
 	const [selectedRange, setSelectedRange] = useState<SelectedDateRange>();

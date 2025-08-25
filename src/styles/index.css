@@ -35,6 +35,8 @@ body {
 	cursor: pointer;
 	border-radius: var(--radius-m);
 	transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+
+	box-shadow: var(--shadow-m);
 }
 
 .btn:hover {
@@ -51,6 +53,8 @@ body {
 	cursor: pointer;
 	border-radius: var(--radius-m);
 	transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
+
+	box-shadow: var(--shadow-m);
 }
 
 .btn-alt:hover {

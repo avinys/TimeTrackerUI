@@ -4,6 +4,7 @@ import type { LoginDto } from "../types/auth.types";
 import { AuthService } from "../services/AuthService";
 import { useAuth } from "../auth/AuthContext";
 import styles from "../styles/form.module.css";
+import clsx from "clsx";
 
 export default function LoginPage() {
 	const { setUser } = useAuth();
@@ -27,7 +28,7 @@ export default function LoginPage() {
 			const user = await AuthService.login(form);
 			setUser(user);
 			navigate("/dashboard");
-		} catch (err) {
+		} catch {
 			setError("Invalid login credentials.");
 		}
 	};
@@ -59,7 +60,7 @@ export default function LoginPage() {
 					/>
 				</div>
 				{error && <p className="error-message">{error}</p>}
-				<button type="submit" className={styles.submitButton}>
+				<button type="submit" className={clsx("btn", styles.submitButton)}>
 					Log In
 				</button>
 			</form>

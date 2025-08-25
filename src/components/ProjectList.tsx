@@ -28,12 +28,7 @@ export default function ProjectList() {
 				{projects.map((p) => (
 					<li key={p.id} className={styles.listItem}>
 						<p>{p.name}</p>
-						<p>
-							{format(
-								new Date(p.createdAt),
-								"yyyy:MM:dd HH:mm:ss"
-							)}
-						</p>
+						<p>{format(new Date(p.createdAt), "yyyy-MM-dd HH:mm:ss")}</p>
 						<p>Last Work</p>
 						<div className={styles.projectActions}>
 							<Link to={`/project-time/${p.id}`} className="btn">
