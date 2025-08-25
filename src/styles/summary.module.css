@@ -25,13 +25,6 @@
 	justify-content: center;
 }
 
-.graphContainer {
-	width: 100%;
-	margin: 0 auto;
-	display: flex;
-	justify-content: center;
-}
-
 .selectTitle {
 	margin-bottom: var(--spacing-m);
 }
@@ -43,4 +36,39 @@
 	margin-top: var(--spacing-l);
 	border: 2px solid var(--color-primary);
 	border-radius: 8px;
+}
+
+.summaryGrid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-m);
+	align-items: stretch;
+	width: 80%;
+	min-width: 60rem;
+	margin: 0 auto;
+}
+
+.metricsContainer {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.chartWrap,
+.totalsWrap {
+	flex: 1;
+	padding: var(--spacing-m);
+	border-radius: var(--radius-m);
+	background: var(--surface, #fff);
+}
+
+.chartWrap {
+	min-height: 15rem;
+	height: 100%;
+}
+
+.totalsWrap {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: var(--spacing-s);
 }
