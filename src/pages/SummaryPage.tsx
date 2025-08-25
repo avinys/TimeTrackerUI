@@ -9,6 +9,7 @@ import type { ProjectDto } from "../types/project.types";
 import type { ProjectTimeDto } from "../types/projectTime.types";
 import type { HourlyTimeEntry, SelectedDateRange } from "../types/summary.types";
 import { filterHourlyEntries, filterProjectTimes, groupTimes } from "../util/getWeeksInMonth";
+import SummaryTotals from "../components/SummaryTotals";
 
 export default function SummaryPage() {
 	const [selectedRange, setSelectedRange] = useState<SelectedDateRange>();
@@ -76,14 +77,21 @@ export default function SummaryPage() {
 					setSelectedRange={setSelectedRange}
 				/>
 			</div>
-			{currentProject && selectedRange && selectedHourlyEntries.length > 0 && (
-				<div className={styles.graphContainer}>
-					<SummaryGraph
+			<div className={styles.summaryGrid}>
+				<div className={styles.totalsWrap}>
+					<SummaryTotals
 						selectedHourlyEntries={selectedHourlyEntries}
-						selectedDateRange={selectedRange}
+						selectedDateRange={selectedRange ?? null}
 					/>
 				</div>
-			)}
+
+				<div className={styles.chartWrap}>
+					<SummaryGraph
+						selectedHourlyEntries={selectedHourlyEntries}
+						selectedDateRange={selectedRange ?? null}
+					/>
+				</div>
+			</div>
 			{selectedProjectTimes.length == 0 && selectedRange && currentProject && (
 				<p>
 					No recorded times found for the selected project - "{currentProject?.name}", in
