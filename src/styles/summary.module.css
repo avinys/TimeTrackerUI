@@ -1,0 +1,37 @@
+.inputContainer {
+	width: 60%;
+	min-width: 40rem;
+	margin: 0 auto var(--spacing-l) auto;
+	background-color: var(--color-background-lighter);
+	border: 2px solid var(--color-primary);
+	border-radius: 8px;
+	padding: var(--spacing-l);
+}
+
+.inputElement {
+	width: 15rem;
+	height: 2rem;
+	border: 1px solid var(--color-primary);
+	border-radius: 4px;
+	font-size: var(--fs-m);
+	text-align: center;
+	margin-bottom: var(--spacing-m);
+}
+
+.dateRangeSelector {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.graphContainer {
+	width: 100%;
+	margin: 0 auto;
+	display: flex;
+	justify-content: center;
+}
+
+.selectTitle {
+	margin-bottom: var(--spacing-m);
+}

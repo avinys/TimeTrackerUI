@@ -1,130 +1,103 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../auth/AuthContext';
-// import { useSummary } from '../context/SummaryContext';
-import { ProjectService } from '../services/ProjectService';
-import type { ProjectDto } from '../types/project.types';
-import type { ProjectTimeDto } from '../types/projectTime.types';
-import type { HourlyTimeEntry, SelectedDateRange } from '../types/summary.types';
-import DateRangeSelector from '../components/DateRangeSelector';
-import SummaryGraph from '../components/SummaryGraph';
-import { formatDate } from '../util/formatTime';
-import { eachDayOfInterval, startOfDay, endOfDay, format } from "date-fns";
-import { ProjectTimeService } from '../services/ProjectTimeService';
-
-function groupTimes(projectTimes: ProjectTimeDto[]): HourlyTimeEntry[] {
-    const hourlyMap = new Map<string, number>(); // key: `${date}-${hour}`
-
-    for (const time of projectTimes) {
-        const start = new Date(time.startTime);
-        const end = new Date(time.endTime);
-
-        // Get each calendar day between start and end
-        const days = eachDayOfInterval({
-            start: startOfDay(start),
-            end: endOfDay(end),
-        });
-
-        for (const day of days) {
-            const dateStr = format(day, "yyyy-MM-dd");
-            const dayStart = new Date(`${dateStr}T00:00:00`);
-            const dayEnd = new Date(`${dateStr}T23:59:59.999`);
-
-            const clampedStart = start < dayStart ? dayStart : start;
-            const clampedEnd = end > dayEnd ? dayEnd : end;
-
-            for (let hour = 0; hour < 24; hour++) {
-                const hourStart = new Date(`${dateStr}T${String(hour).padStart(2, "0")}:00:00`);
-                const hourEnd = new Date(`${dateStr}T${String(hour + 1).padStart(2, "0")}:00:00`);
-
-                const overlapStart = clampedStart > hourStart ? clampedStart : hourStart;
-                const overlapEnd = clampedEnd < hourEnd ? clampedEnd : hourEnd;
-
-                const overlap = (overlapEnd.getTime() - overlapStart.getTime()) / (1000 * 60 * 60);
-
-                if (overlap > 0) {
-                    const key = `${dateStr}*${hour}`;
-                    hourlyMap.set(key, (hourlyMap.get(key) ?? 0) + overlap);
-                }
-            }
-        }
-    }
-
-    // Convert map to array
-    const result: HourlyTimeEntry[] = Array.from(hourlyMap.entries()).map(([key, duration]) => {
-        const [date, hourStr] = key.split("*");
-        duration = parseFloat((duration).toFixed(4))
-        return {
-            date,
-            hour: parseInt(hourStr, 10),
-            duration
-        };
-    });
-
-    return result;
-}
+import { useEffect, useState } from "react";
+import DateRangeSelector from "../components/DateRangeSelector";
+import SummaryGraph from "../components/SummaryGraph";
+import { ProjectService } from "../services/ProjectService";
+import { ProjectTimeService } from "../services/ProjectTimeService";
+import type { ProjectDto } from "../types/project.types";
+import type { ProjectTimeDto } from "../types/projectTime.types";
+import type { HourlyTimeEntry, SelectedDateRange } from "../types/summary.types";
+import { formatDate } from "../util/formatTime";
+import { filterHourlyEntries, filterProjectTimes, groupTimes } from "../util/getWeeksInMonth";
+import styles from "../styles/summary.module.css";
 
 export default function SummaryPage() {
-    const [selectedRange, setSelectedRange] = useState<SelectedDateRange | null>(null);
+	const [selectedRange, setSelectedRange] = useState<SelectedDateRange>();
+	const [projects, setProjects] = useState<ProjectDto[]>([]);
+	const [currentProject, setCurrentProject] = useState<ProjectDto>();
+	const [selectedHourlyEntries, setSelectedHourlyEntries] = useState<HourlyTimeEntry[]>([]);
+	const [selectedProjectTimes, setSelectedProjectTimes] = useState<ProjectTimeDto[]>([]);
 
-    const { user } = useAuth();
-    // const { getProjectTimes } = useSummary();
-    const [projects, setProjects] = useState<ProjectDto[]>([]);
-    const [currentProject, setCurrentProject] = useState<ProjectDto | undefined>(undefined);
-    const [projectTimes, setProjectTimes] = useState<ProjectTimeDto[]>([]);
-    const [groupedProjectTimes, setGroupedProjectTimes] = useState<HourlyTimeEntry[]>([]);
+	useEffect(() => {
+		const fetchProjects = async () => {
+			const userProjects = await ProjectService.getUserProjects();
+			setProjects(userProjects);
+		};
+		fetchProjects();
+	}, []);
 
-    useEffect(() => {
-        if(user) {
-            ProjectService.getUserProjects().then(setProjects);
-        }
-    }, [user]);
+	useEffect(() => {
+		const fetchProjectTimes = async () => {
+			if (selectedRange !== undefined && currentProject !== undefined) {
+				const projectTimes = await ProjectTimeService.getProjectTimes(currentProject.id);
+				const grouped = groupTimes(projectTimes);
+				const filteredProjectTimes = filterProjectTimes(projectTimes, selectedRange);
+				const filteredHourlyEntries = filterHourlyEntries(grouped, selectedRange);
 
-    useEffect(() => {
-        const loadTimes = async () => {
-            if (currentProject) {
-                const data = await ProjectTimeService.getProjectTimes(currentProject.id);
-                setProjectTimes(data);
-            }
-        }
-        loadTimes();
-        setGroupedProjectTimes([]);
-    }, [currentProject])
+				setSelectedProjectTimes(filteredProjectTimes);
+				setSelectedHourlyEntries(filteredHourlyEntries);
+			} else {
+				setSelectedProjectTimes([]);
+			}
+		};
+		fetchProjectTimes();
+	}, [selectedRange, currentProject, setSelectedProjectTimes]);
 
-    useEffect(() => {
-        if (selectedRange) {
-            const groupedTimes = groupTimes(projectTimes);
-            setGroupedProjectTimes(groupedTimes);
-        }
-    }, [selectedRange]);
+	const handleProjectSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const selectedId = e.target.value;
+		const selectedProject = projects.find((p) => p.id === parseInt(selectedId));
+		setCurrentProject(selectedProject);
+	};
 
-    const handleProjectSelection = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedId = e.target.value;
-        const selectedProject = projects.find(p => p.id === parseInt(selectedId));
-        setCurrentProject(selectedProject);
-    }
-
-    return (
-        <div className="container">
-            <h2>Selected project: {currentProject?.name}</h2>
-            <select value={currentProject ? currentProject.id : ''} onChange={handleProjectSelection} >
-                <option value="" disabled hidden>-- select a project --</option>
-                {projects.map((p) => (
-                    <option value={p.id} key={p.id}>{p.name}</option>
-                ))}
-            </select>
-
-            <DateRangeSelector value={selectedRange} onChange={setSelectedRange} />
-            {currentProject && selectedRange && (
-                <SummaryGraph hourlyGroupedProjectTimes={groupedProjectTimes} selectedDateRange={selectedRange}/>
-            )}
-            {projectTimes.length == 0 && currentProject &&(
-                <p>No recorded times found for the selected project: {currentProject?.name}</p>
-            )}
-            <ul>
-                {projectTimes.map((p) => (
-                    <li key={p.id}>{p.id} --- {formatDate(p.startTime)} --- {formatDate(p.endTime)}</li>
-                ))}
-            </ul>
-        </div>
-    )
+	return (
+		<div className="container">
+			<div className={styles.inputContainer}>
+				<h2 className={styles.selectTitle}>
+					{currentProject
+						? `Selected project: ${currentProject?.name}`
+						: "Select a project"}
+				</h2>
+				<select
+					className={styles.inputElement}
+					value={currentProject ? currentProject.id : ""}
+					onChange={handleProjectSelection}
+				>
+					<option value="" disabled hidden>
+						-- select a project --
+					</option>
+					{projects.map((p) => (
+						<option value={p.id} key={p.id}>
+							{p.name}
+						</option>
+					))}
+				</select>
+				<h2 className={styles.selectTitle}>Select a time range:</h2>
+				<DateRangeSelector
+					selectedRange={selectedRange}
+					setSelectedRange={setSelectedRange}
+				/>
+			</div>
+			{currentProject && selectedRange && selectedHourlyEntries.length > 0 && (
+				<div className={styles.graphContainer}>
+					<SummaryGraph
+						selectedHourlyEntries={selectedHourlyEntries}
+						selectedDateRange={selectedRange}
+					/>
+				</div>
+			)}
+			{selectedProjectTimes.length == 0 && selectedRange && currentProject && (
+				<p>
+					No recorded times found for the selected project - "{currentProject?.name}", in
+					the selected range.
+				</p>
+			)}
+			<ul>
+				{selectedProjectTimes?.map((p) => (
+					<li key={p.id}>
+						{p.id} --- {formatDate(p.startTime)} ---{" "}
+						{formatDate(p.endTime ? p.endTime : "")}
+					</li>
+				))}
+			</ul>
+		</div>
+	);
 }

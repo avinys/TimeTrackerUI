@@ -1,24 +1,48 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { getWeeksInMonth } from "../util/getWeeksInMonth";
+import React, { useEffect, useMemo, useState } from "react";
 import type { SelectedDateRange } from "../types/summary.types";
+import { getWeeksInMonth } from "../util/getWeeksInMonth";
+import styles from "../styles/summary.module.css";
 
-type RangeType = "daily" | "weekly" | "monthly" | "yearly" | "custom";
+type RangeType = "" | "daily" | "weekly" | "monthly" | "yearly" | "custom";
 
 interface DateRangeSelectorProps {
-	value: SelectedDateRange | null;
-	onChange: (range: SelectedDateRange | null) => void;
+	selectedRange: SelectedDateRange | undefined;
+	setSelectedRange: (range: SelectedDateRange | undefined) => void;
 }
 
 const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
-	value,
-	onChange,
+	selectedRange,
+	setSelectedRange,
 }) => {
-	const [rangeType, setRangeType] = useState<RangeType>("monthly");
+	const [rangeType, setRangeType] = useState<RangeType>("");
 
-	const year = value && "year" in value ? value.year : null;
-	const month = value && "month" in value ? value.month : null;
-	const day = value && "day" in value ? value.day : null;
-	const custom = value && value.type === "custom" ? value : null;
+	const [year, setYear] = useState(
+		selectedRange && "year" in selectedRange ? selectedRange.year : null
+	);
+	const [month, setMonth] = useState(
+		selectedRange && "month" in selectedRange ? selectedRange.month : null
+	);
+	const [weekStart, setWeekStart] = useState(
+		selectedRange && "weekStart" in selectedRange ? selectedRange.weekStart : null
+	);
+	const [weekEnd, setWeekEnd] = useState(
+		selectedRange && "weekEnd" in selectedRange ? selectedRange.weekEnd : null
+	);
+	const [date, setDate] = useState(
+		selectedRange && "day" in selectedRange
+			? new Date(selectedRange.year, selectedRange.month, selectedRange.day)
+			: null
+	);
+	const [customFrom, setCustomFrom] = useState(
+		selectedRange && "fromYear" in selectedRange
+			? new Date(selectedRange.fromYear, selectedRange.fromMonth, selectedRange.fromDay)
+			: null
+	);
+	const [customTo, setCustomTo] = useState(
+		selectedRange && "toYear" in selectedRange
+			? new Date(selectedRange.toYear, selectedRange.toMonth, selectedRange.toDay)
+			: null
+	);
 
 	const today = new Date().toISOString().split("T")[0];
 
@@ -29,130 +53,134 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 		return [];
 	}, [rangeType, year, month]);
 
-	const handleRangeTypeChange = (type: RangeType) => {
-		setRangeType(type);
-		console.log("RangeType changed: ", type);
-		onChange(null); // Reset selection in parent
+	useEffect(checkSelection, [
+		year,
+		month,
+		weekStart,
+		weekEnd,
+		date,
+		customFrom,
+		customTo,
+		rangeType,
+		setSelectedRange,
+	]);
+
+	const emptyFields = () => {
+		setYear(null);
+		setMonth(null);
+		setDate(null);
+		setCustomFrom(null);
+		setCustomTo(null);
 	};
 
-	const handleYearChange = (year: number) => {
+	function checkSelection() {
 		switch (rangeType) {
 			case "yearly":
-				onChange({ type: "yearly", year });
+				if (year) setSelectedRange({ type: "yearly", year });
 				break;
 			case "monthly":
-				onChange({ type: "monthly", year, month: 0 });
+				if (year && month) setSelectedRange({ type: "monthly", year, month: month });
 				break;
 			case "weekly":
-				onChange({
-					type: "weekly",
-					year,
-					month: 0,
-					weekStart: weeks[0]?.start,
-					weekEnd: weeks[0]?.end,
-				});
+				if (year && month && weekStart && weekEnd)
+					setSelectedRange({
+						type: "weekly",
+						year,
+						month,
+						weekStart,
+						weekEnd,
+					});
 				break;
 			case "daily":
-				onChange({ type: "daily", year, month: 0, day: 1 });
+				if (date)
+					setSelectedRange({
+						type: "daily",
+						year: date.getFullYear(),
+						month: date.getMonth(),
+						day: date.getDate(),
+					});
+				break;
+			case "custom":
+				if (customFrom && customTo)
+					setSelectedRange({
+						type: "custom",
+						fromYear: customFrom.getFullYear(),
+						fromMonth: customFrom.getMonth(),
+						fromDay: customFrom.getDate(),
+						toYear: customTo.getFullYear(),
+						toMonth: customTo.getMonth(),
+						toDay: customTo.getDate(),
+					});
 				break;
 		}
+	}
+
+	const handleRangeTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const selectedType = e.target.value as RangeType;
+		setRangeType(selectedType);
+		emptyFields();
+		setSelectedRange(undefined); // Reset selection in parent
 	};
 
-	const handleMonthChange = (month: number) => {
-		if (year === null) return;
-		switch (rangeType) {
-			case "monthly":
-				onChange({ type: "monthly", year, month });
-				break;
-			case "weekly": {
-				const newWeeks = getWeeksInMonth(year, month);
-				onChange({
-					type: "weekly",
-					year,
-					month,
-					weekStart: newWeeks[0]?.start,
-					weekEnd: newWeeks[0]?.end,
-				});
-				break;
-			}
-			case "daily":
-				onChange({ type: "daily", year, month, day: 1 });
-				break;
-		}
+	const handleWeekChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const weekIndex = Number(e.target.value);
+		if (!weeks[weekIndex] || year === null || month === null) return;
+		const { start, end } = weeks[weekIndex];
+		setWeekStart(start);
+		setWeekEnd(end);
+		checkSelection();
 	};
 
-	const handleWeekChange = (index: number) => {
-		if (!weeks[index] || year === null || month === null) return;
-		const { start, end } = weeks[index];
-		onChange({
-			type: "weekly",
-			year,
-			month,
-			weekStart: start,
-			weekEnd: end,
-		});
+	const handleCustomFromChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const selectedCustomFrom = new Date(e.target.value);
+
+		if (customTo && selectedCustomFrom > customTo) setCustomTo(null);
+
+		setCustomFrom(e.target.value ? selectedCustomFrom : null);
+		checkSelection();
 	};
 
-	const handleCustomChange = (field: "from" | "to", value: string) => {
-		const updated = {
-			...custom,
-			[field]: value,
-		};
+	const handleCustomToChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const selectedCustomTo = new Date(e.target.value);
 
-		const from = updated.from ? new Date(updated.from) : null;
-		const to = updated.to ? new Date(updated.to) : null;
+		if (customFrom && selectedCustomTo < customFrom) setCustomFrom(null);
 
-		// Logic:
-		// If user updates 'from' and it's after 'to', clear 'to'
-		if (field === "from" && from && to && from > to) {
-			updated.to = "";
-		}
-
-		// If user updates 'to' and it's before 'from', clear 'from'
-		if (field === "to" && from && to && from > to) {
-			updated.from = "";
-		}
-
-		onChange({
-			type: "custom",
-			from: updated.from ?? "",
-			to: updated.to ?? "",
-		});
+		setCustomTo(e.target.value ? selectedCustomTo : null);
+		checkSelection();
 	};
 
-	console.log("DateRangeSelector.tsx: rendering");
+	const toDateInput = (d: Date) => d.toISOString().slice(0, 10);
 
 	return (
-		<div>
+		<div className={styles.dateRangeSelector}>
 			{/* Range Type */}
 			<select
+				className={styles.inputElement}
 				value={rangeType}
-				onChange={(e) =>
-					handleRangeTypeChange(e.target.value as RangeType)
-				}
+				onChange={handleRangeTypeChange}
 			>
-				<option value="">-</option>
+				<option value="" disabled>
+					--select range--
+				</option>
 				<option value="yearly">Yearly</option>
 				<option value="monthly">Monthly</option>
 				<option value="weekly">Weekly</option>
 				<option value="daily">Daily</option>
 				<option value="custom">Custom</option>
 			</select>
-
-			{custom?.from &&
-				custom?.to &&
-				new Date(custom.from) > new Date(custom.to) && (
-					<p style={{ color: "red" }}>
-						End date cannot be earlier than start date.
-					</p>
-				)}
-
+			{customFrom && customTo && new Date(customFrom) > new Date(customTo) && (
+				<p style={{ color: "red" }}>End date cannot be earlier than start date.</p>
+			)}
 			{/* Year */}
 			{["yearly", "monthly", "weekly"].includes(rangeType) && (
 				<select
+					className={styles.inputElement}
 					value={year ?? ""}
-					onChange={(e) => handleYearChange(Number(e.target.value))}
+					onChange={(e) => setYear(Number(e.target.value))}
 				>
+					<option value="" disabled>
+						--select year--
+					</option>
 					{[...Array(10)].map((_, i) => {
 						const y = new Date().getFullYear() - i;
 						return (
@@ -163,13 +191,16 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 					})}
 				</select>
 			)}
-
 			{/* Month */}
 			{["monthly", "weekly"].includes(rangeType) && year !== null && (
 				<select
+					className={styles.inputElement}
 					value={month ?? ""}
-					onChange={(e) => handleMonthChange(Number(e.target.value))}
+					onChange={(e) => setMonth(Number(e.target.value))}
 				>
+					<option value="" disabled>
+						--select month--
+					</option>
 					{Array.from({ length: 12 }, (_, i) => (
 						<option key={i} value={i}>
 							{new Date(0, i).toLocaleString("default", {
@@ -179,12 +210,9 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 					))}
 				</select>
 			)}
-
 			{/* Week */}
 			{rangeType === "weekly" && weeks.length > 0 && (
-				<select
-					onChange={(e) => handleWeekChange(Number(e.target.value))}
-				>
+				<select className={styles.inputElement} onChange={handleWeekChange}>
 					{weeks.map((week, index) => (
 						<option key={index} value={index}>
 							{week.label}
@@ -192,49 +220,30 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 					))}
 				</select>
 			)}
-
+			{/* Daily - date */}
 			{rangeType === "daily" && (
 				<input
+					className={styles.inputElement}
 					type="date"
-					value={
-						value?.type === "daily"
-							? `${value.year}-${String(value.month + 1).padStart(
-									2,
-									"0"
-							  )}-${String(value.day).padStart(2, "0")}`
-							: ""
-					}
+					value={date ? toDateInput(date) : ""}
 					max={today}
-					onChange={(e) => {
-						const date = new Date(e.target.value);
-						onChange({
-							type: "daily",
-							year: date.getFullYear(),
-							month: date.getMonth(),
-							day: date.getDate(),
-						});
-					}}
+					onChange={(e) => setDate(e.target.value ? new Date(e.target.value) : null)}
 				/>
 			)}
-
 			{/* Custom */}
 			{rangeType === "custom" && (
 				<div>
 					<input
 						type="date"
 						max={today}
-						value={custom?.from ?? ""}
-						onChange={(e) =>
-							handleCustomChange("from", e.target.value)
-						}
+						value={customFrom ? toDateInput(customFrom) : ""}
+						onChange={handleCustomFromChange}
 					/>
 					<input
 						type="date"
 						max={today}
-						value={custom?.to ?? ""}
-						onChange={(e) =>
-							handleCustomChange("to", e.target.value)
-						}
+						value={customTo ? toDateInput(customTo) : ""}
+						onChange={handleCustomToChange}
 					/>
 				</div>
 			)}
