@@ -77,21 +77,25 @@ export default function SummaryPage() {
 					setSelectedRange={setSelectedRange}
 				/>
 			</div>
-			<div className={styles.summaryGrid}>
-				<div className={styles.totalsWrap}>
-					<SummaryTotals
-						selectedHourlyEntries={selectedHourlyEntries}
-						selectedDateRange={selectedRange ?? null}
-					/>
-				</div>
+			{selectedRange && (
+				<>
+					<div className={styles.summaryGrid}>
+						<div className={styles.totalsWrap}>
+							<SummaryTotals
+								selectedHourlyEntries={selectedHourlyEntries}
+								selectedDateRange={selectedRange ?? null}
+							/>
+						</div>
 
-				<div className={styles.chartWrap}>
-					<SummaryGraph
-						selectedHourlyEntries={selectedHourlyEntries}
-						selectedDateRange={selectedRange ?? null}
-					/>
-				</div>
-			</div>
+						<div className={styles.chartWrap}>
+							<SummaryGraph
+								selectedHourlyEntries={selectedHourlyEntries}
+								selectedDateRange={selectedRange ?? null}
+							/>
+						</div>
+					</div>
+				</>
+			)}
 			{selectedProjectTimes.length == 0 && selectedRange && currentProject && (
 				<p>
 					No recorded times found for the selected project - "{currentProject?.name}", in
