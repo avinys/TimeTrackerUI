@@ -28,7 +28,7 @@ export default function RegisterPage() {
 
 			const user = await AuthService.register(form);
 			setUser(user);
-			navigate("/dashboard");
+			navigate("/login");
 		} catch {
 			setError("Registration failed. Please try again");
 		}
