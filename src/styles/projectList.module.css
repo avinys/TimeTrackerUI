@@ -30,8 +30,10 @@
 	width: 20%;
 	text-align: left;
 	margin-right: var(--spacing-s);
+	padding-right: var(--spacing-s);
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 }
 
 .projectActions {

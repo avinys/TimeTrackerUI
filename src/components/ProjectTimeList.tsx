@@ -23,6 +23,7 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 				<p>Start</p>
 				<p>End</p>
 				<p>Total time</p>
+				<p>Comment</p>
 				{renderActions && <div className={styles.projectActions}>Actions</div>}
 			</li>
 			{projectTimes.map((p) => (
@@ -33,8 +34,9 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 						<p>
 							{p.endTime
 								? formatTime(differenceInSeconds(p.endTime, p.startTime))
-								: ""}
+								: "--"}
 						</p>
+						<p>{p.comment ? p.comment : "--"}</p>
 						{renderActions ? (
 							<div className={styles.projectActions}>{renderActions} </div>
 						) : null}

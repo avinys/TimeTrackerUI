@@ -21,3 +21,23 @@ export function formatDate(input: Date | string | number): string {
 
 	return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+
+export function toLocalInputValue(value?: Date | string | null, withSeconds = false): string {
+	if (!value) return "";
+	const d = value instanceof Date ? value : new Date(value);
+	if (Number.isNaN(d.getTime())) return "";
+
+	const pad = (n: number) => String(n).padStart(2, "0");
+	const y = d.getFullYear();
+	const m = pad(d.getMonth() + 1);
+	const day = pad(d.getDate());
+	const hh = pad(d.getHours());
+	const mm = pad(d.getMinutes());
+	const ss = pad(d.getSeconds());
+
+	return withSeconds ? `${y}-${m}-${day}T${hh}:${mm}:${ss}` : `${y}-${m}-${day}T${hh}:${mm}`;
+}
+// reverse: from <input type="datetime-local"> to ISO UTC
+export function localInputToIso(localValue: string): string {
+	return new Date(localValue).toISOString();
+}
