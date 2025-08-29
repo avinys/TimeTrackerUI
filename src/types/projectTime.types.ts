@@ -4,6 +4,7 @@ export interface ProjectTimeDtoApi {
 	projectTime: number;
 	startTime: string;
 	endTime: string | null;
+	comment: string | null;
 }
 
 export interface ProjectTimeDto {
@@ -12,6 +13,7 @@ export interface ProjectTimeDto {
 	projectTime: number;
 	startTime: Date;
 	endTime: Date | null;
+	comment: string | null;
 }
 
 export interface CreateProjectTimeDto {
@@ -21,6 +23,8 @@ export interface CreateProjectTimeDto {
 export interface UpdateProjectTimeDto {
 	projectTimeId: number;
 	startTime: string;
+	endTime: Date | null;
+	comment: string | null;
 }
 
 export interface DeleteProjectTimeDto {

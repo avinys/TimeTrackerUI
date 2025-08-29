@@ -1,13 +1,16 @@
 import { differenceInSeconds, format } from "date-fns";
+import type { ReactElement } from "react";
 import { useProjectTimes } from "../context/ProjectTimesContext";
 import styles from "../styles/projectList.module.css";
-import { formatTime } from "../util/formatTime";
 import type { ProjectTimeDto } from "../types/projectTime.types";
-import type { ReactNode } from "react";
+import { formatTime } from "../util/formatTime";
+import ConfirmDeleteProjectTime from "./ConfirmDeleteProjectTime";
+import EditProjectTimeForm from "./EditProjectTimeForm";
+import Modal from "./Modal";
 
 type ProjectTimeListProps = {
 	rows?: ProjectTimeDto[];
-	renderActions?: (row: ProjectTimeDto) => ReactNode;
+	renderActions?: ReactElement;
 };
 
 export default function ProjectTimeList({ rows, renderActions }: ProjectTimeListProps) {
@@ -24,14 +27,25 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 			</li>
 			{projectTimes.map((p) => (
 				<li key={p.id} className={styles.listItem}>
-					<p>{format(p.startTime, "yyyy-MM-dd HH:mm:ss")}</p>
-					<p>{p.endTime ? format(p.endTime, "yyyy-MM-dd HH:mm:ss") : "ongoing"}</p>
-					<p>
-						{p.endTime ? formatTime(differenceInSeconds(p.endTime, p.startTime)) : ""}
-					</p>
-					{renderActions ? (
-						<div className={styles.projectActions}>{renderActions(p)} </div>
-					) : null}
+					<Modal>
+						<p>{format(p.startTime, "yyyy-MM-dd HH:mm:ss")}</p>
+						<p>{p.endTime ? format(p.endTime, "yyyy-MM-dd HH:mm:ss") : "ongoing"}</p>
+						<p>
+							{p.endTime
+								? formatTime(differenceInSeconds(p.endTime, p.startTime))
+								: ""}
+						</p>
+						{renderActions ? (
+							<div className={styles.projectActions}>{renderActions} </div>
+						) : null}
+
+						<Modal.Window name="edit">
+							<EditProjectTimeForm projectTime={p} />
+						</Modal.Window>
+						<Modal.Window name="delete">
+							<ConfirmDeleteProjectTime projectTime={p} />
+						</Modal.Window>
+					</Modal>
 				</li>
 			))}
 		</ul>

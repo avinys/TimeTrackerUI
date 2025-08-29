@@ -15,7 +15,7 @@ const toClient = (pt: ProjectTimeDtoApi): ProjectTimeDto => ({
 
 export const ProjectTimeService = {
 	async getProjectTimes(projectId: number): Promise<ProjectTimeDto[]> {
-		const response = await API.get(`ProjectTime/user-project/${projectId}`, {
+		const response = await API.get(`project-times/user-project/${projectId}`, {
 			withCredentials: true,
 		});
 		console.log("ProjectTimeService.tsx: fetching all project times: ", response.data);
@@ -24,7 +24,7 @@ export const ProjectTimeService = {
 
 	async createProjectTime(data: CreateProjectTimeDto): Promise<ProjectTimeDto> {
 		console.log("Requesting project time creation: ", data);
-		const response = await API.post("ProjectTime", data, {
+		const response = await API.post("project-times", data, {
 			withCredentials: true,
 		});
 		return toClient(response.data as ProjectTimeDtoApi);
@@ -32,7 +32,7 @@ export const ProjectTimeService = {
 
 	async updateProjectTime(data: UpdateProjectTimeDto): Promise<ProjectTimeDto> {
 		console.log("Requesting project time update", data);
-		const response = await API.put(`ProjectTime/${data.projectTimeId}`, data, {
+		const response = await API.put(`project-times/${data.projectTimeId}`, data, {
 			withCredentials: true,
 		});
 		return toClient(response.data as ProjectTimeDtoApi);
@@ -40,7 +40,7 @@ export const ProjectTimeService = {
 
 	async deleteProjectTime(data: DeleteProjectTimeDto): Promise<void> {
 		console.log("Requesting project time deletion: ", data);
-		await API.delete(`ProjectTime/${data.projectTimeId}`, {
+		await API.delete(`project-times/${data.projectTimeId}`, {
 			withCredentials: true,
 		});
 	},

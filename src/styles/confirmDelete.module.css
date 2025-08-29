@@ -1,0 +1,20 @@
+.title {
+	margin-bottom: var(--spacing-l);
+	font-size: var(--fs-xl);
+}
+
+.field {
+	font-size: var(--fs-m);
+	margin-bottom: var(--spacing-s);
+}
+
+.fieldTitle {
+	font-weight: bold;
+}
+
+.submitButton {
+	margin-top: var(--spacing-m);
+	width: 100%;
+	font-size: var(--fs-m);
+	max-width: 10rem;
+}
