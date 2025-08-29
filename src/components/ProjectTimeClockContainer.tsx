@@ -9,9 +9,7 @@ type ProjectTimeContainerProps = {
 	projectId: number;
 };
 
-export default function ProjectTimeClockContainer({
-	projectId,
-}: ProjectTimeContainerProps) {
+export default function ProjectTimeClockContainer({ projectId }: ProjectTimeContainerProps) {
 	const { projectTimes, setProjectTimes } = useProjectTimes();
 	const lastTime = projectTimes[projectTimes.length - 1] || null;
 	const startedTime = lastTime && lastTime.endTime ? null : lastTime;
@@ -38,16 +36,13 @@ export default function ProjectTimeClockContainer({
 			return;
 		}
 
-		const updatedProjectTime: ProjectTimeDto =
-			await ProjectTimeService.updateProjectTime({
-				projectTimeId: lastTime.id,
-				startTime: new Date(lastTime.startTime).toISOString(),
-			});
+		const updatedProjectTime: ProjectTimeDto = await ProjectTimeService.updateProjectTime({
+			projectTimeId: lastTime.id,
+			startTime: new Date(lastTime.startTime),
+		});
 
 		setProjectTimes(
-			projectTimes.map((pt) =>
-				pt.id === updatedProjectTime.id ? updatedProjectTime : pt
-			)
+			projectTimes.map((pt) => (pt.id === updatedProjectTime.id ? updatedProjectTime : pt))
 		);
 	};
 

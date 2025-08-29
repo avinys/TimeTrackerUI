@@ -22,9 +22,9 @@ export interface CreateProjectTimeDto {
 
 export interface UpdateProjectTimeDto {
 	projectTimeId: number;
-	startTime: string;
-	endTime: Date | null;
-	comment: string | null;
+	startTime: Date;
+	endTime?: Date | null;
+	comment?: string | null;
 }
 
 export interface DeleteProjectTimeDto {
