@@ -1,0 +1,23 @@
+.formContainer {
+	min-width: 40rem;
+	border-radius: var(--radius-m);
+	text-align: center;
+}
+
+.inputGroup {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 1rem;
+	margin: 2rem auto;
+	font-size: var(--fs-l);
+}
+
+.actions {
+}
+
+.submitButton {
+	width: 100%;
+	max-width: 10rem;
+	font-size: var(--fs-l);
+}

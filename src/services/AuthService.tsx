@@ -9,19 +9,17 @@ import type { LoginDto, CreateUserDto, UserDto } from "../types/auth.types";
 
 export const AuthService = {
 	async login(data: LoginDto): Promise<UserDto> {
-		const response = await API.post("Auth/login", data);
-		console.log("Received response from login request: ", response);
+		const response = await API.post("auth/login", data);
 		return response.data;
 	},
 
 	async register(data: CreateUserDto): Promise<UserDto> {
-		const response = await API.post("Auth/register", data);
-		console.log("Received response from register request: ", response);
+		const response = await API.post("auth/register", data);
 		return response.data;
 	},
 
 	async logout(): Promise<void> {
-		await API.post("Auth/logout");
+		await API.post("auth/logout");
 	},
 
 	async getMe(): Promise<UserDto> {

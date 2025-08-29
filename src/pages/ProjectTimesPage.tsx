@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import Modal from "../components/Modal";
 import ProjectTimeClockContainer from "../components/ProjectTimeClockContainer";
 import ProjectTimeList from "../components/ProjectTimeList";
 import { useProjectTimes } from "../context/ProjectTimesContext";
-import { useEffect } from "react";
 import { ProjectTimeService } from "../services/ProjectTimeService";
 
 export default function ProjectTimesPage() {
@@ -22,16 +23,7 @@ export default function ProjectTimesPage() {
 
 	if (!projectId) throw new Error("projectId is missing");
 
-	const handleDelete = async (id: number) => {
-		try {
-			await ProjectTimeService.deleteProjectTime({
-				projectTimeId: id,
-			});
-			setProjectTimes((prev) => prev.filter((pt) => pt.id !== id));
-		} catch (error) {
-			console.error("Failed to delete project time", error);
-		}
-	};
+	// const handle;
 
 	return (
 		<div className="container">
@@ -39,11 +31,16 @@ export default function ProjectTimesPage() {
 			<h2>Previous Recorded Times: </h2>
 			<div className="container">
 				<ProjectTimeList
-					renderActions={(row) => (
-						<button className="btn-alt" onClick={() => handleDelete(row.id)}>
-							Delete
-						</button>
-					)}
+					renderActions={
+						<>
+							<Modal.Open opens="delete">
+								<button className="btn-alt">Delete</button>
+							</Modal.Open>
+							<Modal.Open opens="edit">
+								<button className="btn">Edit</button>
+							</Modal.Open>
+						</>
+					}
 				/>
 			</div>
 		</div>
