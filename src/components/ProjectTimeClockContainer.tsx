@@ -36,9 +36,8 @@ export default function ProjectTimeClockContainer({ projectId }: ProjectTimeCont
 			return;
 		}
 
-		const updatedProjectTime: ProjectTimeDto = await ProjectTimeService.updateProjectTime({
+		const updatedProjectTime: ProjectTimeDto = await ProjectTimeService.stopProjectTime({
 			projectTimeId: lastTime.id,
-			startTime: new Date(lastTime.startTime),
 		});
 
 		setProjectTimes(
