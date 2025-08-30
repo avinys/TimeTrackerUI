@@ -27,6 +27,10 @@ export interface UpdateProjectTimeDto {
 	comment?: string | null;
 }
 
+export interface StopProjectTimeDto {
+	projectTimeId: number;
+}
+
 export interface DeleteProjectTimeDto {
 	projectTimeId: number;
 }

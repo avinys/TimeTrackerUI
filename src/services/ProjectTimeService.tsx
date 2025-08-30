@@ -5,6 +5,7 @@ import type {
 	UpdateProjectTimeDto,
 	DeleteProjectTimeDto,
 	ProjectTimeDtoApi,
+	StopProjectTimeDto,
 } from "../types/projectTime.types";
 
 const toClient = (pt: ProjectTimeDtoApi): ProjectTimeDto => ({
@@ -33,6 +34,14 @@ export const ProjectTimeService = {
 	async updateProjectTime(data: UpdateProjectTimeDto): Promise<ProjectTimeDto> {
 		console.log("Requesting project time update", data);
 		const response = await API.put(`project-times/${data.projectTimeId}`, data, {
+			withCredentials: true,
+		});
+		return toClient(response.data as ProjectTimeDtoApi);
+	},
+
+	async stopProjectTime(data: StopProjectTimeDto): Promise<ProjectTimeDto> {
+		console.log("Requesting project time stop");
+		const response = await API.put(`project-times/stop/${data.projectTimeId}`, data, {
 			withCredentials: true,
 		});
 		return toClient(response.data as ProjectTimeDtoApi);
