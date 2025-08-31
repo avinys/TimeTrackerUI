@@ -1,29 +1,10 @@
-import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Modal from "../components/Modal";
 import ProjectTimeClockContainer from "../components/ProjectTimeClockContainer";
 import ProjectTimeList from "../components/ProjectTimeList";
-import { useProjectTimes } from "../context/ProjectTimesContext";
-import { ProjectTimeService } from "../services/ProjectTimeService";
 
 export default function ProjectTimesPage() {
 	const { projectId } = useParams<{ projectId: string }>();
-	const { setProjectTimes } = useProjectTimes();
-
-	useEffect(() => {
-		const fetchProjectTimes = async () => {
-			let fetchedProjectTimes = [];
-			if (projectId) {
-				fetchedProjectTimes = await ProjectTimeService.getProjectTimes(Number(projectId));
-				setProjectTimes(fetchedProjectTimes);
-			}
-		};
-		fetchProjectTimes();
-	}, [projectId, setProjectTimes]);
-
-	if (!projectId) throw new Error("projectId is missing");
-
-	// const handle;
 
 	return (
 		<div className="container">

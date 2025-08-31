@@ -1,12 +1,14 @@
 import { differenceInSeconds, format } from "date-fns";
 import type { ReactElement } from "react";
-import { useProjectTimes } from "../context/ProjectTimesContext";
+import { useGetProjectTimes } from "../hooks/useGetProjectTimes";
 import styles from "../styles/projectList.module.css";
 import type { ProjectTimeDto } from "../types/projectTime.types";
 import { formatTime } from "../util/formatTime";
 import ConfirmDeleteProjectTime from "./ConfirmDeleteProjectTime";
 import EditProjectTimeForm from "./EditProjectTimeForm";
 import Modal from "./Modal";
+import Spinner from "./Spinner";
+import { useParams } from "react-router-dom";
 
 type ProjectTimeListProps = {
 	rows?: ProjectTimeDto[];
@@ -14,8 +16,19 @@ type ProjectTimeListProps = {
 };
 
 export default function ProjectTimeList({ rows, renderActions }: ProjectTimeListProps) {
-	const context = useProjectTimes();
-	const projectTimes = rows ?? context.projectTimes;
+	const { projectId } = useParams();
+	const pid = projectId ? Number(projectId) : null;
+	const enabled = rows === undefined && pid !== null;
+	const {
+		isPending,
+		isFetching,
+		projectTimes: fetchedProjectTimes,
+	} = useGetProjectTimes(pid, enabled);
+
+	const loading = enabled && (isPending || isFetching);
+	if (loading) return <Spinner />;
+
+	const projectTimes = rows ?? fetchedProjectTimes ?? [];
 
 	return (
 		<ul className={styles.projectList}>

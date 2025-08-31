@@ -1,10 +1,10 @@
 import clsx from "clsx";
+import { type FormEvent } from "react";
+import toast from "react-hot-toast";
+import { useUpdateProjectTime } from "../hooks/useUpdateProjectTime";
 import styles from "../styles/editForm.module.css";
 import type { ProjectTimeDto, UpdateProjectTimeDto } from "../types/projectTime.types";
-import { useState, type FormEvent } from "react";
 import { toLocalInputValue } from "../util/formatTime";
-import { ProjectTimeService } from "../services/ProjectTimeService";
-import { useProjectTimes } from "../context/ProjectTimesContext";
 
 type EditProjectTimeFormProps = {
 	projectTime: ProjectTimeDto;
@@ -12,8 +12,10 @@ type EditProjectTimeFormProps = {
 };
 
 function EditProjectTimeForm({ projectTime, onCloseModal }: EditProjectTimeFormProps) {
-	const [error, setError] = useState<string>("");
-	const { projectTimes, setProjectTimes } = useProjectTimes();
+	const { isPending, updateProjectTime } = useUpdateProjectTime(
+		projectTime.projectId,
+		onCloseModal
+	);
 	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		const formData = new FormData(e.currentTarget);
@@ -22,7 +24,7 @@ function EditProjectTimeForm({ projectTime, onCloseModal }: EditProjectTimeFormP
 		const endTimeLocal = (formData.get("endTime") as string) || "";
 		const comment = (formData.get("comment") as string) ?? "";
 
-		if (!startTimeLocal) return setError("Please provide a valid start time");
+		if (!startTimeLocal) return toast.error("Please provide a valid start time");
 
 		const startTime = new Date(startTimeLocal);
 		const endTime = new Date(endTimeLocal);
@@ -34,21 +36,13 @@ function EditProjectTimeForm({ projectTime, onCloseModal }: EditProjectTimeFormP
 			comment,
 		};
 
-		const response = await ProjectTimeService.updateProjectTime(dto);
-		console.log("response: ", response);
-		if (!response)
-			setError("Edit failed! Please check the input fields and confirm they are correct.");
-		else {
-			setProjectTimes(projectTimes.map((pt) => (pt.id === response.id ? response : pt)));
-			onCloseModal();
-		}
+		updateProjectTime(dto);
 	};
 
 	return (
 		<div className="container">
 			<div className={styles.formContainer}>
 				<h2 className={styles.title}>Edit project time</h2>
-				<p className={styles.error}>{error}</p>
 				<form onSubmit={handleSubmit} key={projectTime.id}>
 					<div className={styles.inputGroup}>
 						<label htmlFor="startTime">Start time</label>
@@ -84,7 +78,7 @@ function EditProjectTimeForm({ projectTime, onCloseModal }: EditProjectTimeFormP
 
 					<div className={styles.actions}>
 						<button type="submit" className={clsx("btn", styles.submitButton)}>
-							Submit
+							{isPending ? "Updating..." : "Submit"}
 						</button>
 					</div>
 				</form>

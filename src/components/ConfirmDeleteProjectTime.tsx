@@ -1,27 +1,19 @@
-import { format } from "date-fns";
-import { useProjectTimes } from "../context/ProjectTimesContext";
-import { ProjectTimeService } from "../services/ProjectTimeService";
-import type { ProjectTimeDto } from "../types/projectTime.types";
 import clsx from "clsx";
+import { format } from "date-fns";
+import { useDeleteProjectTime } from "../hooks/useDeleteProjectTime";
 import styles from "../styles/confirmDelete.module.css";
+import type { ProjectTimeDto } from "../types/projectTime.types";
 
 type ConfirmDeleteProjectTimeProps = {
 	projectTime: ProjectTimeDto;
+	onCloseModal: () => void;
 };
 
-function ConfirmDeleteProjectTime({ projectTime }: ConfirmDeleteProjectTimeProps) {
-	const { setProjectTimes } = useProjectTimes();
-
-	const handleDelete = async () => {
-		try {
-			await ProjectTimeService.deleteProjectTime({
-				projectTimeId: projectTime.id,
-			});
-			setProjectTimes((prev) => prev.filter((pt) => pt.id !== projectTime.id));
-		} catch (error) {
-			console.error("Failed to delete project time", error);
-		}
-	};
+function ConfirmDeleteProjectTime({ projectTime, onCloseModal }: ConfirmDeleteProjectTimeProps) {
+	const { isPending, deleteProjectTime } = useDeleteProjectTime(
+		projectTime.projectId,
+		onCloseModal
+	);
 
 	return (
 		<div>
@@ -38,8 +30,11 @@ function ConfirmDeleteProjectTime({ projectTime }: ConfirmDeleteProjectTimeProps
 				<span className={styles.fieldTitle}>Comment:</span>{" "}
 				{projectTime.comment || "--undefined--"}
 			</p>
-			<button className={clsx("btn", styles.submitButton)} onClick={handleDelete}>
-				Confirm
+			<button
+				className={clsx("btn", styles.submitButton)}
+				onClick={() => deleteProjectTime({ projectTimeId: projectTime.id })}
+			>
+				{isPending ? "Deleting..." : "Confirm"}
 			</button>
 		</div>
 	);

@@ -1,17 +1,21 @@
 import { differenceInSeconds } from "date-fns";
-import { useProjectTimes } from "../context/ProjectTimesContext";
-import { ProjectTimeService } from "../services/ProjectTimeService";
-import type { ProjectTimeDto } from "../types/projectTime.types";
+import { useCreateProjectTime } from "../hooks/useCreateProjectTime";
+import { useGetProjectTimes } from "../hooks/useGetProjectTimes";
+import { useStopProjectTime } from "../hooks/useStopProjectTime";
 import ProjectTimeClock from "./ProjectTimeClock";
 import ProjectTimeClockActions from "./ProjectTimeClockActions";
+import Spinner from "./Spinner";
 
 type ProjectTimeContainerProps = {
 	projectId: number;
 };
 
 export default function ProjectTimeClockContainer({ projectId }: ProjectTimeContainerProps) {
-	const { projectTimes, setProjectTimes } = useProjectTimes();
-	const lastTime = projectTimes[projectTimes.length - 1] || null;
+	const { isPending: isStarting, startTime } = useCreateProjectTime(projectId);
+	const { isPending: isStopping, stopTime } = useStopProjectTime(projectId);
+	const { projectTimes, isPending } = useGetProjectTimes(projectId);
+	const lastTime =
+		projectTimes && projectTimes.length > 0 ? projectTimes[projectTimes.length - 1] : null;
 	const startedTime = lastTime && lastTime.endTime ? null : lastTime;
 	const elapsedTime =
 		startedTime && !startedTime.endTime
@@ -24,11 +28,7 @@ export default function ProjectTimeClockContainer({ projectId }: ProjectTimeCont
 
 	const handleStart = async () => {
 		if (isOngoing) return;
-
-		const newProjectTime = await ProjectTimeService.createProjectTime({
-			projectId,
-		});
-		setProjectTimes([...projectTimes, newProjectTime]);
+		startTime();
 	};
 
 	const handleStop = async () => {
@@ -36,20 +36,20 @@ export default function ProjectTimeClockContainer({ projectId }: ProjectTimeCont
 			return;
 		}
 
-		const updatedProjectTime: ProjectTimeDto = await ProjectTimeService.stopProjectTime({
+		stopTime({
 			projectTimeId: lastTime.id,
 		});
-
-		setProjectTimes(
-			projectTimes.map((pt) => (pt.id === updatedProjectTime.id ? updatedProjectTime : pt))
-		);
 	};
+
+	if (isPending) return <Spinner />;
 
 	return (
 		<div>
 			<ProjectTimeClock isOngoing={isOngoing} elapsedTime={elapsedTime} />
 			<ProjectTimeClockActions
 				isOngoing={isOngoing}
+				isStarting={isStarting}
+				isStopping={isStopping}
 				handleStart={handleStart}
 				handleStop={handleStop}
 			/>
