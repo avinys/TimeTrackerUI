@@ -52,7 +52,12 @@ function Modal({ children }: ModalProviderProps) {
 function Open({ children, opens: opensWindowName }: OpenProps) {
 	const { open } = useModalContext();
 
-	return cloneElement(children, { onClick: () => open(opensWindowName) });
+	return cloneElement(children, {
+		onClick: (e: any) => {
+			children.props?.onClick?.(e);
+			open(opensWindowName);
+		},
+	});
 }
 
 function Window({ children, name }: WindowProps) {

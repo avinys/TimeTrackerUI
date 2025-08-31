@@ -1,5 +1,5 @@
 import API from "../api/axios";
-import type { ProjectDto, CreateProjectDto } from "../types/project.types";
+import type { ProjectDto, CreateProjectDto, DeleteprojectDto } from "../types/project.types";
 
 export const ProjectService = {
 	async getUserProjects(): Promise<ProjectDto[]> {
@@ -15,5 +15,12 @@ export const ProjectService = {
 			withCredentials: true,
 		});
 		return response.data;
+	},
+
+	async deleteProject(data: DeleteprojectDto): Promise<void> {
+		console.log("Requesting project deletion", data);
+		await API.delete(`projects/${data.projectId}`, {
+			withCredentials: true,
+		});
 	},
 };

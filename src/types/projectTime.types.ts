@@ -1,7 +1,7 @@
 export interface ProjectTimeDtoApi {
 	id: number;
 	userId: number;
-	projectTime: number;
+	projectId: number;
 	startTime: string;
 	endTime: string | null;
 	comment: string | null;
@@ -10,7 +10,7 @@ export interface ProjectTimeDtoApi {
 export interface ProjectTimeDto {
 	id: number;
 	userId: number;
-	projectTime: number;
+	projectId: number;
 	startTime: Date;
 	endTime: Date | null;
 	comment: string | null;

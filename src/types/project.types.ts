@@ -1,10 +1,15 @@
 export interface ProjectDto {
-  id: number;
-  name: string;
-  createdAt: string;
-  userId: number;
+	id: number;
+	name: string;
+	createdAt: string;
+	userId: number;
+	isRunning: boolean;
 }
 
 export interface CreateProjectDto {
-  name: string;
+	name: string;
+}
+
+export interface DeleteprojectDto {
+	projectId: number;
 }
