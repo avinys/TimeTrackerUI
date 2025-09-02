@@ -26,7 +26,6 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 	if (loading) return <Spinner />;
 
 	const projectTimes = rows ?? fetchedProjectTimes ?? [];
-	console.log("Project times: ", projectTimes);
 
 	return (
 		<ul className={styles.projectList}>

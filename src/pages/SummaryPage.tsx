@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DateRangeSelector from "../components/DateRangeSelector";
 import ProjectTimeList from "../components/ProjectTimeList";
 import Spinner from "../components/Spinner";
@@ -16,6 +16,8 @@ import { HiChartBar, HiTableCells } from "react-icons/hi2";
 export default function SummaryPage() {
 	const [selectedRange, setSelectedRange] = useState<SelectedDateRange | undefined>(undefined);
 	const [currentProject, setCurrentProject] = useState<ProjectDto>();
+	const [showCostInput, setShowCostInput] = useState<boolean>(false);
+	const [cost, setCost] = useState<string>("");
 	const [showGraph, setShowGraph] = useState<boolean>(true);
 	const {
 		projects = [],
@@ -50,6 +52,10 @@ export default function SummaryPage() {
 		setCurrentProject(selectedProject);
 	};
 
+	useEffect(() => {
+		if (!showCostInput) setCost("");
+	}, [showCostInput]);
+
 	return (
 		<div className="container">
 			<div className={styles.inputContainer}>
@@ -81,6 +87,35 @@ export default function SummaryPage() {
 							selectedRange={selectedRange}
 							setSelectedRange={setSelectedRange}
 						/>
+						<div className={styles.checkboxInput}>
+							<input
+								type="checkbox"
+								name="show-cost"
+								id="show-cost"
+								checked={showCostInput}
+								onChange={() => setShowCostInput((prev) => !prev)}
+							/>
+							<label htmlFor="show-cost">
+								Would you like to input your hourly cost?
+							</label>
+						</div>
+						{showCostInput && (
+							<input
+								className={styles.inputElement}
+								type="number"
+								min={0}
+								step="0.01"
+								placeholder="0"
+								value={cost}
+								onChange={(e) => setCost(e.target.value)}
+								onBlur={(e) => {
+									const value = e.target.value.trim();
+									if (value === "") return;
+									const numberVal = Math.max(0, Number(value));
+									setCost(String(numberVal));
+								}}
+							/>
+						)}
 					</>
 				)}
 			</div>
@@ -96,6 +131,7 @@ export default function SummaryPage() {
 									<SummaryTotals
 										selectedHourlyEntries={selectedHourlyEntries}
 										selectedDateRange={selectedRange ?? null}
+										cost={cost !== "" ? Number(cost) : 0}
 									/>
 								</div>
 								<div className={styles.summaryGraphTableContainer}>
@@ -110,6 +146,7 @@ export default function SummaryPage() {
 											<SummaryGraph
 												selectedHourlyEntries={selectedHourlyEntries}
 												selectedDateRange={selectedRange ?? null}
+												cost={cost !== "" ? Number(cost) : 0}
 											/>
 										</div>
 									) : (
@@ -117,6 +154,7 @@ export default function SummaryPage() {
 											<SummaryTable
 												selectedHourlyEntries={selectedHourlyEntries}
 												selectedDateRange={selectedRange ?? null}
+												cost={cost !== "" ? Number(cost) : 0}
 											/>
 										</div>
 									)}

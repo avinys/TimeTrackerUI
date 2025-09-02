@@ -239,12 +239,15 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 			{rangeType === "custom" && (
 				<div>
 					<input
+						className={styles.inputElement}
 						type="date"
 						max={today}
 						value={customFrom ? toDateInput(customFrom) : ""}
 						onChange={handleCustomFromChange}
 					/>
+					{" - "}
 					<input
+						className={styles.inputElement}
 						type="date"
 						max={today}
 						value={customTo ? toDateInput(customTo) : ""}
