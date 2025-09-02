@@ -108,13 +108,13 @@ export default function SummaryPage() {
 							</div>
 						</>
 					)}
-					{selectedProjectTimes.length === 0 && hasSelection && (
+					{/* {selectedProjectTimes.length === 0 && hasSelection && (
 						<p>
 							No recorded times found for the selected project - "
 							{currentProject?.name}", in the selected range.
 						</p>
-					)}
-					{selectedProjectTimes.length > 0 && (
+					)} */}
+					{hasSelection && (
 						<div className={styles.listContainer}>
 							<ProjectTimeList rows={selectedProjectTimes} />
 						</div>

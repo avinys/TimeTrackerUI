@@ -1,0 +1,19 @@
+.titleContainer {
+	margin-bottom: var(--spacing-l);
+}
+
+.actionsContainer {
+	margin-top: var(--spacing-l);
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	box-sizing: border-box;
+	margin-left: var(--spacing-l);
+	margin-right: var(--spacing-l);
+}
+
+.actionButton {
+	width: 45%;
+	padding: var(--spacing-m);
+	font-size: var(--fs-m);
+}

@@ -33,6 +33,7 @@
 	width: 80%;
 	min-width: 60rem;
 	margin: 0 auto;
+	border-collapse: collapse;
 	margin-top: var(--spacing-l);
 	border: 2px solid var(--color-primary);
 	border-radius: 8px;
