@@ -69,6 +69,8 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 		setYear(null);
 		setMonth(null);
 		setDate(null);
+		setWeekStart(null);
+		setWeekEnd(null);
 		setCustomFrom(null);
 		setCustomTo(null);
 	};
@@ -212,7 +214,10 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 			)}
 			{/* Week */}
 			{rangeType === "weekly" && weeks.length > 0 && (
-				<select className={styles.inputElement} onChange={handleWeekChange}>
+				<select className={styles.inputElement} onChange={handleWeekChange} defaultValue="">
+					<option value="" disabled>
+						--select week--
+					</option>
 					{weeks.map((week, index) => (
 						<option key={index} value={index}>
 							{week.label}

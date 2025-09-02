@@ -9,16 +9,16 @@ import { useGetProjectTimes } from "../hooks/useGetProjectTimes";
 import styles from "../styles/summary.module.css";
 import type { ProjectDto } from "../types/project.types";
 import type { SelectedDateRange } from "../types/summary.types";
-import { filterHourlyEntries, filterProjectTimes, groupTimes } from "../util/getWeeksInMonth";
+import { filterProjectTimes, groupTimesInRangeSeconds } from "../util/getWeeksInMonth";
 
 export default function SummaryPage() {
 	const [selectedRange, setSelectedRange] = useState<SelectedDateRange | undefined>(undefined);
+	const [currentProject, setCurrentProject] = useState<ProjectDto>();
 	const {
 		projects = [],
 		isPending: projectsPending,
 		isFetching: projectsFetching,
 	} = useGetProjects();
-	const [currentProject, setCurrentProject] = useState<ProjectDto>();
 
 	const projectId = currentProject?.id ?? null;
 	const {
@@ -28,28 +28,27 @@ export default function SummaryPage() {
 	} = useGetProjectTimes(projectId);
 
 	const loadingTop = projectsPending || projectsFetching;
-	console.log("projectId: ", projectId);
-	console.log("selectedRange: ", selectedRange);
-	console.log("timesPending: ", timesPending);
-	console.log("timesFetching: ", timesFetching);
-	const loadingBottom = !!projectId && selectedRange && (timesPending || timesFetching);
+	const hasSelection = !!projectId && !!selectedRange;
+	const loadingBottom = hasSelection && (timesPending || timesFetching);
 
 	const selectedProjectTimes = useMemo(
 		() => (selectedRange ? filterProjectTimes(projectTimes, selectedRange) : []),
 		[projectTimes, selectedRange]
 	);
 
-	const selectedHourlyEntries = useMemo(() => {
-		if (!selectedRange) return [];
-		const grouped = groupTimes(projectTimes);
-		return filterHourlyEntries(grouped, selectedRange);
-	}, [projectTimes, selectedRange]);
+	const selectedHourlyEntries = useMemo(
+		() => (selectedRange ? groupTimesInRangeSeconds(projectTimes, selectedRange, true) : []),
+		[projectTimes, selectedRange]
+	);
 
 	const handleProjectSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const selectedId = e.target.value;
-		const selectedProject = projects?.find((p) => p.id === parseInt(selectedId));
+		const selectedId = Number(e.target.value);
+		const selectedProject = projects?.find((p) => p.id === selectedId);
 		setCurrentProject(selectedProject);
 	};
+
+	console.log("Has selection", hasSelection);
+	console.log("Selected projectTimes: ", selectedProjectTimes);
 
 	return (
 		<div className="container">
@@ -90,7 +89,7 @@ export default function SummaryPage() {
 				<Spinner />
 			) : (
 				<>
-					{selectedRange && (
+					{selectedRange && currentProject && (
 						<>
 							<div className={styles.summaryGrid}>
 								<div className={styles.totalsWrap}>
@@ -109,7 +108,7 @@ export default function SummaryPage() {
 							</div>
 						</>
 					)}
-					{selectedProjectTimes.length == 0 && selectedRange && currentProject && (
+					{selectedProjectTimes.length === 0 && hasSelection && (
 						<p>
 							No recorded times found for the selected project - "
 							{currentProject?.name}", in the selected range.
