@@ -17,9 +17,15 @@ export default function SummaryTotals({ selectedHourlyEntries, selectedDateRange
 		<div className={styles.metricsContainer}>
 			<Metric label="Total hours" value={format(summary.totalHours)} />
 			{/* <Metric label="Avg / day (range)" value={format(summary.avgPerDay)} /> */}
-			<Metric label="Avg / active day" value={format(summary.avgPerActiveDay)} />
-			<Metric label="Avg / week" value={format(summary.avgPerWeek)} />
-			<Metric label="Avg / month" value={format(summary.avgPerMonth)} />
+			{summary.timeUnitLabel !== "Hour" && (
+				<Metric label="Avg / active day" value={format(summary.avgPerActiveDay)} />
+			)}
+			{summary.timeUnitLabel != "Hour" && (
+				<Metric label="Avg / week" value={format(summary.avgPerWeek)} />
+			)}
+			{summary.timeUnitLabel === "Month" && (
+				<Metric label="Avg / month" value={format(summary.avgPerMonth)} />
+			)}
 			{/* <Metric label="Range days" value={String(summary.days)} /> */}
 			<Metric label="Active days" value={String(summary.activeDays)} />
 		</div>
