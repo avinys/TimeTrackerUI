@@ -10,7 +10,6 @@ import {
 	YAxis,
 } from "recharts";
 import { useSummaryData } from "../hooks/useSummaryData";
-
 type SummaryGraphPropsType = {
 	selectedHourlyEntries: HourlyTimeEntry[] | undefined;
 	selectedDateRange: SelectedDateRange | null;

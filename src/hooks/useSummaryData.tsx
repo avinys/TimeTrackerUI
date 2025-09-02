@@ -6,6 +6,7 @@ export type SummaryGraphDataPoint = { name: string; value: number };
 
 export type SummaryStats = {
 	graphData: SummaryGraphDataPoint[];
+	timeUnitLabel: string;
 	totalHours: number;
 	avgPerActiveDay: number;
 	avgPerWeek: number;
@@ -13,10 +14,12 @@ export type SummaryStats = {
 	activeDays: number;
 };
 
+const round = (v, d = 2) => Math.round((v + Number.EPSILON) * 10 ** d) / 10 ** d;
+
 function groupByHour(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
 	const arr = new Array(24).fill(0);
 	for (const pt of projectTimes) arr[pt.hour] += pt.duration;
-	return arr.map((v, i) => ({ name: `${String(i).padStart(2, "0")}:00`, value: v }));
+	return arr.map((v, i) => ({ name: `${String(i).padStart(2, "0")}:00`, value: round(v, 2) }));
 }
 
 function groupByDate(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
@@ -26,7 +29,7 @@ function groupByDate(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
 	}
 	return Array.from(map.entries())
 		.sort(([a], [b]) => a.localeCompare(b))
-		.map(([name, value]) => ({ name, value }));
+		.map(([name, value]) => ({ name, value: round(value, 2) }));
 }
 
 function groupByMonth(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
@@ -37,7 +40,7 @@ function groupByMonth(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] 
 	}
 	return Array.from(map.entries())
 		.sort(([a], [b]) => a.localeCompare(b))
-		.map(([name, value]) => ({ name, value }));
+		.map(([name, value]) => ({ name, value: round(value, 2) }));
 }
 
 export function useSummaryData(
@@ -48,25 +51,36 @@ export function useSummaryData(
 		if (!entries || !range) return null;
 
 		let graphData: SummaryGraphDataPoint[] = [];
+		let timeUnit: string;
 
 		switch (range.type) {
 			case "yearly":
 				graphData = groupByMonth(entries);
+				timeUnit = "Month";
 				break;
 			case "monthly":
 			case "weekly":
 				graphData = groupByDate(entries);
+				timeUnit = "Date";
 				break;
 			case "daily":
 				graphData = groupByHour(entries);
+				timeUnit = "Hour";
 				break;
 			case "custom": {
 				const fromDate = new Date(range.fromYear, range.fromMonth, range.fromDay);
 				const toDate = new Date(range.toYear, range.toMonth, range.toDay);
 				const differenceDays = differenceInDays(toDate, fromDate);
-				if (differenceDays <= 1) graphData = groupByHour(entries);
-				else if (differenceDays <= 62) graphData = groupByDate(entries);
-				else graphData = groupByMonth(entries);
+				if (differenceDays <= 1) {
+					graphData = groupByHour(entries);
+					timeUnit = "Hour";
+				} else if (differenceDays <= 62) {
+					graphData = groupByDate(entries);
+					timeUnit = "Date";
+				} else {
+					graphData = groupByMonth(entries);
+					timeUnit = "Month";
+				}
 				break;
 			}
 		}
@@ -81,6 +95,7 @@ export function useSummaryData(
 
 		return {
 			graphData,
+			timeUnitLabel: timeUnit,
 			totalHours,
 			avgPerActiveDay,
 			avgPerWeek,

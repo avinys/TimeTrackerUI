@@ -10,10 +10,13 @@ import styles from "../styles/summary.module.css";
 import type { ProjectDto } from "../types/project.types";
 import type { SelectedDateRange } from "../types/summary.types";
 import { filterProjectTimes, groupTimesInRangeSeconds } from "../util/getWeeksInMonth";
+import SummaryTable from "../components/SummaryTable";
+import { HiChartBar, HiTableCells } from "react-icons/hi2";
 
 export default function SummaryPage() {
 	const [selectedRange, setSelectedRange] = useState<SelectedDateRange | undefined>(undefined);
 	const [currentProject, setCurrentProject] = useState<ProjectDto>();
+	const [showGraph, setShowGraph] = useState<boolean>(true);
 	const {
 		projects = [],
 		isPending: projectsPending,
@@ -46,9 +49,6 @@ export default function SummaryPage() {
 		const selectedProject = projects?.find((p) => p.id === selectedId);
 		setCurrentProject(selectedProject);
 	};
-
-	console.log("Has selection", hasSelection);
-	console.log("Selected projectTimes: ", selectedProjectTimes);
 
 	return (
 		<div className="container">
@@ -98,22 +98,32 @@ export default function SummaryPage() {
 										selectedDateRange={selectedRange ?? null}
 									/>
 								</div>
-
-								<div className={styles.chartWrap}>
-									<SummaryGraph
-										selectedHourlyEntries={selectedHourlyEntries}
-										selectedDateRange={selectedRange ?? null}
-									/>
+								<div className={styles.summaryGraphTableContainer}>
+									<button
+										className={styles.iconButton}
+										onClick={() => setShowGraph((prev) => !prev)}
+									>
+										{showGraph ? <HiTableCells /> : <HiChartBar />}
+									</button>
+									{showGraph ? (
+										<div className={styles.chartWrap}>
+											<SummaryGraph
+												selectedHourlyEntries={selectedHourlyEntries}
+												selectedDateRange={selectedRange ?? null}
+											/>
+										</div>
+									) : (
+										<div className={styles.tableWrap}>
+											<SummaryTable
+												selectedHourlyEntries={selectedHourlyEntries}
+												selectedDateRange={selectedRange ?? null}
+											/>
+										</div>
+									)}
 								</div>
 							</div>
 						</>
 					)}
-					{/* {selectedProjectTimes.length === 0 && hasSelection && (
-						<p>
-							No recorded times found for the selected project - "
-							{currentProject?.name}", in the selected range.
-						</p>
-					)} */}
 					{hasSelection && (
 						<div className={styles.listContainer}>
 							<ProjectTimeList rows={selectedProjectTimes} />
