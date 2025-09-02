@@ -18,6 +18,27 @@
 	margin-bottom: var(--spacing-m);
 }
 
+.checkboxInput {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-s);
+	margin-bottom: var(--spacing-m);
+}
+
+.checkboxInput input {
+	height: 1.25rem;
+	aspect-ratio: 1;
+	border-radius: var(--radius-s);
+}
+
+input[type="checkbox"] {
+	accent-color: var(--color-primary);
+}
+.checkboxInput label {
+	font-weight: 600;
+}
+
 .dateRangeSelector {
 	display: flex;
 	flex-direction: column;

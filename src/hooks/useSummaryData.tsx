@@ -3,15 +3,21 @@ import { useMemo } from "react";
 import type { HourlyTimeEntry, SelectedDateRange } from "../types/summary.types";
 
 export type SummaryGraphDataPoint = { name: string; value: number };
+export type SummaryGraphDataPointWithCost = { name: string; value: number; cost: number };
 
 export type SummaryStats = {
 	graphData: SummaryGraphDataPoint[];
+	graphDataWithCost: SummaryGraphDataPointWithCost[];
 	timeUnitLabel: string;
 	totalHours: number;
 	avgPerActiveDay: number;
 	avgPerWeek: number;
 	avgPerMonth: number;
 	activeDays: number;
+	totalHoursWithCost: number;
+	avgPerActiveDayWithCost: number;
+	avgPerWeekWithCost: number;
+	avgPerMonthWithCost: number;
 };
 
 const round = (v: number, d = 2) => Math.round((v + Number.EPSILON) * 10 ** d) / 10 ** d;
@@ -45,7 +51,8 @@ function groupByMonth(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] 
 
 export function useSummaryData(
 	entries: HourlyTimeEntry[] | undefined,
-	range: SelectedDateRange | null
+	range: SelectedDateRange | null,
+	cost: number = 0
 ): SummaryStats | null {
 	return useMemo(() => {
 		if (!entries || !range) return null;
@@ -85,6 +92,14 @@ export function useSummaryData(
 			}
 		}
 
+		let graphDataWithCost: SummaryGraphDataPointWithCost[] = [];
+		if (cost !== 0) {
+			graphDataWithCost = graphData.map((entry) => ({
+				...entry,
+				cost: round(entry.value * cost, 2),
+			}));
+		}
+
 		const totalHours = entries.reduce((s, e) => s + e.duration, 0);
 		const days = graphData.length || 1;
 		const activeDays = new Set(entries.map((e) => e.date)).size;
@@ -93,14 +108,25 @@ export function useSummaryData(
 		const avgPerWeek = totalHours / Math.max(1, days / 7);
 		const avgPerMonth = totalHours / Math.max(1, days / 30);
 
+		const totalHoursWithCost = round(totalHours * cost, 2);
+
+		const avgPerActiveDayWithCost = round(avgPerActiveDay * cost, 2);
+		const avgPerWeekWithCost = round(avgPerWeek * cost, 2);
+		const avgPerMonthWithCost = round(avgPerMonth * cost, 2);
+
 		return {
 			graphData,
+			graphDataWithCost,
 			timeUnitLabel: timeUnit,
 			totalHours,
 			avgPerActiveDay,
 			avgPerWeek,
 			avgPerMonth,
 			activeDays,
+			totalHoursWithCost,
+			avgPerActiveDayWithCost,
+			avgPerWeekWithCost,
+			avgPerMonthWithCost,
 		};
-	}, [entries, range]);
+	}, [entries, range, cost]);
 }
