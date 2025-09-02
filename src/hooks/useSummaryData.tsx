@@ -14,7 +14,7 @@ export type SummaryStats = {
 	activeDays: number;
 };
 
-const round = (v, d = 2) => Math.round((v + Number.EPSILON) * 10 ** d) / 10 ** d;
+const round = (v: number, d = 2) => Math.round((v + Number.EPSILON) * 10 ** d) / 10 ** d;
 
 function groupByHour(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
 	const arr = new Array(24).fill(0);
