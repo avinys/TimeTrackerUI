@@ -12,6 +12,9 @@ import type { SelectedDateRange } from "../types/summary.types";
 import { filterProjectTimes, groupTimesInRangeSeconds } from "../util/getWeeksInMonth";
 import SummaryTable from "../components/SummaryTable";
 import { HiChartBar, HiTableCells } from "react-icons/hi2";
+import Modal from "../components/Modal";
+import clsx from "clsx";
+import ExportSummaryForm from "../components/ExportSummaryForm";
 
 export default function SummaryPage() {
 	const [selectedRange, setSelectedRange] = useState<SelectedDateRange | undefined>(undefined);
@@ -58,117 +61,139 @@ export default function SummaryPage() {
 
 	return (
 		<div className="container">
-			<div className={styles.inputContainer}>
-				{loadingTop ? (
+			<Modal>
+				<div className={styles.inputContainer}>
+					{loadingTop ? (
+						<Spinner />
+					) : (
+						<>
+							<h2 className={styles.selectTitle}>
+								{currentProject
+									? `Selected project: ${currentProject?.name}`
+									: "Select a project"}
+							</h2>
+							<select
+								className={styles.inputElement}
+								value={currentProject ? currentProject.id : ""}
+								onChange={handleProjectSelection}
+							>
+								<option value="" disabled hidden>
+									-- select a project --
+								</option>
+								{projects.map((p) => (
+									<option value={p.id} key={p.id}>
+										{p.name}
+									</option>
+								))}
+							</select>
+							<h2 className={styles.selectTitle}>Select a time range:</h2>
+							<DateRangeSelector
+								selectedRange={selectedRange}
+								setSelectedRange={setSelectedRange}
+							/>
+							<div className={styles.checkboxInput}>
+								<input
+									type="checkbox"
+									name="show-cost"
+									id="show-cost"
+									checked={showCostInput}
+									onChange={() => setShowCostInput((prev) => !prev)}
+								/>
+								<label htmlFor="show-cost">
+									Would you like to input your hourly cost?
+								</label>
+							</div>
+							{showCostInput && (
+								<input
+									className={styles.inputElement}
+									type="number"
+									min={0}
+									step="0.01"
+									placeholder="0"
+									value={cost}
+									onChange={(e) => setCost(e.target.value)}
+									onBlur={(e) => {
+										const value = e.target.value.trim();
+										if (value === "") return;
+										const numberVal = Math.max(0, Number(value));
+										setCost(String(numberVal));
+									}}
+								/>
+							)}
+							{selectedRange && currentProject && (
+								<Modal.Open opens="export-summary">
+									<button className={clsx("btn-alt", styles.exportButton)}>
+										Export Summary Information to File
+									</button>
+								</Modal.Open>
+							)}
+						</>
+					)}
+				</div>
+
+				{loadingBottom ? (
 					<Spinner />
 				) : (
 					<>
-						<h2 className={styles.selectTitle}>
-							{currentProject
-								? `Selected project: ${currentProject?.name}`
-								: "Select a project"}
-						</h2>
-						<select
-							className={styles.inputElement}
-							value={currentProject ? currentProject.id : ""}
-							onChange={handleProjectSelection}
-						>
-							<option value="" disabled hidden>
-								-- select a project --
-							</option>
-							{projects.map((p) => (
-								<option value={p.id} key={p.id}>
-									{p.name}
-								</option>
-							))}
-						</select>
-						<h2 className={styles.selectTitle}>Select a time range:</h2>
-						<DateRangeSelector
-							selectedRange={selectedRange}
-							setSelectedRange={setSelectedRange}
-						/>
-						<div className={styles.checkboxInput}>
-							<input
-								type="checkbox"
-								name="show-cost"
-								id="show-cost"
-								checked={showCostInput}
-								onChange={() => setShowCostInput((prev) => !prev)}
-							/>
-							<label htmlFor="show-cost">
-								Would you like to input your hourly cost?
-							</label>
-						</div>
-						{showCostInput && (
-							<input
-								className={styles.inputElement}
-								type="number"
-								min={0}
-								step="0.01"
-								placeholder="0"
-								value={cost}
-								onChange={(e) => setCost(e.target.value)}
-								onBlur={(e) => {
-									const value = e.target.value.trim();
-									if (value === "") return;
-									const numberVal = Math.max(0, Number(value));
-									setCost(String(numberVal));
-								}}
-							/>
+						{selectedRange && currentProject && (
+							<>
+								<div className={styles.summaryGrid}>
+									<div className={styles.totalsWrap}>
+										<SummaryTotals
+											selectedHourlyEntries={selectedHourlyEntries}
+											selectedDateRange={selectedRange ?? null}
+											cost={cost !== "" ? Number(cost) : 0}
+										/>
+									</div>
+									<div className={styles.summaryGraphTableContainer}>
+										<button
+											className={styles.iconButton}
+											onClick={() => setShowGraph((prev) => !prev)}
+										>
+											{showGraph ? (
+												<HiTableCells title="Toggle table view" />
+											) : (
+												<HiChartBar title="Toggle graph view" />
+											)}
+										</button>
+										{showGraph ? (
+											<div className={styles.chartWrap}>
+												<SummaryGraph
+													selectedHourlyEntries={selectedHourlyEntries}
+													selectedDateRange={selectedRange ?? null}
+													cost={cost !== "" ? Number(cost) : 0}
+												/>
+											</div>
+										) : (
+											<div className={styles.tableWrap}>
+												<SummaryTable
+													selectedHourlyEntries={selectedHourlyEntries}
+													selectedDateRange={selectedRange ?? null}
+													cost={cost !== "" ? Number(cost) : 0}
+												/>
+											</div>
+										)}
+									</div>
+								</div>
+							</>
+						)}
+						{hasSelection && (
+							<div className={styles.listContainer}>
+								<ProjectTimeList rows={selectedProjectTimes} />
+							</div>
 						)}
 					</>
 				)}
-			</div>
-
-			{loadingBottom ? (
-				<Spinner />
-			) : (
-				<>
-					{selectedRange && currentProject && (
-						<>
-							<div className={styles.summaryGrid}>
-								<div className={styles.totalsWrap}>
-									<SummaryTotals
-										selectedHourlyEntries={selectedHourlyEntries}
-										selectedDateRange={selectedRange ?? null}
-										cost={cost !== "" ? Number(cost) : 0}
-									/>
-								</div>
-								<div className={styles.summaryGraphTableContainer}>
-									<button
-										className={styles.iconButton}
-										onClick={() => setShowGraph((prev) => !prev)}
-									>
-										{showGraph ? <HiTableCells /> : <HiChartBar />}
-									</button>
-									{showGraph ? (
-										<div className={styles.chartWrap}>
-											<SummaryGraph
-												selectedHourlyEntries={selectedHourlyEntries}
-												selectedDateRange={selectedRange ?? null}
-												cost={cost !== "" ? Number(cost) : 0}
-											/>
-										</div>
-									) : (
-										<div className={styles.tableWrap}>
-											<SummaryTable
-												selectedHourlyEntries={selectedHourlyEntries}
-												selectedDateRange={selectedRange ?? null}
-												cost={cost !== "" ? Number(cost) : 0}
-											/>
-										</div>
-									)}
-								</div>
-							</div>
-						</>
-					)}
-					{hasSelection && (
-						<div className={styles.listContainer}>
-							<ProjectTimeList rows={selectedProjectTimes} />
-						</div>
-					)}
-				</>
-			)}
+				<Modal.Window name="export-summary">
+					<ExportSummaryForm
+						selectedRange={selectedRange}
+						currentProject={currentProject}
+						selectedProjectTimes={selectedProjectTimes}
+						selectedHourlyEntries={selectedHourlyEntries}
+						cost={Number(cost)}
+					/>
+				</Modal.Window>
+			</Modal>
 		</div>
 	);
 }

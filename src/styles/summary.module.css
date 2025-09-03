@@ -151,3 +151,11 @@ input[type="checkbox"] {
 	display: block;
 	cursor: pointer;
 }
+
+.exportButton {
+	width: 60%;
+	font-size: var(--fs-m);
+	text-align: center;
+	display: block;
+	margin: 0 auto;
+}
