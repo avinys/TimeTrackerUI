@@ -1,0 +1,48 @@
+.formContainer {
+	min-width: 40rem;
+	border-radius: var(--radius-m);
+	text-align: center;
+}
+
+.title {
+	font-size: var(--fs-xl);
+}
+
+.inputGroup {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: var(--spacing-m);
+	margin: 2rem auto;
+	font-size: var(--fs-m);
+}
+
+.inputGroup input,
+.inputGroup textarea {
+	width: 40%;
+	border: 1px solid var(--color-text-dark);
+	border-radius: var(--radius-s);
+	font-size: var(--fs-m);
+	padding: var(--spacing-xs);
+}
+
+.inputGroup textarea {
+	aspect-ratio: 2/1;
+}
+
+.actions {
+	display: flex;
+	justify-content: space-around;
+}
+
+.submitButton {
+	display: block;
+	width: 100%;
+	max-width: 10rem;
+	font-size: var(--fs-m);
+	text-align: center;
+}
+
+.error {
+	color: var(--color-danger);
+}

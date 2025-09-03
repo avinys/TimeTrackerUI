@@ -3,20 +3,29 @@ import { useMemo } from "react";
 import type { HourlyTimeEntry, SelectedDateRange } from "../types/summary.types";
 
 export type SummaryGraphDataPoint = { name: string; value: number };
+export type SummaryGraphDataPointWithCost = { name: string; value: number; cost: number };
 
 export type SummaryStats = {
 	graphData: SummaryGraphDataPoint[];
+	graphDataWithCost: SummaryGraphDataPointWithCost[];
+	timeUnitLabel: string;
 	totalHours: number;
 	avgPerActiveDay: number;
 	avgPerWeek: number;
 	avgPerMonth: number;
 	activeDays: number;
+	totalHoursWithCost: number;
+	avgPerActiveDayWithCost: number;
+	avgPerWeekWithCost: number;
+	avgPerMonthWithCost: number;
 };
+
+const round = (v: number, d = 2) => Math.round((v + Number.EPSILON) * 10 ** d) / 10 ** d;
 
 function groupByHour(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
 	const arr = new Array(24).fill(0);
 	for (const pt of projectTimes) arr[pt.hour] += pt.duration;
-	return arr.map((v, i) => ({ name: `${String(i).padStart(2, "0")}:00`, value: v }));
+	return arr.map((v, i) => ({ name: `${String(i).padStart(2, "0")}:00`, value: round(v, 2) }));
 }
 
 function groupByDate(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
@@ -26,7 +35,7 @@ function groupByDate(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
 	}
 	return Array.from(map.entries())
 		.sort(([a], [b]) => a.localeCompare(b))
-		.map(([name, value]) => ({ name, value }));
+		.map(([name, value]) => ({ name, value: round(value, 2) }));
 }
 
 function groupByMonth(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] {
@@ -37,55 +46,90 @@ function groupByMonth(projectTimes: HourlyTimeEntry[]): SummaryGraphDataPoint[] 
 	}
 	return Array.from(map.entries())
 		.sort(([a], [b]) => a.localeCompare(b))
-		.map(([name, value]) => ({ name, value }));
+		.map(([name, value]) => ({ name, value: round(value, 2) }));
 }
 
 export function useSummaryData(
 	entries: HourlyTimeEntry[] | undefined,
-	range: SelectedDateRange | null
+	range: SelectedDateRange | null,
+	cost: number = 0
 ): SummaryStats | null {
 	return useMemo(() => {
 		if (!entries || !range) return null;
 
 		let graphData: SummaryGraphDataPoint[] = [];
+		let timeUnit: string;
 
 		switch (range.type) {
 			case "yearly":
 				graphData = groupByMonth(entries);
+				timeUnit = "Month";
 				break;
 			case "monthly":
 			case "weekly":
 				graphData = groupByDate(entries);
+				timeUnit = "Date";
 				break;
 			case "daily":
 				graphData = groupByHour(entries);
+				timeUnit = "Hour";
 				break;
 			case "custom": {
 				const fromDate = new Date(range.fromYear, range.fromMonth, range.fromDay);
 				const toDate = new Date(range.toYear, range.toMonth, range.toDay);
 				const differenceDays = differenceInDays(toDate, fromDate);
-				if (differenceDays <= 1) graphData = groupByHour(entries);
-				else if (differenceDays <= 62) graphData = groupByDate(entries);
-				else graphData = groupByMonth(entries);
+				if (differenceDays <= 1) {
+					graphData = groupByHour(entries);
+					timeUnit = "Hour";
+				} else if (differenceDays <= 62) {
+					graphData = groupByDate(entries);
+					timeUnit = "Date";
+				} else {
+					graphData = groupByMonth(entries);
+					timeUnit = "Month";
+				}
 				break;
 			}
 		}
 
-		const totalHours = entries.reduce((s, e) => s + e.duration, 0);
+		let graphDataWithCost: SummaryGraphDataPointWithCost[] = [];
+		if (cost !== 0) {
+			graphDataWithCost = graphData.map((entry) => ({
+				...entry,
+				cost: round(entry.value * cost, 2),
+			}));
+		}
+
+		const totalHours = round(
+			entries.reduce((s, e) => s + e.duration, 0),
+			2
+		);
 		const days = graphData.length || 1;
 		const activeDays = new Set(entries.map((e) => e.date)).size;
 
-		const avgPerActiveDay = activeDays ? totalHours / activeDays : 0;
-		const avgPerWeek = totalHours / Math.max(1, days / 7);
-		const avgPerMonth = totalHours / Math.max(1, days / 30);
+		const avgPerActiveDay = round(activeDays ? totalHours / activeDays : 0, 2);
+		const avgPerWeek = round(totalHours / Math.max(1, days / 7), 2);
+		const avgPerMonth = round(totalHours / Math.max(1, days / 30), 2);
+
+		const totalHoursWithCost = round(totalHours * cost, 2);
+
+		const avgPerActiveDayWithCost = round(avgPerActiveDay * cost, 2);
+		const avgPerWeekWithCost = round(avgPerWeek * cost, 2);
+		const avgPerMonthWithCost = round(avgPerMonth * cost, 2);
 
 		return {
 			graphData,
+			graphDataWithCost,
+			timeUnitLabel: timeUnit,
 			totalHours,
 			avgPerActiveDay,
 			avgPerWeek,
 			avgPerMonth,
 			activeDays,
+			totalHoursWithCost,
+			avgPerActiveDayWithCost,
+			avgPerWeekWithCost,
+			avgPerMonthWithCost,
 		};
-	}, [entries, range]);
+	}, [entries, range, cost]);
 }

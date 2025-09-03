@@ -18,6 +18,27 @@
 	margin-bottom: var(--spacing-m);
 }
 
+.checkboxInput {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-s);
+	margin-bottom: var(--spacing-m);
+}
+
+.checkboxInput input {
+	height: 1.25rem;
+	aspect-ratio: 1;
+	border-radius: var(--radius-s);
+}
+
+input[type="checkbox"] {
+	accent-color: var(--color-primary);
+}
+.checkboxInput label {
+	font-weight: 600;
+}
+
 .dateRangeSelector {
 	display: flex;
 	flex-direction: column;
@@ -33,6 +54,7 @@
 	width: 80%;
 	min-width: 60rem;
 	margin: 0 auto;
+	border-collapse: collapse;
 	margin-top: var(--spacing-l);
 	border: 2px solid var(--color-primary);
 	border-radius: 8px;
@@ -55,15 +77,17 @@
 }
 
 .chartWrap,
-.totalsWrap {
+.totalsWrap,
+.tableWrap {
 	flex: 1;
 	padding: var(--spacing-m);
 	border-radius: var(--radius-m);
 	background: var(--surface, #fff);
+	border-collapse: collapse;
 }
 
 .chartWrap {
-	min-height: 15rem;
+	min-height: 20rem;
 	height: 100%;
 }
 
@@ -71,4 +95,67 @@
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 	gap: var(--spacing-s);
+}
+
+.summaryTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.summaryTable caption {
+	font-size: var(--fs-l);
+	font-weight: 600;
+	margin: var(--spacing-m);
+	margin-top: 0;
+}
+
+.summaryTable th,
+.summaryTable td {
+	border: 1px solid var(--color-muted);
+	padding: var(--spacing-xs);
+}
+
+.summaryGraphTableContainer {
+	position: relative;
+}
+
+.iconButton {
+	position: absolute;
+	top: 0;
+	right: -3rem;
+	z-index: 1;
+	height: 2.5rem;
+	aspect-ratio: 1;
+	background-color: var(--color-background-lighter);
+	border-radius: var(--radius-m);
+	border: 2px solid var(--color-primary);
+	color: var(--color-primary);
+	overflow: visible;
+}
+
+.iconButton:hover {
+	background-color: color-mix(in srgb, currentColor 8%, transparent);
+	transform: translateY(-1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.iconButton {
+		transition: none;
+	}
+}
+
+.iconButton svg {
+	width: 2rem;
+	height: 2rem;
+	margin: auto;
+	display: block;
+	cursor: pointer;
+}
+
+.exportButton {
+	width: 60%;
+	font-size: var(--fs-m);
+	text-align: center;
+	display: block;
+	margin: 0 auto;
 }

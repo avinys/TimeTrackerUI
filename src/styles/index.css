@@ -78,7 +78,8 @@ body {
 	margin-right: var(--spacing-l);
 }
 
-.actions-container a {
+.actions-container a,
+.actions-container button {
 	width: 45%;
 	padding: var(--spacing-m);
 	font-size: var(--fs-m);
