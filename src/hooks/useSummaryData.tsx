@@ -100,13 +100,16 @@ export function useSummaryData(
 			}));
 		}
 
-		const totalHours = entries.reduce((s, e) => s + e.duration, 0);
+		const totalHours = round(
+			entries.reduce((s, e) => s + e.duration, 0),
+			2
+		);
 		const days = graphData.length || 1;
 		const activeDays = new Set(entries.map((e) => e.date)).size;
 
-		const avgPerActiveDay = activeDays ? totalHours / activeDays : 0;
-		const avgPerWeek = totalHours / Math.max(1, days / 7);
-		const avgPerMonth = totalHours / Math.max(1, days / 30);
+		const avgPerActiveDay = round(activeDays ? totalHours / activeDays : 0, 2);
+		const avgPerWeek = round(totalHours / Math.max(1, days / 7), 2);
+		const avgPerMonth = round(totalHours / Math.max(1, days / 30), 2);
 
 		const totalHoursWithCost = round(totalHours * cost, 2);
 

@@ -1,3 +1,6 @@
+import type { ProjectDto } from "./project.types";
+import type { ProjectTimeDto } from "./projectTime.types";
+
 export type RangeType = "daily" | "weekly" | "monthly" | "yearly" | "custom";
 
 export type SelectedDateRange =
@@ -19,4 +22,33 @@ export interface HourlyTimeEntry {
 	date: string;
 	hour: number;
 	duration: number;
+}
+
+export interface ExportGenerationOptions {
+	totals: boolean;
+	summaryTable: boolean;
+	projectTimesList: boolean;
+	includeCost: boolean;
+}
+
+export interface ExportData {
+	currentProject: ProjectDto;
+	selectedRange: SelectedDateRange;
+	selectedHourlyEntries: HourlyTimeEntry[];
+	selectedProjectTimes: ProjectTimeDto[];
+	summary: {
+		totalHours: number;
+		avgPerActiveDay: number;
+		avgPerWeek: number;
+		avgPerMonth?: number;
+		activeDays: number;
+		totalHoursWithCost: number;
+		avgPerActiveDayWithCost: number;
+		avgPerWeekWithCost: number;
+		avgPerMonthWithCost?: number;
+		timeUnitLabel: string;
+		graphData: Array<{ name: string; value: number }>;
+		graphDataWithCost: Array<{ name: string; value: number; cost: number }>;
+	};
+	cost: number;
 }

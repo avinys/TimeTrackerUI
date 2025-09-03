@@ -36,6 +36,7 @@
 }
 
 .submitButton {
+	display: block;
 	width: 100%;
 	max-width: 10rem;
 	font-size: var(--fs-m);

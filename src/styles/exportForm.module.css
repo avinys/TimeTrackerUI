@@ -1,0 +1,38 @@
+.formContainer {
+	width: 100%;
+	border-radius: var(--radius-m);
+	text-align: center;
+}
+
+.title {
+	font-size: var(--fs-xl);
+}
+
+.inputGroup {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	gap: var(--spacing-m);
+	margin: 2rem auto;
+	font-size: var(--fs-l);
+	font-weight: 300;
+	max-width: 23rem;
+}
+
+.submitButton {
+	width: 100%;
+	max-width: 12rem;
+	font-size: var(--fs-m);
+	text-align: center;
+}
+
+.inputGroup input[type="checkbox"] {
+	height: 1.25rem;
+	aspect-ratio: 1;
+	border-radius: var(--radius-s);
+}
+
+input[type="checkbox"] {
+	accent-color: var(--color-primary);
+}
