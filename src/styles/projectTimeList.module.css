@@ -4,7 +4,7 @@
 	--col-end: 1.6fr;
 	--col-total: 0.8fr;
 	--col-comment: 2fr;
-	--col-actions: 210px; /* room for 2 small buttons */
+	--col-actions: 180px; /* room for 2 small buttons */
 
 	background: var(--color-background-lighter);
 	border: 1px solid var(--color-secondary-hover);
@@ -18,11 +18,26 @@
 /* Grid skeleton shared by header + items */
 .row {
 	display: grid;
-	grid-template-columns: var(--col-start) var(--col-end) var(--col-total) var(--col-comment) var(
-			--col-actions
-		);
+	grid-template-columns:
+		minmax(0, 1.6fr) /* start */
+		minmax(0, 1.6fr) /* end   */
+		minmax(7ch, 0.8fr) /* total */
+		minmax(0, 2fr) /* comment */
+		var(--col-actions);
 	align-items: center;
 	column-gap: var(--spacing-m);
+}
+
+.row > * {
+	min-width: 0;
+}
+
+.noActions .row {
+	grid-template-columns:
+		minmax(0, 1.6fr)
+		minmax(0, 1.6fr)
+		minmax(7ch, 0.8fr)
+		minmax(0, 2fr);
 }
 
 /* Header */
@@ -59,20 +74,21 @@
 .comment {
 	display: flex;
 	align-items: center;
-}
-.start,
-.end {
-	white-space: nowrap;
+	justify-content: center;
 }
 .total {
 	font-weight: 600;
+	min-width: 5rem;
 }
 .comment {
 	color: var(--color-text-dark);
 	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	white-space: nowrap;
+	white-space: normal; /* allows wrapping */
+	word-break: break-word;
+	text-align: center; /* 👈 centers the content */
+	justify-content: center;
 }
 
 /* Actions container */
@@ -94,15 +110,13 @@
 }
 
 /* -------- Responsive -------- */
-@media (max-width: 1024px) {
-	.list {
-		--col-actions: 180px;
-	}
-}
-
 @media (max-width: 760px) {
 	.header {
 		display: none;
+	}
+
+	.noActions .row {
+		grid-template-columns: 1fr;
 	}
 
 	.item {
@@ -111,15 +125,16 @@
 		padding: var(--spacing-m);
 	}
 
-	/* Top line: start time (bold), second: end + total inline, then comment, then actions */
-	.start {
-		font-weight: 700;
-	}
+	.start,
 	.end,
 	.total {
 		display: inline-block;
 		margin-right: var(--spacing-m);
 		color: var(--color-muted);
+	}
+	.start {
+		font-weight: 700;
+		color: var(--color-text-dark);
 	}
 	.comment {
 		white-space: normal;
