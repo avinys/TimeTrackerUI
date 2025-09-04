@@ -14,6 +14,7 @@ type ConfirmDeleteProjectProps = {
 function ConfirmDeleteProject({ project, onCloseModal }: ConfirmDeleteProjectProps) {
 	const { isPending: timesPending, projectTimes } = useGetProjectTimes(project.id, true);
 	const { isPending: deletePending, deleteProject } = useDeleteProject(onCloseModal);
+
 	return (
 		<div>
 			<h2 className={styles.title}>Are you sure you want to delete this project?</h2>
@@ -21,34 +22,56 @@ function ConfirmDeleteProject({ project, onCloseModal }: ConfirmDeleteProjectPro
 				<span className={styles.fieldTitle}>Name:</span> {project.name}
 			</p>
 			<p className={styles.field}>
-				<span className={styles.fieldTitle}> Creation date:</span>{" "}
-				{format(project.createdAt ?? "", "yyyy-mm-dd HH:MM:ss")}
+				<span className={styles.fieldTitle}>Creation date:</span>{" "}
+				{format(project.createdAt, "yyyy-mm-dd HH:MM:ss")}
 			</p>
-			<h2 className={styles.title}>
-				<span>Warning.</span> All the project times listed below will be deleted:
+			<h2 className={clsx(styles.title, styles.danger)}>
+				Warning! All the project times listed below will be deleted:
 			</h2>
 			{timesPending ? (
 				<Spinner />
-			) : (
-				<ul>
-					{projectTimes?.map((pt) => (
-						<li>
-							<span>From: {format(pt.startTime ?? "", "yyyy-mm-dd HH:MM:ss")}</span>
+			) : projectTimes && projectTimes.length ? (
+				<ul className={styles.timeList}>
+					{projectTimes.map((pt) => (
+						<li key={pt.id} className={styles.timeItem}>
 							<span>
-								To: {pt.endTime ? format(pt.endTime, "yyyy-mm-dd HH:MM:ss") : "now"}
+								<span className={styles.fieldTitle}>From:</span>{" "}
+								{format(pt.startTime, "yyyy-MM-dd HH:mm:ss")}
 							</span>
-							{pt.comment !== "" && <span>Comment: {pt.comment}</span>}
+							<span>
+								<span className={styles.fieldTitle}>To:</span>{" "}
+								{pt.endTime ? format(pt.endTime, "yyyy-MM-dd HH:mm:ss") : "now"}
+							</span>
+							{pt.comment && (
+								<span>
+									<span className={styles.fieldTitle}>Comment:</span> {pt.comment}
+								</span>
+							)}
 						</li>
 					))}
 				</ul>
+			) : (
+				<p className={styles.field}>No project times.</p>
 			)}
 
-			<button
-				className={clsx("btn", styles.submitButton)}
-				onClick={() => deleteProject({ projectId: project.id })}
-			>
-				{deletePending ? "Deleting..." : "Confirm"}
-			</button>
+			<div className={styles.actions}>
+				<button
+					type="button"
+					className="btn btnOutline"
+					onClick={onCloseModal}
+					disabled={deletePending}
+				>
+					Cancel
+				</button>
+				<button
+					type="button"
+					className="btn btnDanger"
+					onClick={() => deleteProject({ projectId: project.id })}
+					disabled={deletePending}
+				>
+					{deletePending ? "Deleting..." : "Confirm"}
+				</button>
+			</div>
 		</div>
 	);
 }
