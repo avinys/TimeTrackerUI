@@ -25,7 +25,7 @@ type OpenProps = {
 };
 
 type WindowProps = {
-	children: ReactElement<{ onCloseModal: () => void }>;
+	children: ReactElement<any> | null;
 	name: string;
 };
 
@@ -72,7 +72,7 @@ function Window({ children, name }: WindowProps) {
 				<button className={styles.button} onClick={close}>
 					<HiXMark />
 				</button>
-				{cloneElement(children, { onCloseModal: close })}
+				{children && cloneElement(children, { onCloseModal: close })}
 			</div>
 		</div>,
 		document.body

@@ -8,7 +8,7 @@ import Spinner from "./Spinner";
 
 type ConfirmDeleteProjectProps = {
 	project: ProjectDto;
-	onCloseModal: () => void;
+	onCloseModal?: () => void;
 };
 
 function ConfirmDeleteProject({ project, onCloseModal }: ConfirmDeleteProjectProps) {

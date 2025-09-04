@@ -6,7 +6,7 @@ import type { ProjectTimeDto } from "../types/projectTime.types";
 
 type ConfirmDeleteProjectTimeProps = {
 	projectTime: ProjectTimeDto;
-	onCloseModal: () => void;
+	onCloseModal?: () => void;
 };
 
 function ConfirmDeleteProjectTime({ projectTime, onCloseModal }: ConfirmDeleteProjectTimeProps) {

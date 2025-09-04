@@ -8,7 +8,7 @@ import { toLocalInputValue } from "../util/formatTime";
 
 type EditProjectTimeFormProps = {
 	projectTime: ProjectTimeDto;
-	onCloseModal: () => void;
+	onCloseModal?: () => void;
 };
 
 function EditProjectTimeForm({ projectTime, onCloseModal }: EditProjectTimeFormProps) {

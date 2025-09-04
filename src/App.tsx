@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
 		},
 	},
 	queryCache: new QueryCache({
-		onError: (error, query) => {
+		onError: (error, _query) => {
 			// avoid toasting initial “no data yet” errors if you want
 			toast.error(
 				(error as any)?.response?.data?.detail ||
