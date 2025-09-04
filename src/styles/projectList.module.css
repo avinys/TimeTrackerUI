@@ -1,61 +1,147 @@
 .projectList {
-	background-color: var(--color-background-lighter);
+	--col-name: 2fr;
+	--col-date: 1.4fr;
+	--col-state: 1fr;
+	--col-actions: 180px;
+}
+
+/* List container */
+.projectList {
+	background: var(--color-background-lighter);
+	border: 1px solid var(--color-secondary-hover);
 	border-radius: var(--radius-m);
-	list-style-type: none;
+	box-shadow: var(--shadow-m);
+	list-style: none;
 	padding: var(--spacing-l);
 	width: 100%;
 }
 
-.listItem,
-.listHeader {
-	display: flex;
-	flex-direction: row;
-	padding: var(--spacing-s);
-	margin: var(--spacing-m);
-	justify-content: space-around;
+/* Header + rows share grid skeleton */
+.listRow {
+	display: grid;
+	grid-template-columns: var(--col-name) var(--col-date) var(--col-state) var(--col-actions);
+	align-items: center;
+	column-gap: var(--spacing-m);
 }
 
+.listHeader,
 .listItem {
-	border: 1px solid var(--color-primary);
-	border-radius: var(--radius-m);
-	background-color: var(--color-background);
+	padding-inline: var(--spacing-m);
 }
 
+/* Header */
 .listHeader {
-	font-weight: bold;
+	padding: 0 var(--spacing-m) var(--spacing-s);
+	margin-bottom: var(--spacing-s);
+	border-bottom: 1px solid var(--color-secondary-hover);
+	color: var(--color-text-dark);
+	font-weight: 700;
 }
 
-.listItem p,
-.listHeader p {
-	width: 20%;
-	text-align: left;
-	margin-right: var(--spacing-s);
-	padding-right: var(--spacing-s);
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
+/* Row card */
+.listItem {
+	background: var(--color-background);
+	border: 1px solid var(--color-background-lighter);
+	border-radius: var(--radius-m);
+	padding-block: var(--spacing-m);
+	box-shadow: var(--shadow-s);
+	margin-block: var(--spacing-s);
+	transition: box-shadow var(--transition-default), transform var(--transition-default);
+}
+.listItem:hover {
+	box-shadow: var(--shadow-m);
+	transform: translateY(-1px);
 }
 
-.projectActions {
-	width: 40%;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: center;
-	text-align: center;
+/* Cells */
+.name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: 600;
+}
+.date {
+	white-space: nowrap;
+	color: var(--color-muted);
 }
 
-.projectActions button,
-.projectActions a {
-	width: 45%;
+/* Status chip (subtle, not screaming red/pink rows) */
+.timerRunningIndicator,
+.timerNotRunningIndicator {
+	font-weight: 600;
+	border-radius: var(--radius-m);
+	margin: 0 auto;
+	padding: 0.25rem 0.5rem;
+	width: max-content;
+	background: var(--color-background-lighter);
 }
 
 .timerRunningIndicator {
 	color: var(--color-success);
-	font-weight: 600;
 }
-
 .timerNotRunningIndicator {
 	color: var(--color-danger);
-	font-weight: 600;
+}
+
+/* Actions row: right aligned, tidy gap, no fixed widths */
+.projectActions {
+	display: inline-flex;
+	justify-content: space-around;
+	align-items: center;
+	gap: var(--spacing-s);
+}
+
+/* Empty state (if used) */
+.empty {
+	text-align: center;
+	border: 1px dashed var(--color-secondary-hover);
+	border-radius: var(--radius-m);
+	padding: var(--spacing-l);
+	background: var(--color-background-lighter);
+	color: var(--color-muted);
+}
+
+/* --------- Responsive --------- */
+@media (max-width: 900px) {
+	/* tighten but keep same template so it still aligns */
+	.projectList {
+		--col-name: 1.8fr;
+		--col-date: 1.2fr;
+		--col-state: 0.9fr;
+		--col-actions: 160px;
+	}
+}
+
+@media (max-width: 700px) {
+	/* Hide table header; rows become cards */
+	.listHeader {
+		display: none;
+	}
+
+	.listItem {
+		grid-template-columns: 1fr;
+		row-gap: var(--spacing-xs);
+		padding: var(--spacing-m);
+	}
+
+	.name {
+		margin-bottom: var(--spacing-xs);
+	}
+	.date {
+		order: 2;
+	}
+	.timerRunningIndicator,
+	.timerNotRunningIndicator {
+		order: 3;
+	}
+
+	.projectActions {
+		order: 4;
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-top: var(--spacing-s);
+	}
+	.projectActions > * {
+		flex: 1 1 140px;
+	}
 }

@@ -14,42 +14,56 @@ export default function ProjectList() {
 
 	if (isPending) return <Spinner />;
 
+	if (!projects || projects.length === 0) {
+		return (
+			<div className={styles.empty}>
+				<p>No projects yet.</p>
+				<p>Create your first project to start tracking time.</p>
+			</div>
+		);
+	}
+
 	return (
 		<Modal>
 			<ul className={styles.projectList}>
-				<li className={styles.listHeader}>
+				<li className={`${styles.listRow} ${styles.listHeader}`} aria-hidden="true">
 					<p>Project Name</p>
 					<p>Date Created</p>
 					<p>State</p>
-					<div className={styles.projectActions}>Actions</div>
+					<div>Actions</div>
 				</li>
-				{projects &&
-					projects.length > 0 &&
-					projects.map((p) => (
-						<li key={p.id} className={styles.listItem}>
-							<p>{p.name}</p>
-							<p>{format(new Date(p.createdAt), "yyyy-MM-dd HH:mm:ss")}</p>
-							{p.isRunning ? (
-								<p className={styles.timerRunningIndicator}>Running</p>
-							) : (
-								<p className={styles.timerNotRunningIndicator}>Stopped</p>
-							)}
-							<div className={styles.projectActions}>
-								<Link to={`/project-time/${p.id}`} className="btn">
-									View
-								</Link>
-								<Modal.Open opens="confirm-delete-project">
-									<button
-										onClick={() => setProjectToDelete(p)}
-										className="btn-alt"
-									>
-										Delete
-									</button>
-								</Modal.Open>
-							</div>
-						</li>
-					))}
+
+				{projects.map((p) => (
+					<li key={p.id} className={`${styles.listRow} ${styles.listItem}`}>
+						<p className={styles.name}>{p.name}</p>
+						<p className={styles.date}>
+							{format(new Date(p.createdAt), "yyyy-MM-dd HH:mm:ss")}
+						</p>
+						{p.isRunning ? (
+							<p className={styles.timerRunningIndicator}>Running</p>
+						) : (
+							<p className={styles.timerNotRunningIndicator}>Stopped</p>
+						)}
+
+						<div className={styles.projectActions}>
+							<Link to={`/project-time/${p.id}`} className="btn btnSubtle btn--md">
+								View
+							</Link>
+
+							<Modal.Open opens="confirm-delete-project">
+								<button
+									type="button"
+									onClick={() => setProjectToDelete(p)}
+									className="btn btnDanger btn--md"
+								>
+									Delete
+								</button>
+							</Modal.Open>
+						</div>
+					</li>
+				))}
 			</ul>
+
 			<Modal.Window name="confirm-delete-project">
 				{projectToDelete && <ConfirmDeleteProject project={projectToDelete} />}
 			</Modal.Window>

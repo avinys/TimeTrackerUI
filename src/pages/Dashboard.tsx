@@ -4,7 +4,6 @@ import ProjectList from "../components/ProjectList";
 import styles from "../styles/dashboard.module.css";
 import Modal from "../components/Modal";
 import CreateProjectForm from "../components/CreateProjectForm";
-import clsx from "clsx";
 
 export default function Dashboard() {
 	const { user } = useAuth();
