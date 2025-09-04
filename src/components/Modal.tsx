@@ -69,7 +69,7 @@ function Window({ children, name }: WindowProps) {
 	return createPortal(
 		<div className={styles.overlay}>
 			<div className={styles.modal} ref={ref}>
-				<button className={styles.button} onClick={close}>
+				<button className={`btn btnIcon btnOutline ${styles.closeBtn}`} onClick={close}>
 					<HiXMark />
 				</button>
 				{children && cloneElement(children, { onCloseModal: close })}

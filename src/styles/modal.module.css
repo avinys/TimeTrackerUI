@@ -2,48 +2,42 @@
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	translate: -50% -50%;
 	background-color: var(--color-background-lighter);
 	border-radius: var(--radius-l);
 	box-shadow: var(--shadow-l);
-	padding: 3.2rem 4rem;
-	transition: all 0.5s;
+	padding: var(--spacing-xl) var(--spacing-xl);
+	max-width: min(720px, 92vw);
+	width: max-content;
+	max-height: 90vh;
+	overflow: auto;
+	z-index: var(--z-modal); /* use your token */
 }
 
 .overlay {
 	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100vh;
-	background-color: var(--backdrop-color);
+	inset: 0;
+	background-color: color-mix(in srgb, black 40%, transparent); /* backdrop */
 	backdrop-filter: blur(4px);
-	z-index: 1000;
-	transition: all 0.5s;
+	z-index: calc(var(--z-modal) - 1);
 }
 
-.button {
-	background: none;
-	border: none;
-	padding: 0.4rem;
-	border-radius: var(--radius-s);
-	transform: translateX(0.8rem);
-	transition: all 0.2s;
+/* Close button uses global button system (btnIcon + btnOutline) */
+.closeBtn {
 	position: absolute;
-	top: 1.2rem;
-	right: 1.9rem;
+	top: var(--spacing-s);
+	right: var(--spacing-s);
+	font-size: var(--fs-l) !important;
+	padding: var(--spacing-s) var(--spacing-m);
+	border-radius: var(--radius-m);
+	border: none !important;
+	box-shadow: none !important;
+}
 
-	&:hover {
-		background-color: rgba(128, 128, 128, 0.1);
-		cursor: pointer;
-	}
-
-	& svg {
-		width: 2.4rem;
-		height: 2.4rem;
-		/* Sometimes we need both */
-		/* fill: var(--color-grey-500);
-    stroke: var(--color-grey-500); */
-		color: rgba(128, 128, 128);
+/* Responsive padding */
+@media (max-width: 640px) {
+	.modal {
+		padding: var(--spacing-l);
+		max-width: 94vw;
 	}
 }
