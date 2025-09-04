@@ -75,7 +75,6 @@ input[type="checkbox"] {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 	gap: var(--spacing-s);
-	min-height: 20rem;
 }
 
 /* Container that positions the view toggle button */

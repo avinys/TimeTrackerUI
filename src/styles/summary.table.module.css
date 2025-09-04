@@ -42,7 +42,7 @@
 
 /* Numbers right-aligned */
 .num {
-	text-align: right;
+	text-align: center;
 }
 
 /* Compact on small screens */
