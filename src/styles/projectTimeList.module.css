@@ -1,0 +1,146 @@
+/* Wrapper */
+.list {
+	--col-start: 1.6fr;
+	--col-end: 1.6fr;
+	--col-total: 0.8fr;
+	--col-comment: 2fr;
+	--col-actions: 210px; /* room for 2 small buttons */
+
+	background: var(--color-background-lighter);
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-m);
+	box-shadow: var(--shadow-m);
+	list-style: none;
+	padding: var(--spacing-l);
+	width: 100%;
+}
+
+/* Grid skeleton shared by header + items */
+.row {
+	display: grid;
+	grid-template-columns: var(--col-start) var(--col-end) var(--col-total) var(--col-comment) var(
+			--col-actions
+		);
+	align-items: center;
+	column-gap: var(--spacing-m);
+}
+
+/* Header */
+.header {
+	padding: 0 var(--spacing-m) var(--spacing-s);
+	margin-bottom: var(--spacing-s);
+	border-bottom: 1px solid var(--color-secondary-hover);
+	color: var(--color-text-dark);
+	font-weight: 700;
+}
+.actionsHead {
+	justify-self: center;
+}
+
+/* Items */
+.item {
+	background: var(--color-background);
+	border: 1px solid var(--color-background);
+	border-radius: var(--radius-m);
+	padding: var(--spacing-m);
+	margin-block: var(--spacing-s);
+	box-shadow: var(--shadow-s);
+	transition: box-shadow var(--transition-default), transform var(--transition-default);
+}
+.item:hover {
+	box-shadow: var(--shadow-m);
+	transform: translateY(-1px);
+}
+
+/* Cells */
+.start,
+.end,
+.total,
+.comment {
+	display: flex;
+	align-items: center;
+}
+.start,
+.end {
+	white-space: nowrap;
+}
+.total {
+	font-weight: 600;
+}
+.comment {
+	color: var(--color-text-dark);
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Actions container */
+.actions {
+	display: inline-flex;
+	justify-content: space-around;
+	align-items: center;
+	gap: var(--spacing-s);
+}
+
+/* Empty */
+.empty {
+	text-align: center;
+	border: 1px dashed var(--color-secondary-hover);
+	border-radius: var(--radius-m);
+	padding: var(--spacing-l);
+	background: var(--color-background-lighter);
+	color: var(--color-muted);
+}
+
+/* -------- Responsive -------- */
+@media (max-width: 1024px) {
+	.list {
+		--col-actions: 180px;
+	}
+}
+
+@media (max-width: 760px) {
+	.header {
+		display: none;
+	}
+
+	.item {
+		grid-template-columns: 1fr;
+		row-gap: var(--spacing-xs);
+		padding: var(--spacing-m);
+	}
+
+	/* Top line: start time (bold), second: end + total inline, then comment, then actions */
+	.start {
+		font-weight: 700;
+	}
+	.end,
+	.total {
+		display: inline-block;
+		margin-right: var(--spacing-m);
+		color: var(--color-muted);
+	}
+	.comment {
+		white-space: normal;
+	}
+
+	.actions {
+		justify-content: center;
+		flex-wrap: wrap;
+		margin-top: var(--spacing-s);
+	}
+	.actions > * {
+		flex: 1 1 140px;
+	}
+}
+
+/* Optional compact handset tweak */
+@media (max-width: 420px) {
+	.list {
+		padding: var(--spacing-m);
+	}
+	.item {
+		padding: var(--spacing-s) var(--spacing-m);
+	}
+}

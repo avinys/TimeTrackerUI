@@ -1,20 +1,66 @@
+/* Big time display */
+.clockContainer {
+	display: grid;
+	place-items: center;
+	margin-block: var(--spacing-m) var(--spacing-l);
+}
+
 .clockTime {
-	font-size: var(--fs-xxl);
-	font-family: "Rubik", sans-serif;
+	font-family: "Rubik", var(--font-family), sans-serif;
 	font-weight: 500;
+	font-size: var(--fs-xxl); /* initial large size */
+	line-height: 1.1;
+	color: var(--color-text-dark);
+	text-align: center;
 }
 
-.clockButton {
-	padding: var(--spacing-l) var(--spacing-xxl);
-	margin: var(--spacing-m);
-	margin-bottom: var(--spacing-xl);
-	border-radius: var(--radius-l);
-	border: 2px solid;
+/* Actions layout */
+.clockActions {
+	display: flex;
+	gap: var(--spacing-m);
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-block: var(--spacing-m) var(--spacing-l);
+}
+
+.clockActions .clockBtn,
+.btn.clockBtn {
+	padding: var(--spacing-l) var(--spacing-xxl); /* original big size */
 	font-size: var(--fs-l);
-	font-family: "Rubik", sans-serif;
+	font-family: "Rubik", var(--font-family), sans-serif;
+	border-radius: var(--radius-l);
+}
+/* -------- Responsive -------- */
+
+/* Medium screens */
+@media (max-width: 768px) {
+	.clockTime {
+		font-size: 4rem; /* smaller clock */
+	}
+
+	.clockActions .clockBtn,
+	.btn.clockBtn {
+		padding: var(--spacing-m) var(--spacing-xl);
+		font-size: var(--fs-m);
+	}
 }
 
-.startButton {
-	background-color: var(--color-primary);
-	color: var(--color-text-light);
+/* Small screens */
+@media (max-width: 480px) {
+	.clockTime {
+		font-size: 2.5rem; /* even smaller clock */
+	}
+
+	.clockActions {
+		flex-direction: column; /* stack buttons */
+	}
+
+	.clockActions .clockBtn,
+	.btn.clockBtn {
+		width: 100%;
+		max-width: 280px;
+		padding: var(--spacing-s) var(--spacing-l);
+		font-size: var(--fs-s);
+	}
 }
