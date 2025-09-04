@@ -1,0 +1,52 @@
+/* Wrapper: a small card-like row stack that centers in the controls card */
+.wrap {
+	display: grid;
+	gap: var(--spacing-s);
+	justify-items: center;
+}
+
+/* First row: the range-type select */
+.rangeType {
+	width: clamp(220px, 40vw, 320px);
+}
+
+/* Shared input look (selects and date inputs) */
+.input {
+	width: clamp(180px, 28vw, 260px);
+	height: 2.25rem;
+	padding: 0 var(--spacing-s);
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-s);
+	font-size: var(--fs-m);
+	background: var(--color-white);
+	box-shadow: var(--shadow-s);
+	box-sizing: border-box;
+}
+
+/* Group rows (year/month/week) */
+.row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-s);
+	justify-content: center;
+}
+
+/* Inline custom range – keep the dash tight */
+.inline {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-s);
+}
+
+/* Validation message */
+.error {
+	color: var(--color-danger);
+	font-size: var(--fs-s);
+}
+
+/* Responsive tweaks */
+@media (max-width: 720px) {
+	.input {
+		width: clamp(180px, 46vw, 260px);
+	}
+}
