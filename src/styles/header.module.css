@@ -7,7 +7,7 @@
 	font-family: "Rubik", var(--font-family), sans-serif;
 
 	/* No fixed height: let content define height and center vertically */
-	padding: var(--spacing-s) var(--spacing-m);
+	padding: var(--spacing-m) var(--spacing-m);
 	box-shadow: var(--shadow-m);
 	/* optional: remove the page gap line issues */
 	margin: 0;

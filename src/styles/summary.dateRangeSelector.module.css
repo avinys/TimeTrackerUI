@@ -3,6 +3,7 @@
 	display: grid;
 	gap: var(--spacing-s);
 	justify-items: center;
+	margin-bottom: var(--spacing-m);
 }
 
 /* First row: the range-type select */
@@ -12,7 +13,7 @@
 
 /* Shared input look (selects and date inputs) */
 .input {
-	width: clamp(180px, 28vw, 260px);
+	width: clamp(220px, 40vw, 320px);
 	height: 2.25rem;
 	padding: 0 var(--spacing-s);
 	border: 1px solid var(--color-secondary-hover);

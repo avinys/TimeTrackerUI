@@ -6,7 +6,7 @@ import SummaryGraph from "../components/SummaryGraph";
 import SummaryTotals from "../components/SummaryTotals";
 import { useGetProjects } from "../hooks/useGetProjects";
 import { useGetProjectTimes } from "../hooks/useGetProjectTimes";
-import styles from "../styles/summary.module.css";
+import styles from "../styles/summary.page.module.css";
 import type { ProjectDto } from "../types/project.types";
 import type { SelectedDateRange } from "../types/summary.types";
 import { filterProjectTimes, groupTimesInRangeSeconds } from "../util/getWeeksInMonth";
@@ -62,7 +62,7 @@ export default function SummaryPage() {
 	return (
 		<div className="container">
 			<Modal>
-				<div className={styles.inputContainer}>
+				<div className={styles.controlsCard}>
 					{loadingTop ? (
 						<Spinner />
 					) : (
@@ -122,7 +122,7 @@ export default function SummaryPage() {
 							)}
 							{selectedRange && currentProject && (
 								<Modal.Open opens="export-summary">
-									<button className={clsx("btn-alt", styles.exportButton)}>
+									<button className={clsx("btn btnOutline", styles.exportBtn)}>
 										Export Summary Information to File
 									</button>
 								</Modal.Open>
@@ -145,17 +145,26 @@ export default function SummaryPage() {
 											cost={cost !== "" ? Number(cost) : 0}
 										/>
 									</div>
-									<div className={styles.summaryGraphTableContainer}>
-										<button
-											className={styles.iconButton}
-											onClick={() => setShowGraph((prev) => !prev)}
-										>
-											{showGraph ? (
-												<HiTableCells title="Toggle table view" />
-											) : (
-												<HiChartBar title="Toggle graph view" />
-											)}
-										</button>
+									<div className={styles.vizSwitch}>
+										<div className={styles.toggleRow}>
+											<button
+												className={clsx(
+													"btn",
+													"btnIcon",
+													"btnOutline",
+													styles.toggleBtn
+												)}
+												onClick={() => setShowGraph((p) => !p)}
+												aria-label={showGraph ? "Show table" : "Show graph"}
+												title={
+													showGraph
+														? "Toggle table view"
+														: "Toggle graph view"
+												}
+											>
+												{showGraph ? <HiTableCells /> : <HiChartBar />}
+											</button>
+										</div>
 										{showGraph ? (
 											<div className={styles.chartWrap}>
 												<SummaryGraph
@@ -178,7 +187,7 @@ export default function SummaryPage() {
 							</>
 						)}
 						{hasSelection && (
-							<div className={styles.listContainer}>
+							<div className={styles.listCard}>
 								<ProjectTimeList rows={selectedProjectTimes} />
 							</div>
 						)}

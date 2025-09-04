@@ -1,0 +1,159 @@
+/* === Page containers (only) === */
+
+/* Card that holds project selector, range selector, cost toggle, export trigger */
+.controlsCard {
+	width: clamp(320px, 92vw, 1040px);
+	margin: 0 auto var(--spacing-l);
+	background: var(--color-background-lighter);
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-m);
+	box-shadow: var(--shadow-m);
+	padding: var(--spacing-l);
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+/* Shared input look for selects/inputs placed in the card (page-level only) */
+.inputElement {
+	width: clamp(220px, 40vw, 320px);
+	height: 2.25rem;
+	padding: 0 var(--spacing-s);
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-s);
+	font-size: var(--fs-m);
+	background: var(--color-white);
+	box-shadow: var(--shadow-s);
+	margin-bottom: var(--spacing-m);
+}
+
+/* small label + checkbox row */
+.checkboxInput {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-s);
+	margin-bottom: var(--spacing-m);
+}
+.checkboxInput input {
+	height: 1.1rem;
+	aspect-ratio: 1;
+	border-radius: var(--radius-s);
+}
+input[type="checkbox"] {
+	accent-color: var(--color-primary);
+}
+
+.selectTitle {
+	margin-bottom: var(--spacing-m);
+	text-align: center;
+}
+
+/* Grid that holds totals + viz (graph/table) */
+.summaryGrid {
+	display: grid;
+	gap: var(--spacing-m);
+	align-items: stretch;
+	width: clamp(320px, 92vw, 1040px);
+	margin: 0 auto;
+}
+
+/* Totals + viz wrappers (surface cards) */
+.totalsWrap,
+.chartWrap,
+.tableWrap {
+	background: var(--color-white);
+	border-radius: var(--radius-m);
+	border: 1px solid var(--color-secondary-hover);
+	box-shadow: var(--shadow-s);
+	padding: var(--spacing-m);
+}
+
+/* Make totals a responsive grid (internal component still decides items) */
+.totalsWrap {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: var(--spacing-s);
+	min-height: 20rem;
+}
+
+/* Container that positions the view toggle button */
+.vizSwitch {
+	position: relative;
+	--fab-size: 2rem;
+}
+
+/* Position only; visual style comes from global .btn.btnIcon/.btnOutline */
+.toggleBtn {
+	position: absolute;
+	z-index: 2;
+}
+
+/* List (ProjectTimeList) card under the grid */
+.listCard {
+	width: clamp(320px, 92vw, 1040px);
+	margin: var(--spacing-l) auto 0;
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-m);
+	background: var(--color-background-lighter);
+	box-shadow: var(--shadow-m);
+}
+
+/* Export button spacing */
+.exportBtn {
+	display: block;
+	margin: var(--spacing-s) auto 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media (min-width: 721px) {
+	.toggleRow {
+		/* visually collapses; the button will float, so no extra spacing */
+		margin-bottom: 0;
+	}
+
+	.toggleBtn {
+		position: absolute;
+		top: var(--spacing-s);
+		right: var(--spacing-s);
+	}
+
+	/* Add just enough padding so the FAB never covers axes/legends */
+	.chartWrap,
+	.tableWrap {
+		padding-top: calc(var(--spacing-m) + var(--fab-size));
+		padding-right: calc(var(--spacing-m) + var(--fab-size));
+	}
+}
+
+@media (max-width: 720px) {
+	.toggleBtn {
+		position: static;
+	}
+	.viz-switch {
+		position: relative;
+	}
+	.toggleRow {
+		position: absolute;
+		left: 50%;
+		top: 0; /* at the card’s top edge */
+		transform: translate(-50%, 10%); /* lift it outside */
+		z-index: 3; /* above card border */
+		margin-bottom: 0; /* avoid extra gap */
+	}
+	.inputElement {
+		width: clamp(180px, 46vw, 260px);
+	}
+	.controlsCard {
+		padding: var(--spacing-m);
+	}
+	.summaryGrid {
+		gap: var(--spacing-s);
+	}
+	.chartWrap,
+	.tableWrap {
+		padding-top: calc(var(--spacing-m) + var(--fab-size));
+	}
+}
