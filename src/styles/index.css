@@ -84,3 +84,17 @@ body {
 	padding: var(--spacing-m);
 	font-size: var(--fs-m);
 }
+
+.heroBg {
+	position: fixed; /* cover whole app */
+	inset: 0;
+	z-index: -1; /* push behind header + page */
+	background: radial-gradient(
+			1200px 500px at 15% -10%,
+			var(--color-primary-hover) 0%,
+			transparent 60%
+		),
+		radial-gradient(900px 500px at 100% 0%, var(--color-secondary-hover) 0%, transparent 65%);
+	opacity: 0.35;
+	pointer-events: none;
+}

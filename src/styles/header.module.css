@@ -1,46 +1,127 @@
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap");
 
+/* Header bar */
 .header {
 	background-color: var(--color-primary);
-	padding: var(--spacing-m);
-	margin-bottom: var(--spacing-m);
-	font-size: var(--fs-l);
-	height: 4rem;
+	color: var(--color-text-light);
+	font-family: "Rubik", var(--font-family), sans-serif;
+
+	/* No fixed height: let content define height and center vertically */
+	padding: var(--spacing-s) var(--spacing-m);
+	box-shadow: var(--shadow-m);
+	/* optional: remove the page gap line issues */
+	margin: 0;
 }
 
+/* Flex container for logo + actions */
 .navContainer {
-	width: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: flex-start;
-	color: var(--color-text-light);
+	gap: var(--spacing-m);
+	width: 100%;
 }
 
-.navLink {
-	text-decoration: none;
-	margin: var(--spacing-s) var(--spacing-m);
-	color: inherit;
-}
-
-.navButton {
-	background-color: var(--color-primary);
-	color: inherit;
-	font-size: var(--fs-l);
-	border: none;
-	text-decoration: underline;
+/* Push the second child (first item after the logo) to the right */
+.navContainer > :nth-child(2) {
 	margin-left: auto;
 }
 
-.navLink:hover,
-.navButton:hover {
-	color: var(--color-secondary-hover);
+/* Brand logo */
+.logo {
+	text-decoration: none;
+	color: inherit;
+	font-weight: 700;
+	font-size: var(--fs-xl);
+	letter-spacing: 0.2px;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+}
+
+/* Links & button normalized */
+.navLink,
+.navButton {
+	font-size: var(--fs-m);
+	line-height: 1;
+	color: inherit;
+	text-decoration: none;
+
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: var(--radius-s);
+
+	padding: var(--spacing-xs) var(--spacing-s);
+	display: inline-flex;
+	align-items: center;
+
+	transition: background-color var(--transition-default), border-color var(--transition-default),
+		color var(--transition-default);
 	cursor: pointer;
 }
 
-.logo {
-	color: inherit;
-	text-decoration: none;
-	font-family: "Rubik", sans-serif;
-	font-size: var(--fs-xl);
-	font-weight: 700;
+/* Make the button look like a link by default */
+.navButton {
+	appearance: none;
+}
+
+/* Hover / active */
+.navLink:hover,
+.navButton:hover {
+	color: var(--color-secondary-hover);
+	background-color: rgba(255, 255, 255, 0.06);
+	border-color: rgba(255, 255, 255, 0.08);
+}
+
+.navLink:active,
+.navButton:active {
+	background-color: rgba(0, 0, 0, 0.06);
+}
+
+/* Keyboard focus */
+.navLink:focus-visible,
+.navButton:focus-visible,
+.logo:focus-visible {
+	outline: 2px solid var(--color-primary-hover);
+	outline-offset: 2px;
+	border-radius: var(--radius-s);
+}
+
+/* Compact on smaller screens */
+@media (max-width: 768px) {
+	.header {
+		padding: var(--spacing-s) var(--spacing-m);
+	}
+	.logo {
+		font-size: 1.5rem; /* a bit smaller than var(--fs-xl) */
+	}
+	.navLink,
+	.navButton {
+		font-size: var(--fs-s);
+		padding: var(--spacing-xs) var(--spacing-xs);
+	}
+	.navContainer {
+		gap: var(--spacing-s);
+	}
+}
+
+/* Very small screens: allow wrapping gracefully */
+@media (max-width: 480px) {
+	.navContainer {
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: var(--spacing-s);
+	}
+	.logo {
+		flex: 1 1 100%;
+		text-align: center;
+		margin: 0;
+	}
+	/* stop pushing items to the right on mobile */
+	.navContainer > :nth-child(2) {
+		margin-left: 0;
+	}
+	.navLink,
+	.navButton {
+		justify-content: center; /* center text inside */
+	}
 }
