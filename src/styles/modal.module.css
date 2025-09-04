@@ -38,6 +38,11 @@
 @media (max-width: 640px) {
 	.modal {
 		padding: var(--spacing-l);
-		max-width: 94vw;
+		max-width: 100vw;
+	}
+
+	.closeBtn {
+		top: 0;
+		right: 0;
 	}
 }
