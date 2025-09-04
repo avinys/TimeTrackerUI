@@ -21,30 +21,35 @@ export default function ProjectTimesPage() {
 					<ProjectTimeList
 						renderActions={(p: ProjectTimeDto) => (
 							<>
-								<Modal.Open opens="confirm-delete-project-time">
+								<Modal.Open opens="edit-project-time">
 									<button
-										onClick={() => setProjectTimeToDelete(p)}
-										className="btn-alt"
+										type="button"
+										onClick={() => setProjectTimeToEdit(p)}
+										className="btn btnSubtle btn--md"
 									>
-										Delete
+										Edit
 									</button>
 								</Modal.Open>
-								<Modal.Open opens="edit-project-time">
-									<button onClick={() => setProjectTimeToEdit(p)} className="btn">
-										Edit
+								<Modal.Open opens="confirm-delete-project-time">
+									<button
+										type="button"
+										onClick={() => setProjectTimeToDelete(p)}
+										className="btn btnDanger btn--md"
+									>
+										Delete
 									</button>
 								</Modal.Open>
 							</>
 						)}
 					/>
-					<Modal.Window name="confirm-delete-project-time">
-						{projectTimeToDelete && (
-							<ConfirmDeleteProjectTime projectTime={projectTimeToDelete} />
-						)}
-					</Modal.Window>
 					<Modal.Window name="edit-project-time">
 						{projectTimeToEdit && (
 							<EditProjectTimeForm projectTime={projectTimeToEdit} />
+						)}
+					</Modal.Window>
+					<Modal.Window name="confirm-delete-project-time">
+						{projectTimeToDelete && (
+							<ConfirmDeleteProjectTime projectTime={projectTimeToDelete} />
 						)}
 					</Modal.Window>
 				</Modal>

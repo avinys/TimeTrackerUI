@@ -1,6 +1,6 @@
-import { useSummaryData } from "../hooks/useSummaryData";
 import type { HourlyTimeEntry, SelectedDateRange } from "../types/summary.types";
-import styles from "../styles/summary.module.css";
+import { useSummaryData } from "../hooks/useSummaryData";
+import styles from "../styles/summary.totals.module.css";
 
 type SummaryTotalsProps = {
 	selectedHourlyEntries: HourlyTimeEntry[] | undefined;
@@ -16,61 +16,72 @@ export default function SummaryTotals({
 	const summary = useSummaryData(selectedHourlyEntries, selectedDateRange, cost);
 	if (!summary) return null;
 
-	const format = (n: number) => n.toFixed(2);
+	const fmt = (n: number) => n.toFixed(2);
+	const showCost = cost !== 0;
 
 	return (
-		<>
-			<div className={styles.metricsContainer}>
-				<Metric label="Total hours" value={format(summary.totalHours)} />
-				{/* <Metric label="Avg / day (range)" value={format(summary.avgPerDay)} /> */}
-				{summary.timeUnitLabel !== "Hour" && (
-					<Metric label="Avg / active day" value={format(summary.avgPerActiveDay)} />
-				)}
-				{summary.timeUnitLabel != "Hour" && (
-					<Metric label="Avg / week" value={format(summary.avgPerWeek)} />
-				)}
-				{summary.timeUnitLabel === "Month" && (
-					<Metric label="Avg / month" value={format(summary.avgPerMonth)} />
-				)}
-				{/* <Metric label="Range days" value={String(summary.days)} /> */}
-				<Metric label="Active days" value={String(summary.activeDays)} />
+		<div className={styles.metrics}>
+			<Metric label="Total hours" value={fmt(summary.totalHours)} />
 
-				{cost != 0 && (
-					<>
+			{summary.timeUnitLabel !== "Hour" && (
+				<Metric label="Avg / active day" value={fmt(summary.avgPerActiveDay)} />
+			)}
+
+			{summary.timeUnitLabel !== "Hour" && (
+				<Metric label="Avg / week" value={fmt(summary.avgPerWeek)} />
+			)}
+
+			{summary.timeUnitLabel === "Month" && (
+				<Metric label="Avg / month" value={fmt(summary.avgPerMonth)} />
+			)}
+
+			<Metric label="Active days" value={String(summary.activeDays)} />
+
+			{showCost && (
+				<>
+					<Metric label="Total cost" value={fmt(summary.totalHoursWithCost)} isCurrency />
+					{summary.timeUnitLabel !== "Hour" && (
 						<Metric
-							label="Total cost"
-							value={`€${format(summary.totalHoursWithCost)}`}
+							label="Avg cost / active day"
+							value={fmt(summary.avgPerActiveDayWithCost)}
+							isCurrency
 						/>
-						{summary.timeUnitLabel !== "Hour" && (
-							<Metric
-								label="Avg cost / active day"
-								value={`€${format(summary.avgPerActiveDayWithCost)}`}
-							/>
-						)}
-						{summary.timeUnitLabel != "Hour" && (
-							<Metric
-								label="Avg cost / week"
-								value={`€${format(summary.avgPerWeekWithCost)}`}
-							/>
-						)}
-						{summary.timeUnitLabel === "Month" && (
-							<Metric
-								label="Avg cost / month"
-								value={`€${format(summary.avgPerMonthWithCost)}`}
-							/>
-						)}
-					</>
-				)}
-			</div>
-		</>
+					)}
+					{summary.timeUnitLabel !== "Hour" && (
+						<Metric
+							label="Avg cost / week"
+							value={fmt(summary.avgPerWeekWithCost)}
+							isCurrency
+						/>
+					)}
+					{summary.timeUnitLabel === "Month" && (
+						<Metric
+							label="Avg cost / month"
+							value={fmt(summary.avgPerMonthWithCost)}
+							isCurrency
+						/>
+					)}
+				</>
+			)}
+		</div>
 	);
 }
 
-function Metric({ label, value }: { label: string; value: string }) {
+function Metric({
+	label,
+	value,
+	isCurrency = false,
+}: {
+	label: string;
+	value: string;
+	isCurrency?: boolean;
+}) {
 	return (
-		<div style={{ padding: 12, border: "1px solid #e5e7eb", borderRadius: 8 }}>
-			<div style={{ fontSize: 12, color: "#6b7280" }}>{label}</div>
-			<div style={{ fontSize: 20, fontWeight: 600 }}>{value}</div>
+		<div className={styles.metric}>
+			<div className={styles.label}>{label}</div>
+			<div className={`${styles.value} ${isCurrency ? styles.valueCurrency : ""}`}>
+				{isCurrency ? value : value}
+			</div>
 		</div>
 	);
 }

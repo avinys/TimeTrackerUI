@@ -5,6 +5,7 @@ import LoadingOlay from "./components/LoadingOverlay";
 import Header from "./components/Header";
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import toast, { Toaster } from "react-hot-toast";
+import "./styles/index.css";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -13,7 +14,7 @@ const queryClient = new QueryClient({
 		},
 	},
 	queryCache: new QueryCache({
-		onError: (error, query) => {
+		onError: (error, _query) => {
 			// avoid toasting initial “no data yet” errors if you want
 			toast.error(
 				(error as any)?.response?.data?.detail ||
@@ -41,6 +42,8 @@ export default function App() {
 					error: { iconTheme: { primary: "#ef4444", secondary: "white" } },
 				}}
 			/>
+
+			<div className="heroBg" aria-hidden="true" />
 			<Header />
 			{element}
 		</QueryClientProvider>

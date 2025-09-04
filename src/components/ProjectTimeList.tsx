@@ -2,10 +2,11 @@ import { differenceInSeconds, format } from "date-fns";
 import { type ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useGetProjectTimes } from "../hooks/useGetProjectTimes";
-import styles from "../styles/projectList.module.css";
+import styles from "../styles/projectTimeList.module.css"; // <-- new module
 import type { ProjectTimeDto } from "../types/projectTime.types";
 import { formatTime } from "../util/formatTime";
 import Spinner from "./Spinner";
+import clsx from "clsx";
 
 type ProjectTimeListProps = {
 	rows?: ProjectTimeDto[];
@@ -16,6 +17,7 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 	const { projectId } = useParams();
 	const pid = projectId ? Number(projectId) : null;
 	const enabled = rows === undefined && pid !== null;
+
 	const {
 		isPending,
 		isFetching,
@@ -26,34 +28,47 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 	if (loading) return <Spinner />;
 
 	const projectTimes = rows ?? fetchedProjectTimes ?? [];
+	const hasActions = Boolean(renderActions);
 
 	return (
-		<ul className={styles.projectList}>
+		<ul className={clsx(styles.list, !hasActions && styles.noActions)}>
 			{projectTimes.length === 0 ? (
-				<li>No project times found</li>
+				<li className={styles.empty}>No project times found</li>
 			) : (
 				<>
-					<li className={styles.listHeader}>
+					<li className={`${styles.row} ${styles.header}`} aria-hidden="true">
 						<p>Start</p>
 						<p>End</p>
-						<p>Total time</p>
+						<p>Total</p>
 						<p>Comment</p>
-						{renderActions && <div className={styles.projectActions}>Actions</div>}
+						{hasActions && <div className={styles.actionsHead}>Actions</div>}
 					</li>
+
 					{projectTimes.map((p) => (
-						<li key={p.id} className={styles.listItem}>
-							<p>{format(p.startTime, "yyyy-MM-dd HH:mm:ss")}</p>
-							<p>
-								{p.endTime ? format(p.endTime, "yyyy-MM-dd HH:mm:ss") : "ongoing"}
+						<li key={p.id} className={`${styles.row} ${styles.item}`}>
+							<p className={styles.start}>
+								{format(p.startTime, "yyyy-MM-dd HH:mm:ss")}
 							</p>
-							<p>
+							<p className={styles.end}>
+								{p.endTime ? (
+									// <>
+									// 	<span>{format(p.endTime, "yyyy-MM-dd")}</span>{" "}
+									// 	<span>{format(p.endTime, "HH:mm:ss")}</span>
+									// </>
+									<span>{format(p.endTime, "yyyy-MM-dd HH:mm:ss")}</span>
+								) : (
+									"ongoing"
+								)}
+							</p>
+							<p className={styles.total}>
 								{p.endTime
 									? formatTime(differenceInSeconds(p.endTime, p.startTime))
 									: "--"}
 							</p>
-							<p>{p.comment ? p.comment : "--"}</p>
-							{renderActions ? (
-								<div className={styles.projectActions}>{renderActions(p)}</div>
+							<p className={styles.comment}>{p.comment || "—"}</p>
+
+							{hasActions ? (
+								<div className={styles.actions}>{renderActions?.(p)}</div>
 							) : null}
 						</li>
 					))}

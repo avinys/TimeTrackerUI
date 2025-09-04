@@ -1,20 +1,62 @@
 .title {
-	margin-bottom: var(--spacing-l);
-	font-size: var(--fs-xl);
+	margin-bottom: var(--spacing-s);
+	font-size: 1.5rem;
+}
+
+.warning {
+	margin: var(--spacing-m) 0 var(--spacing-s);
+	font-size: var(--fs-l);
+	color: var(--color-danger);
 }
 
 .field {
 	font-size: var(--fs-m);
-	margin-bottom: var(--spacing-s);
+	margin-bottom: var(--spacing-xs);
 }
-
 .fieldTitle {
-	font-weight: bold;
+	font-weight: 700;
 }
 
-.submitButton {
+/* list of times */
+.timeList {
+	list-style: none;
+	padding: var(--spacing-s);
+	margin: 0 0 var(--spacing-m);
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-m);
+	background: var(--color-background-lighter);
+	max-height: 40vh;
+	overflow: auto;
+}
+.timeItem {
+	display: grid;
+	gap: var(--spacing-xs);
+	grid-template-columns: 1.2fr 1.2fr 1fr;
+	padding: var(--spacing-s) 0;
+	border-bottom: 1px dashed var(--color-secondary-hover);
+}
+.timeItem:last-child {
+	border-bottom: none;
+}
+
+.actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: var(--spacing-s);
 	margin-top: var(--spacing-m);
-	width: 100%;
-	font-size: var(--fs-m);
-	max-width: 10rem;
+}
+
+.danger {
+	color: var(--color-danger);
+}
+
+/* mobile tweaks */
+@media (max-width: 640px) {
+	.timeItem {
+		grid-template-columns: 1fr;
+	}
+	.actions {
+		justify-content: center;
+		flex-wrap: wrap;
+	}
 }

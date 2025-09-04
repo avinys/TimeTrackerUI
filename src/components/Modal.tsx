@@ -25,7 +25,7 @@ type OpenProps = {
 };
 
 type WindowProps = {
-	children: ReactElement<{ onCloseModal: () => void }>;
+	children: ReactElement<any> | null;
 	name: string;
 };
 
@@ -69,10 +69,10 @@ function Window({ children, name }: WindowProps) {
 	return createPortal(
 		<div className={styles.overlay}>
 			<div className={styles.modal} ref={ref}>
-				<button className={styles.button} onClick={close}>
+				<button className={`btn btnIcon btnOutline ${styles.closeBtn}`} onClick={close}>
 					<HiXMark />
 				</button>
-				{cloneElement(children, { onCloseModal: close })}
+				{children && cloneElement(children, { onCloseModal: close })}
 			</div>
 		</div>,
 		document.body

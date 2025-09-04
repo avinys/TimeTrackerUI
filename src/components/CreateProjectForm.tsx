@@ -7,7 +7,7 @@ import type { CreateProjectDto } from "../types/project.types";
 import SpinnerMini from "./SpinnerMini";
 
 type CreateProjectFormProps = {
-	onCloseModal: () => void;
+	onCloseModal?: () => void;
 };
 
 function CreateProjectForm({ onCloseModal }: CreateProjectFormProps) {
@@ -22,7 +22,7 @@ function CreateProjectForm({ onCloseModal }: CreateProjectFormProps) {
 
 		const dto: CreateProjectDto = { name };
 		createProject(dto);
-		onCloseModal();
+		onCloseModal?.();
 	};
 
 	return (

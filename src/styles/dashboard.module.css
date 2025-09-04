@@ -1,19 +1,20 @@
 .titleContainer {
-	margin-bottom: var(--spacing-l);
+	margin-block: var(--spacing-m) var(--spacing-l);
+	text-align: center;
 }
 
-.actionsContainer {
-	margin-top: var(--spacing-l);
-	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	box-sizing: border-box;
-	margin-left: var(--spacing-l);
-	margin-right: var(--spacing-l);
+.welcome {
+	color: var(--color-muted);
+	margin-top: var(--spacing-xs);
 }
 
-.actionButton {
-	width: 45%;
-	padding: var(--spacing-m);
-	font-size: var(--fs-m);
+.sectionTitle {
+	margin-top: var(--spacing-m);
+}
+
+/* Optional: tighten spacing above the list on small screens */
+@media (max-width: 768px) {
+	.titleContainer {
+		margin-block: var(--spacing-s) var(--spacing-m);
+	}
 }

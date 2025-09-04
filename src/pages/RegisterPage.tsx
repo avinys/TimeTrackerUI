@@ -36,7 +36,7 @@ export default function RegisterPage() {
 
 	return (
 		<div className={styles.container}>
-			<h2>Register</h2>
+			<h2 className="page-title">Register</h2>
 			<form onSubmit={handleSubmit} className={styles.formContainer}>
 				<div className={styles.inputGroup}>
 					<label htmlFor="username">Username</label>

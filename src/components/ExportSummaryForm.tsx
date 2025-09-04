@@ -1,6 +1,6 @@
-import { useState } from "react";
-import styles from "../styles/exportForm.module.css";
 import clsx from "clsx";
+import { useState } from "react";
+import styles from "../styles/summary.exportForm.module.css";
 import type {
 	ExportData,
 	ExportGenerationOptions,
@@ -37,10 +37,7 @@ function ExportSummaryForm({
 	const summary = useSummaryData(selectedHourlyEntries, selectedRange ?? null, cost);
 
 	const handleOptionChange = (option: keyof ExportGenerationOptions) => {
-		setExportOptions((prev) => ({
-			...prev,
-			[option]: !prev[option],
-		}));
+		setExportOptions((prev) => ({ ...prev, [option]: !prev[option] }));
 	};
 
 	const handleExport = () => {
@@ -67,48 +64,58 @@ function ExportSummaryForm({
 	};
 
 	return (
-		<div className="container">
-			<div className={styles.formContainer}>
-				<h2 className={styles.title}>Please select options for export</h2>
-				<div className={styles.inputGroup}>
-					<input
-						type="checkbox"
-						id="totals"
-						checked={exportOptions.totals}
-						onChange={() => handleOptionChange("totals")}
-					/>
-					<label htmlFor="totals">Include Totals section?</label>
+		<div className={styles.wrap}>
+			<div className={styles.formCard}>
+				<h2 className={styles.title}>Export options</h2>
+
+				<div className={styles.options}>
+					<label className={styles.optionRow} htmlFor="totals">
+						<input
+							id="totals"
+							type="checkbox"
+							checked={exportOptions.totals}
+							onChange={() => handleOptionChange("totals")}
+						/>
+						<span>Include Totals section</span>
+					</label>
+
+					<label className={styles.optionRow} htmlFor="summary-table">
+						<input
+							id="summary-table"
+							type="checkbox"
+							checked={exportOptions.summaryTable}
+							onChange={() => handleOptionChange("summaryTable")}
+						/>
+						<span>Include Summary Table section</span>
+					</label>
+
+					<label className={styles.optionRow} htmlFor="pt-list">
+						<input
+							id="pt-list"
+							type="checkbox"
+							checked={exportOptions.projectTimesList}
+							onChange={() => handleOptionChange("projectTimesList")}
+						/>
+						<span>Include Project Times List</span>
+					</label>
+
+					<label className={styles.optionRow} htmlFor="cost">
+						<input
+							id="cost"
+							type="checkbox"
+							checked={exportOptions.includeCost}
+							onChange={() => handleOptionChange("includeCost")}
+						/>
+						<span>Include costs</span>
+					</label>
 				</div>
-				<div className={styles.inputGroup}>
-					<input
-						type="checkbox"
-						id="summary-table"
-						checked={exportOptions.summaryTable}
-						onChange={() => handleOptionChange("summaryTable")}
-					/>
-					<label htmlFor="summary-table">Include Summary Table section?</label>
-				</div>
-				<div className={styles.inputGroup}>
-					<input
-						type="checkbox"
-						id="pt-list"
-						checked={exportOptions.projectTimesList}
-						onChange={() => handleOptionChange("projectTimesList")}
-					/>
-					<label htmlFor="pt-list">Include Project Times List section?</label>
-				</div>
-				<div className={styles.inputGroup}>
-					<input
-						type="checkbox"
-						id="cost"
-						checked={exportOptions.includeCost}
-						onChange={() => handleOptionChange("includeCost")}
-					/>
-					<label htmlFor="cost">Include costs?</label>
-				</div>
-				<div>
-					<button onClick={handleExport} className={clsx("btn", styles.submitButton)}>
-						Export
+
+				<div className={styles.actions}>
+					<button
+						onClick={handleExport}
+						className={clsx("btn", "btnPrimary", styles.exportBtn)}
+					>
+						Export CSV
 					</button>
 				</div>
 			</div>

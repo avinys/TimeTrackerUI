@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { ProjectTimeService } from "../services/ProjectTimeService";
 import type { DeleteProjectTimeDto } from "../types/projectTime.types";
 
-export function useDeleteProjectTime(projectId: number, closeModal: () => void) {
+export function useDeleteProjectTime(projectId: number, closeModal?: () => void) {
 	const queryClient = useQueryClient();
 
 	const { mutate: deleteProjectTime, isPending } = useMutation({
@@ -11,7 +11,7 @@ export function useDeleteProjectTime(projectId: number, closeModal: () => void) 
 		onSuccess: () => {
 			toast.success("Project time succesfully deleted");
 			queryClient.invalidateQueries({ queryKey: ["projectTimes", projectId] });
-			closeModal();
+			closeModal?.();
 		},
 		onError: () => toast.error("Failed to delete project time"),
 	});
