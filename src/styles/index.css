@@ -26,63 +26,217 @@ body {
 	max-width: 1440px;
 }
 
+h1,
+h2,
+h3 {
+	margin-block-start: 0;
+}
+
+/* =========
+   Base
+   ========= */
 .btn {
+	/* layout */
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-s);
+
+	/* sizing */
+	padding: calc(var(--spacing-s) * 0.9) var(--spacing-m);
+	border-radius: var(--radius-m);
+	border: 1px solid transparent;
+	box-shadow: var(--shadow-s);
+
+	/* type */
+	font: 600 var(--fs-m) / 1 var(--font-family);
+	text-decoration: none;
+
+	/* theme */
 	background-color: var(--color-primary);
 	color: var(--color-text-light);
-	padding: var(--spacing-s);
-	border: 1px solid var(--color-secondary-hover);
-	text-decoration: none;
-	cursor: pointer;
-	border-radius: var(--radius-m);
-	transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
 
-	box-shadow: var(--shadow-m);
+	/* affordances */
+	cursor: pointer;
+	transition: background-color var(--transition-default), color var(--transition-default),
+		border-color var(--transition-default), box-shadow var(--transition-default),
+		transform var(--transition-default);
 }
 
 .btn:hover {
-	background-color: var(--color-primary-hover);
-	color: var(--color-dark);
-}
-
-.btn-alt {
-	background-color: var(--color-secondary);
-	color: var(--color-text-light);
-	padding: var(--spacing-s);
-	border: 1px solid var(--color-secondary-hover);
-	text-decoration: none;
-	cursor: pointer;
-	border-radius: var(--radius-m);
-	transition: background-color 0.3s ease, color 0.3s ease, border 0.3s ease;
-
+	transform: translateY(-1px);
 	box-shadow: var(--shadow-m);
 }
-
-.btn-alt:hover {
-	background-color: var(--color-secondary-hover);
-	color: var(--color-text-dark);
+.btn:active {
+	transform: translateY(0);
+	box-shadow: var(--shadow-s);
 }
 
+/* Accessible focus */
+.btn:focus-visible {
+	outline: 2px solid var(--color-primary-hover);
+	outline-offset: 3px;
+}
+
+/* Disabled */
 .btn:disabled,
-.btn-alt:disabled {
-	opacity: 0.2;
+.btn[aria-disabled="true"] {
+	opacity: 0.45;
 	cursor: not-allowed;
 	pointer-events: none;
 }
 
+/* Icons inside buttons (react-icons) */
+.btn > svg,
+.btn .icon {
+	width: 1.1em;
+	height: 1.1em;
+	flex: 0 0 auto;
+}
+
+/* =========
+   Variants
+   ========= */
+.btnPrimary {
+	/* same as base; explicit alias for clarity */
+	background-color: var(--color-primary);
+	color: var(--color-text-light);
+	border-color: var(--color-primary);
+}
+.btnPrimary:hover {
+	background-color: var(--color-primary-hover);
+	color: var(--color-text-dark);
+	border-color: var(--color-primary-hover);
+}
+
+/* secondary filled */
+.btnSecondary {
+	background-color: var(--color-secondary);
+	color: var(--color-text-light);
+	border-color: var(--color-secondary);
+}
+.btnSecondary:hover {
+	background-color: var(--color-secondary-hover);
+	color: var(--color-text-dark);
+	border-color: var(--color-secondary-hover);
+}
+
+/* outline (neutral outline, primary text) */
+.btnOutline {
+	background: transparent;
+	color: var(--color-primary);
+	border-color: var(--color-secondary-hover);
+}
+.btnOutline:hover {
+	background: rgba(0, 0, 0, 0.04);
+}
+
+/* ghost (no border, subtle bg on hover) */
+.btnGhost {
+	background: transparent;
+	color: var(--color-primary);
+	border-color: transparent;
+}
+.btnGhost:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+/* danger (for destructive actions) */
+.btnDanger {
+	background: var(--color-danger);
+	color: var(--color-text-light);
+	border-color: var(--color-danger);
+}
+.btnDanger:hover {
+	filter: brightness(1.05);
+}
+
+/* subtle/surface (for cards/secondary emphasis) */
+.btnSubtle {
+	background: var(--color-background-lighter);
+	color: var(--color-text-dark);
+	border-color: var(--color-secondary-hover);
+}
+.btnSubtle:hover {
+	background: #fff;
+}
+
+/* =========
+   Sizes
+   ========= */
+.btn--sm {
+	padding: var(--spacing-xs) var(--spacing-s);
+	font-size: var(--fs-s);
+	border-radius: var(--radius-s);
+}
+.btn--md {
+	/* default */
+}
+.btn--lg {
+	padding: var(--spacing-m) calc(var(--spacing-m) * 1.25);
+	font-size: var(--fs-l);
+}
+
+.btn--block {
+	width: 100%;
+}
+
+/* Square icon button */
+.btnIcon {
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border-radius: var(--radius-m);
+	display: inline-grid;
+	place-items: center;
+}
+.btnIcon.btn--sm {
+	width: 36px;
+	height: 36px;
+}
+.btnIcon.btn--lg {
+	width: 56px;
+	height: 56px;
+}
+
+/* =========
+   Button groups / action rows
+   ========= */
 .actions-container {
 	display: flex;
-	flex-direction: row;
-	justify-content: space-around;
-	box-sizing: border-box;
-	margin-left: var(--spacing-l);
-	margin-right: var(--spacing-l);
+	flex-wrap: wrap;
+	gap: var(--spacing-s);
+	justify-content: center;
+	margin: var(--spacing-l) auto;
+	padding-inline: var(--spacing-l);
 }
 
 .actions-container a,
 .actions-container button {
-	width: 45%;
-	padding: var(--spacing-m);
-	font-size: var(--fs-m);
+	flex: 1 1 220px; /* grow nicely, minimum width */
+}
+
+/* Small screens: full-width for better ergonomics */
+@media (max-width: 480px) {
+	.actions-container a,
+	.actions-container button {
+		flex: 1 1 100%;
+	}
+}
+
+/* =========
+   Optional link-style button (for header if needed)
+   ========= */
+.btnLink {
+	background: transparent !important;
+	border-color: transparent !important;
+	color: var(--color-text-light);
+	box-shadow: none;
+	padding: var(--spacing-xs) var(--spacing-s);
+}
+.btnLink:hover {
+	color: var(--color-secondary-hover);
+	background: rgba(255, 255, 255, 0.06);
 }
 
 .heroBg {

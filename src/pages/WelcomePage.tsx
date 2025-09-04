@@ -5,34 +5,36 @@ import styles from "../styles/welcome.module.css";
 export default function WelcomePage() {
 	return (
 		<main className={styles.page}>
-			<section className={styles.hero}>
-				<h1 className={styles.title}>Track time. Get clarity.</h1>
+			<section className={styles.hero} aria-labelledby="welcome-title">
+				<h1 id="welcome-title" className={styles.title}>
+					Track time. Get clarity.
+				</h1>
 				<p className={styles.subtitle}>
 					TimeTracker helps you log hours across projects, visualize progress, and export
 					clean reports in seconds.
 				</p>
 
 				<div className={styles.ctaRow}>
-					<Link to="/register" className={`${styles.btn} ${styles.btnPrimary}`}>
+					<Link to="/register" className="btn btnPrimary">
 						Get started
 					</Link>
-					<Link to="/login" className={`${styles.btn} ${styles.btnGhost}`}>
+					<Link to="/login" className="btn btnGhost">
 						I already have an account
 					</Link>
 				</div>
 
 				<ul className={styles.highlights}>
 					<li>
-						<HiClock /> One-click start/stop timers
+						<HiClock aria-hidden="true" /> One-click start/stop timers
 					</li>
 					<li>
-						<HiChartBar /> Smart summaries & graphs
+						<HiChartBar aria-hidden="true" /> Smart summaries &amp; graphs
 					</li>
 					<li>
-						<HiCloudArrowDown /> CSV export for clients & payroll
+						<HiCloudArrowDown aria-hidden="true" /> CSV export for clients &amp; payroll
 					</li>
 					<li>
-						<HiShieldCheck /> Secure JWT auth & role-based access
+						<HiShieldCheck aria-hidden="true" /> Secure JWT auth &amp; role-based access
 					</li>
 				</ul>
 			</section>
@@ -68,10 +70,10 @@ export default function WelcomePage() {
 				</article>
 			</section>
 
-			<section className={styles.meta}>
+			<section className={styles.meta} aria-label="At-a-glance benefits">
 				<div className={styles.stat}>
 					<span className={styles.statValue}>100% free</span>
-					<span className={styles.statLabel}>open-source/ portfolio project</span>
+					<span className={styles.statLabel}>open-source / portfolio project</span>
 				</div>
 				<div className={styles.stat}>
 					<span className={styles.statValue}>Multi-project</span>
