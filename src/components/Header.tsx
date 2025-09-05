@@ -1,16 +1,15 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
-import { AuthService } from "../services/AuthService";
+import { useLogout } from "../hooks/useLogout";
 import styles from "../styles/header.module.css";
+import SpinnerMini from "./SpinnerMini";
 
 export default function Header() {
-	const { user, setUser } = useAuth();
-	const navigate = useNavigate();
+	const { user } = useAuth();
+	const { isPending, logout } = useLogout();
 
 	const handleLogout = async () => {
-		await AuthService.logout();
-		setUser(null);
-		navigate("/");
+		logout();
 	};
 
 	return (
@@ -35,7 +34,7 @@ export default function Header() {
 							Track Time
 						</Link>
 						<button onClick={handleLogout} className="btn btnLink btn--md">
-							Logout
+							{isPending ? <SpinnerMini /> : "Logout"}
 						</button>
 					</>
 				)}
