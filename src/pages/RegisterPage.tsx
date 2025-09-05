@@ -28,7 +28,6 @@ export default function RegisterPage() {
 
 		register(form, {
 			onSuccess: () => navigate("/login"),
-			onError: () => toast.error("Registration failed. Please try again"),
 		});
 	};
 

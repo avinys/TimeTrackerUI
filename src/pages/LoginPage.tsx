@@ -1,11 +1,10 @@
 import clsx from "clsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { LoginDto } from "../types/auth.types";
+import SpinnerMini from "../components/SpinnerMini";
 import { useLogin } from "../hooks/useLogin";
 import styles from "../styles/form.module.css";
-import SpinnerMini from "../components/SpinnerMini";
-import toast from "react-hot-toast";
+import type { LoginDto } from "../types/auth.types";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
@@ -22,7 +21,6 @@ export default function LoginPage() {
 		e.preventDefault();
 		login(form, {
 			onSuccess: () => navigate("/dashboard"),
-			onError: () => toast.error("Login failed. Please check your inputs and try again"),
 		});
 	};
 
