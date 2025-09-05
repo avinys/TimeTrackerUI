@@ -43,6 +43,7 @@
 
 /* Inputs */
 .field input,
+.fieldFull input,
 .fieldFull textarea {
 	width: 100%;
 	min-width: 0; /* allow shrinking in grids */
