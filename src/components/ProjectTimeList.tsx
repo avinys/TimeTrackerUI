@@ -10,10 +10,11 @@ import clsx from "clsx";
 
 type ProjectTimeListProps = {
 	rows?: ProjectTimeDto[];
+	cost?: number;
 	renderActions?: (pt: ProjectTimeDto) => ReactElement;
 };
 
-export default function ProjectTimeList({ rows, renderActions }: ProjectTimeListProps) {
+export default function ProjectTimeList({ rows, cost, renderActions }: ProjectTimeListProps) {
 	const { projectId } = useParams();
 	const pid = projectId ? Number(projectId) : null;
 	const enabled = rows === undefined && pid !== null;
@@ -31,7 +32,7 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 	const hasActions = Boolean(renderActions);
 
 	return (
-		<ul className={clsx(styles.list, !hasActions && styles.noActions)}>
+		<ul className={clsx(styles.list, !hasActions && styles.noActions, cost && styles.withCost)}>
 			{projectTimes.length === 0 ? (
 				<li className={styles.empty}>No project times found</li>
 			) : (
@@ -41,6 +42,7 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 						<p>End</p>
 						<p>Total</p>
 						<p>Comment</p>
+						{Boolean(cost) && <p>Cost</p>}
 						{hasActions && <div className={styles.actionsHead}>Actions</div>}
 					</li>
 
@@ -66,7 +68,15 @@ export default function ProjectTimeList({ rows, renderActions }: ProjectTimeList
 									: "--"}
 							</p>
 							<p className={styles.comment}>{p.comment || "—"}</p>
-
+							{Boolean(cost) && p.endTime && (
+								<p className={styles.cost}>
+									{(
+										(differenceInSeconds(p.endTime, p.startTime) / 3600) *
+										cost
+									).toFixed(2)}
+									€
+								</p>
+							)}
 							{hasActions ? (
 								<div className={styles.actions}>{renderActions?.(p)}</div>
 							) : null}

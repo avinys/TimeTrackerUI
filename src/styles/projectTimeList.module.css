@@ -40,6 +40,15 @@
 		minmax(0, 2fr);
 }
 
+.withCost .row {
+	grid-template-columns:
+		minmax(0, 1.6fr)
+		minmax(0, 1.6fr)
+		minmax(7ch, 0.8fr)
+		minmax(0, 2fr)
+		minmax(0, 0.8fr);
+}
+
 /* Header */
 .header {
 	padding: 0 var(--spacing-m) var(--spacing-s);

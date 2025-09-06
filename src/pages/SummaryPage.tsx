@@ -188,7 +188,7 @@ export default function SummaryPage() {
 						)}
 						{hasSelection && (
 							<div className={styles.listCard}>
-								<ProjectTimeList rows={selectedProjectTimes} />
+								<ProjectTimeList rows={selectedProjectTimes} cost={Number(cost)} />
 							</div>
 						)}
 					</>
