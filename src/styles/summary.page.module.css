@@ -93,10 +93,10 @@ input[type="checkbox"] {
 .listCard {
 	width: clamp(320px, 92vw, 1040px);
 	margin: var(--spacing-l) auto 0;
-	border: 1px solid var(--color-secondary-hover);
+	/* border: 1px solid var(--color-secondary-hover);
 	border-radius: var(--radius-m);
 	background: var(--color-background-lighter);
-	box-shadow: var(--shadow-m);
+	box-shadow: var(--shadow-m); */
 }
 
 /* Export button spacing */

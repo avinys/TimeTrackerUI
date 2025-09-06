@@ -11,7 +11,6 @@ export default function ProjectTimesPage() {
 	const { projectId } = useParams<{ projectId: string }>();
 	const [projectTimeToDelete, setProjectTimeToDelete] = useState<ProjectTimeDto | null>(null);
 	const [projectTimeToEdit, setProjectTimeToEdit] = useState<ProjectTimeDto | null>(null);
-	const [showCommentExpanders, setShowCommentExpanders] = useState<boolean>(false);
 
 	return (
 		<div className="container">

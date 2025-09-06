@@ -1,11 +1,12 @@
-/* Wrapper */
+.listWrap {
+}
+
 .list {
 	--col-start: 1.6fr;
 	--col-end: 1.6fr;
 	--col-total: 0.8fr;
 	--col-comment: 2fr;
 	--col-actions: 180px; /* room for 2 small buttons */
-
 	background: var(--color-background-lighter);
 	border: 1px solid var(--color-secondary-hover);
 	border-radius: var(--radius-m);
@@ -159,7 +160,6 @@
 	}
 }
 
-/* Optional compact handset tweak */
 @media (max-width: 420px) {
 	.list {
 		padding: var(--spacing-m);
