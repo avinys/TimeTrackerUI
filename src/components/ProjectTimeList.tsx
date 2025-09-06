@@ -7,6 +7,7 @@ import type { ProjectTimeDto } from "../types/projectTime.types";
 import { formatTime } from "../util/formatTime";
 import Spinner from "./Spinner";
 import clsx from "clsx";
+import TextExpander from "./TextExpander";
 
 type ProjectTimeListProps = {
 	rows?: ProjectTimeDto[];
@@ -67,7 +68,9 @@ export default function ProjectTimeList({ rows, cost, renderActions }: ProjectTi
 									? formatTime(differenceInSeconds(p.endTime, p.startTime))
 									: "--"}
 							</p>
-							<p className={styles.comment}>{p.comment || "—"}</p>
+							<p className={styles.comment}>
+								{p.comment ? <TextExpander text={p.comment} /> : "—"}
+							</p>
 							{Boolean(cost) && p.endTime && (
 								<p className={styles.cost}>
 									{(
