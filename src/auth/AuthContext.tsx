@@ -1,21 +1,25 @@
 // auth/AuthContext.tsx
-import { createContext, useContext, useEffect, useState } from "react";
-import type { UserDto, AuthContextType } from "../types/auth.types";
+import { useQueryClient } from "@tanstack/react-query";
+import { createContext, useContext } from "react";
+import Spinner from "../components/Spinner";
 import { useGetMe } from "../hooks/useGetMe";
+import type { AuthContextType, UserDto } from "../types/auth.types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-	const [user, setUser] = useState<UserDto | null>(null);
 	const { data, isPending, isError } = useGetMe();
+	const queryClient = useQueryClient();
 
-	useEffect(() => {
-		if (data) setUser(data);
-		if (isError) setUser(null);
-	}, [data, isError]);
+	const setUser = (u: UserDto | null) => {
+		if (u) queryClient.setQueryData(["auth", "me"], u);
+		else queryClient.removeQueries({ queryKey: ["auth", "me"] });
+	};
+
+	if (isPending) return <Spinner />;
 
 	return (
-		<AuthContext.Provider value={{ user, setUser, loading: isPending }}>
+		<AuthContext.Provider value={{ user: data ?? null, setUser, loading: isPending }}>
 			{children}
 		</AuthContext.Provider>
 	);

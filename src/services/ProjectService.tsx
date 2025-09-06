@@ -10,7 +10,7 @@ export const ProjectService = {
 	},
 
 	async createProject(data: CreateProjectDto): Promise<ProjectDto> {
-		console.log("Requesting project creation: ", data);
+		// console.log("Requesting project creation: ", data);
 		const response = await API.post("projects", data, {
 			withCredentials: true,
 		});
@@ -18,7 +18,7 @@ export const ProjectService = {
 	},
 
 	async deleteProject(data: DeleteprojectDto): Promise<void> {
-		console.log("Requesting project deletion", data);
+		// console.log("Requesting project deletion", data);
 		await API.delete(`projects/${data.projectId}`, {
 			withCredentials: true,
 		});

@@ -7,8 +7,8 @@ export function useGetMe() {
 		queryKey: ["auth", "me"],
 		queryFn: AuthService.getMe,
 		retry: false,
-		staleTime: 0,
-		gcTime: 0,
+		staleTime: 5 * 60 * 1000,
+		gcTime: 30 * 60 * 1000,
 		refetchOnWindowFocus: false,
 		meta: { suppressGlobalError: true },
 	});
