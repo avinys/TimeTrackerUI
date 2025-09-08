@@ -1,29 +1,32 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import type { UserDto, AuthContextType } from '../types/auth.types'
-import { AuthService } from '../services/AuthService';
+// auth/AuthContext.tsx
+import { useQueryClient } from "@tanstack/react-query";
+import { createContext, useContext } from "react";
+import Spinner from "../components/Spinner";
+import { useGetMe } from "../hooks/useGetMe";
+import type { AuthContextType, UserDto } from "../types/auth.types";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-    const [user, setUser] = useState<UserDto | null>(null);
-    const [loading, setLoading] = useState(true);
+	const { data, isPending, isError } = useGetMe();
+	const queryClient = useQueryClient();
 
-    useEffect(() => {
-        AuthService.getMe()
-        .then(setUser)
-        .catch(() => setUser(null))
-        .finally(() => setLoading(false))
-    }, []);
+	const setUser = (u: UserDto | null) => {
+		if (u) queryClient.setQueryData(["auth", "me"], u);
+		else queryClient.removeQueries({ queryKey: ["auth", "me"] });
+	};
 
-    return (
-        <AuthContext.Provider value={{ user, setUser, loading}}>
-            {children}
-        </AuthContext.Provider>
-    );
-}
+	if (isPending) return <Spinner />;
+
+	return (
+		<AuthContext.Provider value={{ user: data ?? null, setUser, loading: isPending }}>
+			{children}
+		</AuthContext.Provider>
+	);
+};
 
 export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) throw new Error('useAuth must be used within AuthProvider');
-    return context;
-}
+	const ctx = useContext(AuthContext);
+	if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+	return ctx;
+};

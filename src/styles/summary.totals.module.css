@@ -1,0 +1,53 @@
+/* Container that holds all metric tiles */
+.metrics {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+	gap: var(--spacing-s);
+}
+
+/* Single metric tile */
+.metric {
+	background: var(--color-white);
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-m);
+	box-shadow: var(--shadow-s);
+	padding: var(--spacing-m);
+	min-height: 72px;
+	display: grid;
+	align-content: center;
+	gap: var(--spacing-xs);
+	aspect-ratio: 4/3;
+}
+
+/* Label and value */
+.label {
+	font-size: var(--fs-s);
+	color: var(--color-muted);
+	letter-spacing: 0.2px;
+}
+
+.value {
+	font-size: 1.25rem; /* slightly larger than fs-m */
+	font-weight: 700;
+	color: var(--color-text-dark);
+	line-height: 1.2;
+}
+
+/* Modifier for currency values (optional accent) */
+.valueCurrency::before {
+	content: "€";
+	margin-right: 2px;
+}
+
+/* Compact on small screens */
+@media (max-width: 560px) {
+	.metrics {
+		grid-template-columns: repeat(auto-fit, minmax(120px, 140px));
+	}
+	.metric {
+		padding: var(--spacing-s) var(--spacing-m);
+	}
+	.value {
+		font-size: 1.125rem;
+	}
+}

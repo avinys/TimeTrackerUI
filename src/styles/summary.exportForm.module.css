@@ -1,0 +1,71 @@
+/* Center the card inside the modal body */
+.wrap {
+	display: grid;
+	place-items: center;
+}
+
+/* Card */
+.formCard {
+	width: 100%;
+	margin-inline: auto;
+	background: var(--color-background-lighter);
+	box-sizing: border-box;
+	text-align: left;
+}
+
+.title {
+	font-size: var(--fs-xl);
+	text-align: center;
+	margin-bottom: var(--spacing-m);
+}
+
+/* Options stack */
+.options {
+	display: grid;
+	gap: var(--spacing-s);
+	margin-bottom: var(--spacing-m);
+}
+
+/* Row with checkbox + label */
+.optionRow {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	gap: var(--spacing-s);
+	padding: var(--spacing-s);
+	border: 1px solid var(--color-secondary-hover);
+	border-radius: var(--radius-s);
+	background: var(--color-white);
+	box-shadow: var(--shadow-s);
+	cursor: pointer;
+}
+
+.optionRow input[type="checkbox"] {
+	inline-size: 1.1rem;
+	block-size: 1.1rem;
+	border-radius: var(--radius-s);
+	accent-color: var(--color-primary);
+}
+
+.optionRow span {
+	font-size: var(--fs-m);
+	color: var(--color-text-dark);
+}
+
+/* Actions */
+.actions {
+	display: flex;
+	justify-content: center;
+	margin-top: var(--spacing-s);
+}
+
+.exportBtn {
+	min-width: 10rem;
+}
+
+/* Compact on small screens */
+@media (max-width: 560px) {
+	.optionRow {
+		padding: var(--spacing-xs) var(--spacing-s);
+	}
+}

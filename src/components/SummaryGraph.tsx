@@ -25,7 +25,7 @@ export default function SummaryGraph({
 	if (!summary) return null;
 
 	return (
-		<ResponsiveContainer width="100%" height="100%">
+		<ResponsiveContainer width="100%" aspect={16 / 9}>
 			<LineChart data={cost > 0 ? summary.graphDataWithCost : summary.graphData}>
 				<Line type="monotone" dataKey="value" />
 				<CartesianGrid strokeDasharray="5 5" />

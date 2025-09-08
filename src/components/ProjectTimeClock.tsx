@@ -7,10 +7,7 @@ type ProjectTimeClockProps = {
 	elapsedTime: number;
 };
 
-export default function ProjectTimeClock({
-	isOngoing,
-	elapsedTime,
-}: ProjectTimeClockProps) {
+export default function ProjectTimeClock({ isOngoing, elapsedTime }: ProjectTimeClockProps) {
 	const [elapsed, setElapsed] = useState(elapsedTime);
 	const intervalRef = useRef<number | null>(null);
 
@@ -36,7 +33,9 @@ export default function ProjectTimeClock({
 
 	return (
 		<div className={styles.clockContainer}>
-			<h2 className={styles.clockTime}>{formatTime(elapsed)}</h2>
+			<h2 className={styles.clockTime} role="timer" aria-live="polite" aria-atomic="true">
+				{formatTime(elapsed)}
+			</h2>
 		</div>
 	);
 }

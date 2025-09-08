@@ -18,18 +18,29 @@ function ProjectTimeClockActions({
 	isStopping,
 }: ProjectTimeClockActionsProps) {
 	return (
-		<div>
+		<div className={styles.clockActions}>
 			<button
-				className={clsx("btn", styles.clockButton)}
+				type="button"
 				onClick={handleStart}
 				disabled={isOngoing}
+				className={
+					isOngoing
+						? clsx("btn btnOutline", styles.clockBtn)
+						: clsx("btn btnPrimary", styles.clockBtn)
+				}
 			>
 				{isStarting ? <SpinnerMini /> : "Start"}
 			</button>
+
 			<button
-				className={clsx("btn-alt", styles.clockButton)}
+				type="button"
 				onClick={handleStop}
 				disabled={!isOngoing}
+				className={
+					!isOngoing
+						? clsx("btn btnOutline", styles.clockBtn)
+						: clsx("btn btnPrimary", styles.clockBtn)
+				}
 			>
 				{isStopping ? <SpinnerMini /> : "Stop"}
 			</button>

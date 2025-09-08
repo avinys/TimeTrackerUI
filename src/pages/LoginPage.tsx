@@ -1,36 +1,27 @@
+import clsx from "clsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { LoginDto } from "../types/auth.types";
-import { AuthService } from "../services/AuthService";
-import { useAuth } from "../auth/AuthContext";
+import SpinnerMini from "../components/SpinnerMini";
+import { useLogin } from "../hooks/useLogin";
 import styles from "../styles/form.module.css";
-import clsx from "clsx";
+import type { LoginDto } from "../types/auth.types";
 
 export default function LoginPage() {
-	const { setUser } = useAuth();
 	const navigate = useNavigate();
+	const { login, isPending, isError } = useLogin();
 
-	const [form, setForm] = useState<LoginDto>({
-		identifier: "",
-		password: "",
-	});
-	const [error, setError] = useState<string | null>(null);
+	const [form, setForm] = useState<LoginDto>({ identifier: "", password: "" });
 
-	const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		setError("");
-		try {
-			const user = await AuthService.login(form);
-			setUser(user);
-			navigate("/dashboard");
-		} catch {
-			setError("Invalid login credentials.");
-		}
+		login(form, {
+			onSuccess: () => navigate("/dashboard"),
+		});
 	};
 
 	return (
@@ -40,7 +31,7 @@ export default function LoginPage() {
 				<div className={styles.inputGroup}>
 					<label htmlFor="identifier">Username or Email</label>
 					<input
-						id="ientifier"
+						id="identifier"
 						type="text"
 						name="identifier"
 						value={form.identifier}
@@ -59,9 +50,13 @@ export default function LoginPage() {
 						required
 					/>
 				</div>
-				{error && <p className="error-message">{error}</p>}
-				<button type="submit" className={clsx("btn", styles.submitButton)}>
-					Log In
+
+				<button
+					type="submit"
+					className={clsx("btn", styles.submitButton)}
+					disabled={isPending}
+				>
+					{isPending ? <SpinnerMini /> : "Log In"}
 				</button>
 			</form>
 		</div>

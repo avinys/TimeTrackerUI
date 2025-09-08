@@ -13,3 +13,5 @@ export interface CreateProjectDto {
 export interface DeleteprojectDto {
 	projectId: number;
 }
+
+export type SortByProjects = "name-asc" | "name-desc" | "date-asc" | "date-desc";

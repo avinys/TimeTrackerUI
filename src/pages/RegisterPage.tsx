@@ -1,42 +1,39 @@
 import clsx from "clsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthContext";
-import { AuthService } from "../services/AuthService";
+import { useRegister } from "../hooks/useRegister";
 import styles from "../styles/form.module.css";
 import type { CreateUserDto } from "../types/auth.types";
+import SpinnerMini from "../components/SpinnerMini";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
-	const { setUser } = useAuth();
 	const navigate = useNavigate();
+	const { register, isPending } = useRegister();
 
 	const [form, setForm] = useState<CreateUserDto>({ username: "", email: "", password: "" });
-	const [error, setError] = useState<string | null>(null);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-		try {
-			if (form.username.includes("@")) {
-				setError("Username cannot contain '@'.");
-				return;
-			}
 
-			const user = await AuthService.register(form);
-			setUser(user);
-			navigate("/login");
-		} catch {
-			setError("Registration failed. Please try again");
+		if (form.username.includes("@")) {
+			toast.error("Username cannot contain '@'.");
+			return;
 		}
+
+		register(form, {
+			onSuccess: () => navigate("/login"),
+		});
 	};
 
 	return (
 		<div className={styles.container}>
-			<h2>Register</h2>
+			<h2 className="page-title">Register</h2>
 			<form onSubmit={handleSubmit} className={styles.formContainer}>
 				<div className={styles.inputGroup}>
 					<label htmlFor="username">Username</label>
@@ -71,9 +68,13 @@ export default function RegisterPage() {
 						required
 					/>
 				</div>
-				{error && <p className="error-message">{error}</p>}
-				<button type="submit" className={clsx("btn", styles.submitButton)}>
-					Register
+
+				<button
+					type="submit"
+					className={clsx("btn", styles.submitButton)}
+					disabled={isPending}
+				>
+					{isPending ? <SpinnerMini /> : "Register"}
 				</button>
 			</form>
 		</div>
