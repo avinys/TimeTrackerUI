@@ -35,4 +35,4 @@ export interface DeleteProjectTimeDto {
 	projectTimeId: number;
 }
 
-export type SortBy = "date-desc" | "date-asc" | "duration-desc" | "duration-asc";
+export type SortByProjectTimes = "date-desc" | "date-asc" | "duration-desc" | "duration-asc";

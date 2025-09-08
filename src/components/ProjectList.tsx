@@ -1,16 +1,45 @@
 import { format } from "date-fns";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useGetProjects } from "../hooks/useGetProjects";
 import styles from "../styles/projectList.module.css";
-import type { ProjectDto } from "../types/project.types";
+import type { ProjectDto, SortByProjects as SortBy } from "../types/project.types";
 import ConfirmDeleteProject from "./ConfirmDeleteProject";
 import Modal from "./Modal";
 import Spinner from "./Spinner";
+import ProjectListSearchOptions from "./ProjectListSearchOptions";
 
 export default function ProjectList() {
 	const { isPending, projects } = useGetProjects();
 	const [projectToDelete, setProjectToDelete] = useState<ProjectDto | null>(null);
+	const [search, setSearch] = useState<string>("");
+	const [sortBy, setSortBy] = useState<SortBy>("date-desc");
+
+	const sortedProjects = useMemo(() => {
+		const projectList = [...(projects ?? [])];
+		switch (sortBy) {
+			case "name-asc":
+				return projectList?.sort((a, b) =>
+					a.name.localeCompare(b.name, "en", { sensitivity: "base" })
+				);
+			case "name-desc":
+				return projectList?.sort((a, b) =>
+					b.name.localeCompare(a.name, "en", { sensitivity: "base" })
+				);
+			case "date-asc":
+				return projectList?.sort(
+					(a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+				);
+			default:
+				return projectList?.sort(
+					(a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+				);
+		}
+	}, [sortBy, projects]);
+
+	const filteredProjects = useMemo(() => {
+		return sortedProjects?.filter((p) => p.name.toLocaleLowerCase().startsWith(search));
+	}, [search, sortedProjects]);
 
 	if (isPending) return <Spinner />;
 
@@ -25,6 +54,12 @@ export default function ProjectList() {
 
 	return (
 		<Modal>
+			<ProjectListSearchOptions
+				search={search}
+				setSearch={setSearch}
+				sortBy={sortBy}
+				setSortBy={setSortBy}
+			/>
 			<ul className={styles.projectList}>
 				<li className={`${styles.listRow} ${styles.listHeader}`} aria-hidden="true">
 					<p>Project Name</p>
@@ -33,7 +68,7 @@ export default function ProjectList() {
 					<div>Actions</div>
 				</li>
 
-				{projects.map((p) => (
+				{filteredProjects?.map((p) => (
 					<li key={p.id} className={`${styles.listRow} ${styles.listItem}`}>
 						<p className={styles.name}>{p.name}</p>
 						<p className={styles.date}>

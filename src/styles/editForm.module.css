@@ -73,6 +73,7 @@
 
 /* Focus state */
 .field input:focus,
+.fieldFull input:focus,
 .fieldFull textarea:focus {
 	outline: none;
 	border-color: var(--color-primary);

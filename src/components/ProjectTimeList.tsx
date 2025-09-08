@@ -3,7 +3,7 @@ import { useMemo, useState, type ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { useGetProjectTimes } from "../hooks/useGetProjectTimes";
 import styles from "../styles/projectTimeList.module.css"; // <-- new module
-import type { ProjectTimeDto, SortBy } from "../types/projectTime.types";
+import type { ProjectTimeDto, SortByProjectTimes as SortBy } from "../types/projectTime.types";
 import { formatTime } from "../util/formatTime";
 import Spinner from "./Spinner";
 import clsx from "clsx";
