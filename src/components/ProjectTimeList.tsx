@@ -107,7 +107,7 @@ export default function ProjectTimeList({ rows, cost, renderActions }: ProjectTi
 										? formatTime(differenceInSeconds(p.endTime, p.startTime))
 										: "--"}
 								</p>
-								<p className={styles.comment}>
+								<div className={styles.comment}>
 									{p.comment ? (
 										showCommentExpander ? (
 											<TextExpander text={p.comment} />
@@ -117,7 +117,7 @@ export default function ProjectTimeList({ rows, cost, renderActions }: ProjectTi
 									) : (
 										"—"
 									)}
-								</p>
+								</div>
 								{cost != undefined && p.endTime && (
 									<p className={styles.cost}>
 										{(
