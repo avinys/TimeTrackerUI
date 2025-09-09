@@ -5,10 +5,11 @@ import SpinnerMini from "../components/SpinnerMini";
 import { useLogin } from "../hooks/useLogin";
 import styles from "../styles/form.module.css";
 import type { LoginDto } from "../types/auth.types";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
-	const { login, isPending, isError } = useLogin();
+	const { login, isPending } = useLogin();
 
 	const [form, setForm] = useState<LoginDto>({ identifier: "", password: "" });
 
@@ -59,6 +60,8 @@ export default function LoginPage() {
 					{isPending ? <SpinnerMini /> : "Log In"}
 				</button>
 			</form>
+
+			<GoogleSignInButton onSuccess={() => navigate("/dashboard")} />
 		</div>
 	);
 }

@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { SortBy } from "../types/projectTime.types";
+import type { SortByProjectTimes as SortBy } from "../types/projectTime.types";
 import styles from "../styles/projectTimeListOptions.module.css";
 
 type ProjectTimeListOptionsProps = {
