@@ -7,7 +7,6 @@ import SpinnerMini from "./SpinnerMini";
 export default function Header() {
 	const { user } = useAuth();
 	const { isPending, logout } = useLogout();
-	console.log("Header: ", user);
 
 	const handleLogout = async () => {
 		logout();
