@@ -1,13 +1,11 @@
-// src/pages/ConfirmEmailPage.tsx
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { useConfirmEmail } from "../hooks/useConfirmEmail";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useConfirmEmail } from "../hooks/useConfirmEmail";
 import styles from "../styles/emailConfirm.module.css";
 
 export default function ConfirmEmailPage() {
 	const [sp] = useSearchParams();
-	const navigate = useNavigate();
 	const userId = sp.get("userId");
 	const token = sp.get("token");
 
@@ -20,15 +18,8 @@ export default function ConfirmEmailPage() {
 			return;
 		}
 
-		confirmEmail(
-			{ userId: Number(userId), token },
-			{
-				onSuccess: () => navigate("/confirm/success"),
-				onError: () => setMessage("Invalid or expired confirmation link."),
-			}
-		);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [userId, token]);
+		confirmEmail({ userId: Number(userId), token });
+	}, [userId, token, confirmEmail]);
 
 	return (
 		<div className={clsx("container", styles.container)}>
