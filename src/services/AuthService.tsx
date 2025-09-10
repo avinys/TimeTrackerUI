@@ -26,8 +26,17 @@ export const AuthService = {
 		const response = await API.get("auth/me", { withCredentials: true });
 		return response.data;
 	},
+
 	async loginWithGoogle({ idToken }: LoginWithGoogleDto): Promise<UserDto> {
 		const response = await API.post("auth/google", { idToken });
 		return response.data;
+	},
+
+	async resendConfirmation(email: string): Promise<void> {
+		await API.post("auth/resend-confirmation", { email });
+	},
+
+	async confirmEmail(userId: number, token: string): Promise<void> {
+		await API.get("auth/confirm", { params: { userId, token } });
 	},
 };

@@ -10,8 +10,8 @@ export function useRegister() {
 
 	const { mutate, isPending, isError } = useMutation({
 		mutationFn: (dto: CreateUserDto) => AuthService.register(dto),
-		onSuccess: () => {
-			navigate("/");
+		onSuccess: (user) => {
+			navigate(`/check-email?email=${encodeURIComponent(user.email)}`);
 		},
 		onError: (err) => {
 			toast.error(apiMessage(err, "Registration failed. Please try again."));
