@@ -12,6 +12,9 @@
 .field {
 	font-size: var(--fs-m);
 	margin-bottom: var(--spacing-xs);
+	white-space: normal;
+	overflow-wrap: anywhere;
+	word-break: break-word;
 }
 .fieldTitle {
 	font-weight: 700;

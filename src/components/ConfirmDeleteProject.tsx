@@ -34,16 +34,16 @@ function ConfirmDeleteProject({ project, onCloseModal }: ConfirmDeleteProjectPro
 				<ul className={styles.timeList}>
 					{projectTimes.map((pt) => (
 						<li key={pt.id} className={styles.timeItem}>
-							<span>
+							<span className={styles.field}>
 								<span className={styles.fieldTitle}>From:</span>{" "}
 								{format(pt.startTime, "yyyy-MM-dd HH:mm:ss")}
 							</span>
-							<span>
+							<span className={styles.field}>
 								<span className={styles.fieldTitle}>To:</span>{" "}
 								{pt.endTime ? format(pt.endTime, "yyyy-MM-dd HH:mm:ss") : "now"}
 							</span>
 							{pt.comment && (
-								<span>
+								<span className={styles.field}>
 									<span className={styles.fieldTitle}>Comment:</span> {pt.comment}
 								</span>
 							)}
