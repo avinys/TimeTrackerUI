@@ -3,14 +3,10 @@ import { useAuth } from "../auth/AuthContext";
 import { useLogout } from "../hooks/useLogout";
 import styles from "../styles/header.module.css";
 import SpinnerMini from "./SpinnerMini";
+import ProfileDropdown from "./ProfileDropdown";
 
 export default function Header() {
 	const { user } = useAuth();
-	const { isPending, logout } = useLogout();
-
-	const handleLogout = async () => {
-		logout();
-	};
 
 	return (
 		<header className={styles.header}>
@@ -29,14 +25,15 @@ export default function Header() {
 					</>
 				)}
 				{user && (
-					<>
-						<Link to="/dashboard" className="btn btnLink btn--md">
-							Track Time
-						</Link>
-						<button onClick={handleLogout} className="btn btnLink btn--md">
-							{isPending ? <SpinnerMini /> : "Logout"}
-						</button>
-					</>
+					// <>
+					// 	<Link to="/dashboard" className="btn btnLink btn--md">
+					// 		Track Time
+					// 	</Link>
+					// 	<button onClick={handleLogout} className="btn btnLink btn--md">
+					// 		{isPending ? <SpinnerMini /> : "Logout"}
+					// 	</button>
+					// </>
+					<ProfileDropdown />
 				)}
 			</nav>
 		</header>
