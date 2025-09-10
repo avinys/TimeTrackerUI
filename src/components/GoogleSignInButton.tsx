@@ -53,7 +53,7 @@ function GoogleSignInButton({ onSuccess }: GoogleSignInButtonProps) {
 				});
 			}
 		}
-	}, [clientId]);
+	}, [clientId, googleLogin]);
 
 	return (
 		<div style={{ marginTop: 16 }}>

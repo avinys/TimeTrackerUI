@@ -62,6 +62,10 @@ export default function LoginPage() {
 			</form>
 
 			<GoogleSignInButton onSuccess={() => navigate("/dashboard")} />
+			<p className="note">
+				* The Google Sign in is stil in Testing mode. If you would like to access the
+				application through Google, contact me.
+			</p>
 		</div>
 	);
 }

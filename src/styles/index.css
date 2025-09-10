@@ -32,6 +32,12 @@ h3 {
 	margin-block-start: 0;
 }
 
+.note {
+	font-size: var(--fs-s);
+	margin: var(--spacing-s);
+	color: var(--color-muted);
+}
+
 /* =========
    Base
    ========= */
