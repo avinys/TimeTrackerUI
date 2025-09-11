@@ -5,10 +5,12 @@ import { UserIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import styles from "../styles/profileDropdown.module.css";
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileDropdown() {
 	const { user } = useAuth();
 	const { logout } = useLogout();
+	const navigate = useNavigate();
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 
@@ -55,7 +57,11 @@ export default function ProfileDropdown() {
 
 			{open && (
 				<div className={styles.menu} role="menu" aria-labelledby="profile-trigger">
-					<button className={styles.menuItem} role="menuitem">
+					<button
+						className={styles.menuItem}
+						role="menuitem"
+						onClick={() => navigate("/me/password")}
+					>
 						Change Password
 					</button>
 					<hr className={styles.sep} />

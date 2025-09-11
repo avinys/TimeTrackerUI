@@ -1,14 +1,14 @@
 // import axios from "../api/axios";
 import API from "../api/axios";
 import type {
-	LoginDto,
+	ConfirmEmailDto,
 	CreateUserDto,
-	UserDto,
+	ForgotPasswordDto,
+	LoginDto,
 	LoginWithGoogleDto,
 	ResendConfirmationDto,
 	ResetPasswordDto,
-	ForgotPasswordDto,
-	ConfirmEmailDto,
+	UserDto,
 } from "../types/auth.types";
 
 // const API = axios.create({

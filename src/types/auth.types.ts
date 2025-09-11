@@ -44,3 +44,8 @@ export interface ResetPasswordDto {
 	token: string;
 	newPassword: string;
 }
+
+export interface ChangePasswordDto {
+	currentPassword: string;
+	newPassword: string;
+}
