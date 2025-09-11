@@ -25,3 +25,22 @@ export interface AuthContextType {
 export interface LoginWithGoogleDto {
 	idToken: string;
 }
+
+export interface ResendConfirmationDto {
+	email: string;
+}
+
+export interface ConfirmEmailDto {
+	userId: number;
+	token: string;
+}
+
+export interface ForgotPasswordDto {
+	email: string;
+}
+
+export interface ResetPasswordDto {
+	userId: number;
+	token: string;
+	newPassword: string;
+}

@@ -1,6 +1,15 @@
 // import axios from "../api/axios";
 import API from "../api/axios";
-import type { LoginDto, CreateUserDto, UserDto, LoginWithGoogleDto } from "../types/auth.types";
+import type {
+	LoginDto,
+	CreateUserDto,
+	UserDto,
+	LoginWithGoogleDto,
+	ResendConfirmationDto,
+	ResetPasswordDto,
+	ForgotPasswordDto,
+	ConfirmEmailDto,
+} from "../types/auth.types";
 
 // const API = axios.create({
 //   baseURL: 'https://localhost:7129/api',
@@ -27,16 +36,26 @@ export const AuthService = {
 		return response.data;
 	},
 
-	async loginWithGoogle({ idToken }: LoginWithGoogleDto): Promise<UserDto> {
-		const response = await API.post("auth/google", { idToken });
+	async loginWithGoogle(dto: LoginWithGoogleDto): Promise<UserDto> {
+		const response = await API.post("auth/google", dto);
 		return response.data;
 	},
 
-	async resendConfirmation(email: string): Promise<void> {
-		await API.post("auth/resend-confirmation", { email });
+	async resendConfirmation(dto: ResendConfirmationDto): Promise<void> {
+		await API.post("auth/resend-confirmation", dto);
 	},
 
-	async confirmEmail(userId: number, token: string): Promise<void> {
-		await API.get("auth/confirm", { params: { userId, token } });
+	async confirmEmail(dto: ConfirmEmailDto): Promise<void> {
+		await API.get("auth/confirm", { params: dto });
+	},
+
+	async forgotPassword(dto: ForgotPasswordDto) {
+		const response = await API.post("auth/password/forgot", dto);
+		return response.data;
+	},
+
+	async resetPassword(dto: ResetPasswordDto) {
+		const response = await API.post("auth/password/reset", dto);
+		return response.data;
 	},
 };

@@ -86,6 +86,25 @@
 	transform: translateY(0);
 }
 
+.forgotPassword {
+	font-size: var(--fs-m);
+	color: var(--color-primary);
+}
+
+.forgotPassword:hover {
+	color: var(--color-primary-hover);
+}
+
+.passwordRow {
+	display: grid;
+	grid-template-columns: 1fr var(--spacing-l);
+	gap: var(--spacing-xs);
+	align-items: center;
+}
+.passwordRow button {
+	aspect-ratio: 1;
+}
+
 /* mobile tweaks */
 @media (max-width: 480px) {
 	.formContainer {

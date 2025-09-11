@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SpinnerMini from "../components/SpinnerMini";
 import { useLogin } from "../hooks/useLogin";
 import styles from "../styles/form.module.css";
@@ -59,6 +59,9 @@ export default function LoginPage() {
 				>
 					{isPending ? <SpinnerMini /> : "Log In"}
 				</button>
+				<Link className={styles.forgotPassword} to="/password/forgot">
+					Forgot Password?
+				</Link>
 			</form>
 
 			<GoogleSignInButton onSuccess={() => navigate("/dashboard")} />
