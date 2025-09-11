@@ -9,7 +9,17 @@ export default function Footer() {
 			<div className={styles.inner}>
 				<span className={styles.copy}>© {year} TimeTracker</span>
 				<nav className={styles.nav} aria-label="Footer">
-					<Link to="/contact" className={styles.link}>
+					<Link to="/privacy" className={styles.link}>
+						Privacy Policy
+					</Link>
+				</nav>
+				<nav className={styles.nav} aria-label="Footer">
+					<Link to="/terms" className={styles.link}>
+						Terms of Use
+					</Link>
+				</nav>
+				<nav className={styles.nav} aria-label="Footer">
+					<Link to="/contact" className={styles.contact}>
 						Contact us
 					</Link>
 				</nav>
