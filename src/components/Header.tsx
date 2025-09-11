@@ -1,16 +1,10 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
-import { useLogout } from "../hooks/useLogout";
 import styles from "../styles/header.module.css";
-import SpinnerMini from "./SpinnerMini";
+import ProfileDropdown from "./ProfileDropdown";
 
 export default function Header() {
 	const { user } = useAuth();
-	const { isPending, logout } = useLogout();
-
-	const handleLogout = async () => {
-		logout();
-	};
 
 	return (
 		<header className={styles.header}>
@@ -19,25 +13,16 @@ export default function Header() {
 					TimeTracker
 				</Link>
 				{!user && (
-					<>
+					<div>
 						<Link to="/login" className="btn btnLink btn--md">
 							Login
 						</Link>
 						<Link to="/register" className="btn btnLink btn--md">
 							Register
 						</Link>
-					</>
+					</div>
 				)}
-				{user && (
-					<>
-						<Link to="/dashboard" className="btn btnLink btn--md">
-							Track Time
-						</Link>
-						<button onClick={handleLogout} className="btn btnLink btn--md">
-							{isPending ? <SpinnerMini /> : "Logout"}
-						</button>
-					</>
-				)}
+				{user && <ProfileDropdown />}
 			</nav>
 		</header>
 	);

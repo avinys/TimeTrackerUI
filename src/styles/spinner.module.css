@@ -13,7 +13,7 @@
 	width: 20px;
 	aspect-ratio: 1;
 	border-radius: 50%;
-	border: 2px solid var(--color-primary);
+	border: 2px solid var(--color-background);
 	border-right-color: transparent;
 	animation: rotate 0.5s infinite linear;
 }

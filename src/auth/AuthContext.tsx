@@ -8,12 +8,16 @@ import type { AuthContextType, UserDto } from "../types/auth.types";
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-	const { data, isPending, isError } = useGetMe();
+	const { data, isPending } = useGetMe();
 	const queryClient = useQueryClient();
 
 	const setUser = (u: UserDto | null) => {
 		if (u) queryClient.setQueryData(["auth", "me"], u);
-		else queryClient.removeQueries({ queryKey: ["auth", "me"] });
+		else {
+			queryClient.cancelQueries({ queryKey: ["auth", "me"] });
+			queryClient.setQueryData(["auth", "me"], null); // <-- force immediate UI update
+			queryClient.invalidateQueries({ queryKey: ["auth", "me"] });
+		}
 	};
 
 	if (isPending) return <Spinner />;

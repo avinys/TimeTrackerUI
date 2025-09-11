@@ -1,0 +1,11 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-m);
+	width: 90%;
+	margin: var(--spacing-m) auto;
+	background-color: var(--color-background-lighter);
+	border-radius: var(--radius-l);
+	box-shadow: var(--shadow-l);
+	padding: var(--spacing-xl) var(--spacing-xl);
+}

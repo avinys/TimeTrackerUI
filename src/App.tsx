@@ -5,6 +5,7 @@ import Header from "./components/Header";
 import LoadingOlay from "./components/LoadingOverlay";
 import { routes } from "./routes/app.routes";
 import "./styles/index.css";
+import Footer from "./components/Footer";
 
 export default function App() {
 	const element = useRoutes(routes);
@@ -15,7 +16,7 @@ export default function App() {
 	return (
 		<>
 			<Toaster
-				position="top-right"
+				position="top-center"
 				toastOptions={{
 					duration: 4000,
 					style: { fontSize: "14px" },
@@ -27,6 +28,7 @@ export default function App() {
 			<div className="heroBg" aria-hidden="true" />
 			<Header />
 			{element}
+			<Footer />
 		</>
 	);
 }

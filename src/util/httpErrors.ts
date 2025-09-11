@@ -15,7 +15,10 @@ function firstValidationError(err: AxiosError<ProblemDetails>) {
 	return first;
 }
 
-export function friendlyAuthError(err: unknown, ctx: "login" | "register"): string {
+export function friendlyAuthError(
+	err: unknown,
+	ctx: "login" | "register" | "Google sign-in"
+): string {
 	if (isAxiosError<ProblemDetails>(err)) {
 		const status = err.response?.status;
 

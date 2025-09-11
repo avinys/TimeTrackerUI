@@ -1,0 +1,115 @@
+/* Legal pages styled to match your global variables */
+
+.wrap {
+	max-width: var(--container-max);
+	margin: var(--spacing-l) auto;
+	padding: 0 var(--page-padding-x);
+	white-space: normal;
+	overflow-wrap: anywhere;
+	word-break: break-word;
+	hyphens: auto;
+}
+
+.paper {
+	background: var(--color-white);
+	border: var(--border);
+	border-radius: var(--radius-l);
+	box-shadow: var(--shadow-m);
+	padding: clamp(var(--spacing-m), 3.2vw, var(--spacing-xl));
+	/* override global center text just for legal content */
+	text-align: left;
+	line-height: var(--line-height);
+}
+
+/* Header */
+.header {
+	margin-bottom: var(--spacing-m);
+}
+.title {
+	font-size: clamp(1.6rem, 2.6vw, var(--fs-xl));
+	font-weight: var(--fw-bold);
+	line-height: 1.2;
+	margin: 0 0 var(--spacing-xs) 0;
+}
+.kicker {
+	color: var(--color-muted);
+	font-size: var(--fs-s);
+}
+
+/* Meta rows under header */
+.meta {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--spacing-xs);
+	margin: var(--spacing-s) 0 var(--spacing-m);
+	font-size: var(--fs-m);
+}
+.meta b {
+	color: var(--color-text-dark);
+}
+.meta a {
+	color: var(--color-primary);
+	text-decoration: none;
+}
+.meta a:hover {
+	color: var(--color-primary-hover);
+	text-decoration: underline;
+}
+
+/* Sections */
+.section {
+	margin-top: clamp(var(--spacing-m), 2.2vw, var(--spacing-l));
+}
+.section h2 {
+	display: block;
+	font-size: clamp(1.05rem, 4.2vw, 1.35rem);
+	font-weight: var(--fw-bold);
+	line-height: 1.25;
+	margin: 0 0 var(--spacing-xs) 0;
+	color: var(--color-text-dark);
+}
+.section p {
+	margin: 0 0 var(--spacing-s) 0;
+	color: var(--color-text-dark);
+}
+
+/* Lists */
+.list {
+	margin: 0;
+	padding-left: 1.25rem;
+	list-style: disc outside;
+}
+.list li {
+	margin: 6px 0;
+}
+.list li b {
+	color: var(--color-text-dark);
+}
+
+/* Inline code-ish chip */
+.code {
+	background: var(--color-background-lighter);
+	border: var(--border);
+	border-radius: var(--radius-s);
+	padding: 2px 6px;
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+	font-size: 0.92em;
+}
+
+@media (max-width: 480px) {
+	.section h2 {
+		font-size: clamp(1rem, 4vw, 1.15rem);
+	}
+}
+
+@media print {
+	.wrap {
+		margin: 0;
+		padding: 0;
+	}
+	.paper {
+		border: 0;
+		box-shadow: none;
+		border-radius: 0;
+	}
+}

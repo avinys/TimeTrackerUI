@@ -1,15 +1,16 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import SpinnerMini from "../components/SpinnerMini";
 import { useRegister } from "../hooks/useRegister";
 import styles from "../styles/form.module.css";
 import type { CreateUserDto } from "../types/auth.types";
-import SpinnerMini from "../components/SpinnerMini";
-import toast from "react-hot-toast";
+import GoogleSignInButton from "../components/GoogleSignInButton";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
-	const navigate = useNavigate();
 	const { register, isPending } = useRegister();
+	const navigate = useNavigate();
 
 	const [form, setForm] = useState<CreateUserDto>({ username: "", email: "", password: "" });
 
@@ -26,9 +27,7 @@ export default function RegisterPage() {
 			return;
 		}
 
-		register(form, {
-			onSuccess: () => navigate("/login"),
-		});
+		register(form);
 	};
 
 	return (
@@ -77,6 +76,11 @@ export default function RegisterPage() {
 					{isPending ? <SpinnerMini /> : "Register"}
 				</button>
 			</form>
+			<GoogleSignInButton onSuccess={() => navigate("/dashboard")} />
+			<p className="note">
+				* The Google Sign in is stil in Testing mode. If you would like to access the
+				application through Google, contact me.
+			</p>
 		</div>
 	);
 }

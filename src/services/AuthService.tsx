@@ -1,6 +1,15 @@
 // import axios from "../api/axios";
 import API from "../api/axios";
-import type { LoginDto, CreateUserDto, UserDto } from "../types/auth.types";
+import type {
+	ConfirmEmailDto,
+	CreateUserDto,
+	ForgotPasswordDto,
+	LoginDto,
+	LoginWithGoogleDto,
+	ResendConfirmationDto,
+	ResetPasswordDto,
+	UserDto,
+} from "../types/auth.types";
 
 // const API = axios.create({
 //   baseURL: 'https://localhost:7129/api',
@@ -24,6 +33,29 @@ export const AuthService = {
 
 	async getMe(): Promise<UserDto> {
 		const response = await API.get("auth/me", { withCredentials: true });
+		return response.data;
+	},
+
+	async loginWithGoogle(dto: LoginWithGoogleDto): Promise<UserDto> {
+		const response = await API.post("auth/google", dto);
+		return response.data;
+	},
+
+	async resendConfirmation(dto: ResendConfirmationDto): Promise<void> {
+		await API.post("auth/resend-confirmation", dto);
+	},
+
+	async confirmEmail(dto: ConfirmEmailDto): Promise<void> {
+		await API.get("auth/confirm", { params: dto });
+	},
+
+	async forgotPassword(dto: ForgotPasswordDto) {
+		const response = await API.post("auth/password/forgot", dto);
+		return response.data;
+	},
+
+	async resetPassword(dto: ResetPasswordDto) {
+		const response = await API.post("auth/password/reset", dto);
 		return response.data;
 	},
 };

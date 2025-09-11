@@ -1,14 +1,15 @@
 import clsx from "clsx";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SpinnerMini from "../components/SpinnerMini";
 import { useLogin } from "../hooks/useLogin";
 import styles from "../styles/form.module.css";
 import type { LoginDto } from "../types/auth.types";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 export default function LoginPage() {
 	const navigate = useNavigate();
-	const { login, isPending, isError } = useLogin();
+	const { login, isPending } = useLogin();
 
 	const [form, setForm] = useState<LoginDto>({ identifier: "", password: "" });
 
@@ -58,7 +59,16 @@ export default function LoginPage() {
 				>
 					{isPending ? <SpinnerMini /> : "Log In"}
 				</button>
+				<Link className={styles.forgotPassword} to="/password/forgot">
+					Forgot Password?
+				</Link>
 			</form>
+
+			<GoogleSignInButton onSuccess={() => navigate("/dashboard")} />
+			<p className="note">
+				* The Google Sign in is stil in Testing mode. If you would like to access the
+				application through Google, contact me.
+			</p>
 		</div>
 	);
 }
