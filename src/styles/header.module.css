@@ -17,13 +17,9 @@
 .navContainer {
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	gap: var(--spacing-m);
 	width: 100%;
-}
-
-/* Push the second child (first item after the logo) to the right */
-.navContainer > :nth-child(2) {
-	margin-left: auto;
 }
 
 /* Brand logo */
@@ -107,18 +103,15 @@
 /* Very small screens: allow wrapping gracefully */
 @media (max-width: 480px) {
 	.navContainer {
+		flex-direction: column;
 		justify-content: center;
+		align-items: center;
 		flex-wrap: wrap;
 		gap: var(--spacing-s);
 	}
 	.logo {
-		flex: 1 1 100%;
 		text-align: center;
 		margin: 0;
-	}
-	/* stop pushing items to the right on mobile */
-	.navContainer > :nth-child(2) {
-		margin-left: 0;
 	}
 	.navLink,
 	.navButton {

@@ -13,14 +13,14 @@ export default function Header() {
 					TimeTracker
 				</Link>
 				{!user && (
-					<>
+					<div>
 						<Link to="/login" className="btn btnLink btn--md">
 							Login
 						</Link>
 						<Link to="/register" className="btn btnLink btn--md">
 							Register
 						</Link>
-					</>
+					</div>
 				)}
 				{user && <ProfileDropdown />}
 			</nav>

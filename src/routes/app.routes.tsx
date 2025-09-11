@@ -7,10 +7,12 @@ import { HomeRedirect } from "./HomeRedirect";
 import NotFoundPage from "../pages/NotFoundPage";
 import Unauthorized from "../pages/UnauthorizedPage";
 import { userRoutes } from "./user.routes";
+import ContactUsPage from "../pages/ContactUsPage";
 
 export const routes: RouteObject[] = [
 	{ path: "/", element: <HomeRedirect /> },
 	{ path: "/unauthorized", element: <Unauthorized /> },
+	{ path: "/contact", element: <ContactUsPage /> },
 	...authRoutes,
 	...projectRoutes,
 	...userRoutes,

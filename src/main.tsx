@@ -7,6 +7,7 @@ import { AuthProvider } from "./auth/AuthContext";
 import { ProjectTimesProvider } from "./context/ProjectTimesContext.tsx";
 import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import "@fontsource-variable/inter";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
