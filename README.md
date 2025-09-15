@@ -5,7 +5,7 @@ Frontend React app for the TimeTracker application. Provides user registration &
 API part here: https://github.com/avinys/TimeTrackerAPI
 
 ## Technologies
-- React 18 + TypseScript + Vite
+- React 18 + TypeScript + Vite
 - React Router for routing
 - TanStack Query for data fetching & caching
 - Axios for API requests
