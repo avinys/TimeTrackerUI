@@ -1,147 +1,181 @@
 .projectList {
-	--col-name: 2fr;
-	--col-date: 1.4fr;
-	--col-state: 1fr;
-	--col-actions: 180px;
+  --col-name: 2fr;
+  --col-date: 1.4fr;
+  --col-state: 1fr;
+  --col-actions: 270px;
 }
 
 /* List container */
 .projectList {
-	background: var(--color-background-lighter);
-	border: 1px solid var(--color-secondary-hover);
-	border-radius: var(--radius-m);
-	box-shadow: var(--shadow-m);
-	list-style: none;
-	padding: var(--spacing-l);
-	width: 100%;
+  background: var(--color-background-lighter);
+  border: 1px solid var(--color-secondary-hover);
+  border-radius: var(--radius-m);
+  box-shadow: var(--shadow-m);
+  list-style: none;
+  padding: var(--spacing-l);
+  width: 100%;
 }
 
 /* Header + rows share grid skeleton */
 .listRow {
-	display: grid;
-	grid-template-columns: var(--col-name) var(--col-date) var(--col-state) var(--col-actions);
-	align-items: center;
-	column-gap: var(--spacing-m);
+  display: grid;
+  grid-template-columns: var(--col-name) var(--col-date) var(--col-state) var(--col-actions);
+  align-items: center;
+  column-gap: var(--spacing-m);
 }
 
 .listHeader,
 .listItem {
-	padding-inline: var(--spacing-m);
+  padding-inline: var(--spacing-m);
 }
 
 /* Header */
 .listHeader {
-	padding: 0 var(--spacing-m) var(--spacing-s);
-	margin-bottom: var(--spacing-s);
-	border-bottom: 1px solid var(--color-secondary-hover);
-	color: var(--color-text-dark);
-	font-weight: 700;
+  padding: 0 var(--spacing-m) var(--spacing-s);
+  margin-bottom: var(--spacing-s);
+  border-bottom: 1px solid var(--color-secondary-hover);
+  color: var(--color-text-dark);
+  font-weight: 700;
 }
 
 /* Row card */
+.listItemContainer {
+  position: relative;
+  width: 100%;
+}
 .listItem {
-	background: var(--color-background);
-	border: 1px solid var(--color-background-lighter);
-	border-radius: var(--radius-m);
-	padding-block: var(--spacing-m);
-	box-shadow: var(--shadow-s);
-	margin-block: var(--spacing-s);
-	transition: box-shadow var(--transition-default), transform var(--transition-default);
+  background: var(--color-background);
+  border: 1px solid var(--color-background-lighter);
+  border-radius: var(--radius-m);
+  padding-block: var(--spacing-m);
+  box-shadow: var(--shadow-s);
+  margin-block: var(--spacing-s);
+  transition: box-shadow var(--transition-default), transform var(--transition-default);
 }
 .listItem:hover {
-	box-shadow: var(--shadow-m);
-	transform: translateY(-1px);
+  box-shadow: var(--shadow-m);
+  transform: translateY(-1px);
 }
 
 /* Cells */
 .name {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-	font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
 }
 .date {
-	white-space: nowrap;
-	color: var(--color-muted);
+  white-space: nowrap;
+  color: var(--color-muted);
 }
 
 /* Status chip (subtle, not screaming red/pink rows) */
 .timerRunningIndicator,
 .timerNotRunningIndicator {
-	font-weight: 600;
-	border-radius: var(--radius-m);
-	margin: 0 auto;
-	padding: 0.25rem 0.5rem;
-	width: max-content;
-	background: var(--color-background-lighter);
+  font-weight: 600;
+  border-radius: var(--radius-m);
+  margin: 0 auto;
+  padding: 0.25rem 0.5rem;
+  width: max-content;
+  background: var(--color-background-lighter);
 }
 
 .timerRunningIndicator {
-	color: var(--color-success);
+  color: var(--color-success);
 }
 .timerNotRunningIndicator {
-	color: var(--color-danger);
+  color: var(--color-danger);
 }
 
 /* Actions row: right aligned, tidy gap, no fixed widths */
 .projectActions {
-	display: inline-flex;
-	justify-content: space-around;
-	align-items: center;
-	gap: var(--spacing-s);
+  display: inline-flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: var(--spacing-s);
 }
 
 /* Empty state (if used) */
 .empty {
-	text-align: center;
-	border: 1px dashed var(--color-secondary-hover);
-	border-radius: var(--radius-m);
-	padding: var(--spacing-l);
-	background: var(--color-background-lighter);
-	color: var(--color-muted);
+  text-align: center;
+  border: 1px dashed var(--color-secondary-hover);
+  border-radius: var(--radius-m);
+  padding: var(--spacing-l);
+  background: var(--color-background-lighter);
+  color: var(--color-muted);
+}
+
+.completeBtnContainer {
+  display: block;
+}
+
+.listItem.blurred {
+  filter: blur(18px);
+}
+
+.contentUI {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  column-gap: var(--spacing-m);
+}
+
+.contentUI .timerRunningIndicator {
+  background: none;
 }
 
 /* --------- Responsive --------- */
 @media (max-width: 900px) {
-	/* tighten but keep same template so it still aligns */
-	.projectList {
-		--col-name: 1.8fr;
-		--col-date: 1.2fr;
-		--col-state: 0.9fr;
-		--col-actions: 160px;
-	}
+  /* tighten but keep same template so it still aligns */
+  .projectList {
+    --col-name: 1.8fr;
+    --col-date: 1.2fr;
+    --col-state: 0.9fr;
+    --col-actions: 270px;
+  }
 }
 
 @media (max-width: 700px) {
-	/* Hide table header; rows become cards */
-	.listHeader {
-		display: none;
-	}
+  /* Hide table header; rows become cards */
+  .listHeader {
+    display: none;
+  }
 
-	.listItem {
-		grid-template-columns: 1fr;
-		row-gap: var(--spacing-xs);
-		padding: var(--spacing-m);
-	}
+  .listItem {
+    grid-template-columns: 1fr;
+    row-gap: var(--spacing-xs);
+    padding: var(--spacing-m);
+  }
 
-	.name {
-		margin-bottom: var(--spacing-xs);
-	}
-	.date {
-		order: 2;
-	}
-	.timerRunningIndicator,
-	.timerNotRunningIndicator {
-		order: 3;
-	}
+  .contentUI {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
-	.projectActions {
-		order: 4;
-		justify-content: center;
-		flex-wrap: wrap;
-		margin-top: var(--spacing-s);
-	}
-	.projectActions > * {
-		flex: 1 1 140px;
-	}
+  .name {
+    margin-bottom: var(--spacing-xs);
+  }
+  .date {
+    order: 2;
+  }
+  .timerRunningIndicator,
+  .timerNotRunningIndicator {
+    order: 3;
+  }
+
+  .projectActions {
+    order: 4;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: var(--spacing-s);
+  }
+  .projectActions > * {
+    flex: 1 1 140px;
+  }
+  .contentUI {
+    flex-direction: column;
+  }
 }

@@ -55,7 +55,7 @@ export function useResendConfirmation({
 	};
 
 	const { mutateAsync, isPending, isSuccess, isError, error, reset } = useMutation({
-		mutationFn: () => AuthService.resendConfirmation(email),
+		mutationFn: () => AuthService.resendConfirmation({ email }),
 		onSuccess: () => {
 			startCooldown();
 		},

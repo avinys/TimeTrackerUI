@@ -1,5 +1,4 @@
 import { useResendConfirmation } from "../hooks/useResendConfirmation";
-import styles from "../styles/emailConfirm.module.css";
 
 export default function ResendConfirmation({ email }: { email: string }) {
 	const { resend, isPending, cooldownSecondsLeft } = useResendConfirmation({
