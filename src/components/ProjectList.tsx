@@ -1,14 +1,12 @@
-import { format } from 'date-fns'
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useGetProjects } from '../hooks/useGetProjects'
 import styles from '../styles/projectList.module.css'
 import type { ProjectDto, SortByProjects as SortBy } from '../types/project.types'
 import ConfirmDeleteProject from './ConfirmDeleteProject'
 import Modal from './Modal'
-import Spinner from './Spinner'
-import ProjectListSearchOptions from './ProjectListSearchOptions'
 import ProjectListRow from './ProjectListRow'
+import ProjectListSearchOptions from './ProjectListSearchOptions'
+import Spinner from './Spinner'
 
 export default function ProjectList() {
   const { isPending, projects } = useGetProjects()
