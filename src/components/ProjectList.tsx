@@ -7,6 +7,7 @@ import Modal from './Modal'
 import ProjectListRow from './ProjectListRow'
 import ProjectListSearchOptions from './ProjectListSearchOptions'
 import Spinner from './Spinner'
+import Pagination from './Pagination'
 
 export default function ProjectList() {
   const { isPending, projects } = useGetProjects()
@@ -66,10 +67,11 @@ export default function ProjectList() {
           <p>State</p>
           <div>Actions</div>
         </li>
-
-        {filteredProjects?.map((p) => (
-          <ProjectListRow key={p.id} p={p} setProjectToDelete={setProjectToDelete} />
-        ))}
+        <Pagination pageSize={3}>
+          {filteredProjects?.map((p) => (
+            <ProjectListRow key={p.id} p={p} setProjectToDelete={setProjectToDelete} />
+          ))}
+        </Pagination>
       </ul>
 
       <Modal.Window name="confirm-delete-project">
