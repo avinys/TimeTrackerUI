@@ -1,47 +1,80 @@
 .container {
-	display: flex;
-	gap: var(--spacing-l);
-	align-items: center;
-	justify-content: flex-end;
-	margin-bottom: var(--spacing-s);
-	margin-right: var(--spacing-s);
-	margin-left: var(--spacing-s);
+  display: flex;
+  gap: var(--spacing-l);
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: var(--spacing-s);
+  margin-right: var(--spacing-s);
+  margin-left: var(--spacing-s);
+  position: relative;
 }
 
-.inputGroup {
-	display: flex;
-	align-items: center;
-	gap: var(--spacing-s);
+.inputGroup,
+.pageItemsInputGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-s);
 }
 
-.inputGroup input[type="checkbox"] {
-	inline-size: 1.1rem;
-	block-size: 1.1rem;
-	border-radius: var(--radius-s);
-	accent-color: var(--color-primary);
+.inputGroup input[type='checkbox'] {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+  border-radius: var(--radius-s);
+  accent-color: var(--color-primary);
 }
 
-.inputGroup select {
-	width: clamp(220px, 40vw, 320px);
-	height: 2rem;
-	padding: 0 var(--spacing-s);
-	border: 1px solid var(--color-secondary-hover);
-	border-radius: var(--radius-s);
-	font-size: var(--fs-m);
-	background: var(--color-white);
-	box-shadow: var(--shadow-s);
-	box-sizing: border-box;
+.inputGroup select,
+.pageItemsInputGroup select {
+  width: clamp(220px, 40vw, 320px);
+  height: 2rem;
+  padding: 0 var(--spacing-s);
+  border: 1px solid var(--color-secondary-hover);
+  border-radius: var(--radius-s);
+  font-size: var(--fs-m);
+  background: var(--color-white);
+  box-shadow: var(--shadow-s);
+  box-sizing: border-box;
 }
 
-@media (max-width: 760px) {
-	.container {
-		justify-content: space-around;
-	}
+.pageItemsInputGroup select {
+  width: 4rem;
+}
+.hamburgerButton {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 2rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
 }
 
-@media (max-width: 520px) {
-	.container {
-		flex-direction: column;
-		gap: var(--spacing-xs);
-	}
+.filtersMenu {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-s);
+  z-index: 3;
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  padding: var(--spacing-m);
+  border-radius: var(--radius-m);
+  /* border: 1px solid var(--color-primary); */
+  height: auto;
+  width: auto;
+}
+
+.filtersMenu.open {
+  display: flex;
+}
+
+.bar {
+  width: 1.5rem;
+  height: 2px;
+  background: var(--color-primary);
 }
