@@ -14,6 +14,8 @@ export default function ProjectList() {
   const [projectToDelete, setProjectToDelete] = useState<ProjectDto | null>(null)
   const [search, setSearch] = useState<string>('')
   const [sortBy, setSortBy] = useState<SortBy>('date-desc')
+  const [showCompleted, setShowCompleted] = useState<boolean>(false)
+  const [pageItems, setPageItems] = useState<number>(10)
 
   const sortedProjects = useMemo(() => {
     const projectList = [...(projects ?? [])]
@@ -38,8 +40,10 @@ export default function ProjectList() {
   }, [sortBy, projects])
 
   const filteredProjects = useMemo(() => {
-    return sortedProjects?.filter((p) => p.name.toLocaleLowerCase().startsWith(search))
-  }, [search, sortedProjects])
+    return sortedProjects
+      ?.filter((p) => !p.isCompleted || showCompleted)
+      .filter((p) => p.name.toLocaleLowerCase().startsWith(search))
+  }, [search, sortedProjects, showCompleted])
 
   if (isPending) return <Spinner />
 
@@ -59,6 +63,10 @@ export default function ProjectList() {
         setSearch={setSearch}
         sortBy={sortBy}
         setSortBy={setSortBy}
+        showCompleted={showCompleted}
+        setShowCompleted={setShowCompleted}
+        pageItems={pageItems}
+        setPageItems={setPageItems}
       />
       <ul className={styles.projectList}>
         <li className={`${styles.listRow} ${styles.listHeader}`} aria-hidden="true">
@@ -67,7 +75,7 @@ export default function ProjectList() {
           <p>State</p>
           <div>Actions</div>
         </li>
-        <Pagination pageSize={3}>
+        <Pagination pageSize={pageItems}>
           {filteredProjects?.map((p) => (
             <ProjectListRow key={p.id} p={p} setProjectToDelete={setProjectToDelete} />
           ))}
