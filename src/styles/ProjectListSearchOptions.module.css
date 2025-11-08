@@ -1,72 +1,120 @@
 .container {
-	display: grid;
-	grid-template-columns: 1fr clamp(290px, 40vw, 390px);
-	gap: var(--spacing-l);
-	align-items: center;
-	margin-bottom: var(--spacing-s);
-	margin-right: var(--spacing-s);
-	margin-left: var(--spacing-s);
+  display: grid;
+  grid-template-columns: 1fr 2rem;
+  gap: var(--spacing-l);
+  align-items: center;
+  margin-bottom: var(--spacing-s);
+  margin-right: var(--spacing-s);
+  margin-left: var(--spacing-s);
+  position: relative;
 }
 
 .searchInputGroup,
-.sortInputGroup {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: var(--spacing-s);
+.sortInputGroup,
+.pageItemsInputGroup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-s);
 }
 
 .searchInputGroup {
-	justify-content: flex-start;
+  justify-content: flex-start;
 }
 
-.sortInputGroup select {
-	width: clamp(220px, 40vw, 320px);
-	height: 2rem;
-	padding: 0 var(--spacing-s);
-	border: 1px solid var(--color-secondary-hover);
-	border-radius: var(--radius-s);
-	font-size: var(--fs-m);
-	background: var(--color-white);
-	box-shadow: var(--shadow-s);
-	box-sizing: border-box;
+.sortInputGroup select,
+.pageItemsInputGroup select {
+  width: 12rem;
+  height: 2rem;
+  padding: 0 var(--spacing-s);
+  border: 1px solid var(--color-secondary-hover);
+  border-radius: var(--radius-s);
+  font-size: var(--fs-m);
+  background: var(--color-white);
+  box-shadow: var(--shadow-s);
+  box-sizing: border-box;
+}
+
+.pageItemsInputGroup select {
+  width: 4rem;
 }
 
 .sortLabel {
-	min-width: 60px;
+  min-width: 60px;
 }
 
 .searchInput {
-	width: 100%;
-	max-width: 50rem;
-	height: 2rem;
-	padding: var(--spacing-s);
-	font: 400 var(--fs-m) var(--font-family);
-	color: var(--color-text-dark);
-	background: var(--color-white);
-	border: 1px solid var(--color-secondary-hover);
-	border-radius: var(--radius-s);
-	box-shadow: var(--shadow-s);
-	box-sizing: border-box; /* include padding in width */
-	transition: border-color var(--transition-default), box-shadow var(--transition-default);
+  width: 100%;
+  max-width: 50rem;
+  height: 2rem;
+  padding: var(--spacing-s);
+  font: 400 var(--fs-m) var(--font-family);
+  color: var(--color-text-dark);
+  background: var(--color-white);
+  border: 1px solid var(--color-secondary-hover);
+  border-radius: var(--radius-s);
+  box-shadow: var(--shadow-s);
+  box-sizing: border-box; /* include padding in width */
+  transition: border-color var(--transition-default), box-shadow var(--transition-default);
 }
 
 .searchInput:focus {
-	outline: none;
-	border-color: var(--color-primary);
-	box-shadow: 0 0 0 3px rgba(187, 62, 0, 0.2);
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(187, 62, 0, 0.2);
 }
 
-@media (max-width: 650px) {
-	.container {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		flex-direction: column-reverse;
-		gap: var(--spacing-xs);
-	}
+.showCompletedInput {
+  height: 1.5rem;
+  width: 1.5rem;
+  border-radius: 10px;
+}
 
-	.searchInputGroup {
-		width: 100%;
-	}
+.showCompletedInputGroup {
+  max-width: 10rem;
+  display: flex;
+  gap: var(--spacing-s);
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+.hamburgerButton {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 2rem;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.filtersMenu {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-s);
+  z-index: 3;
+  position: absolute;
+  top: 2.5rem;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(8px);
+  padding: var(--spacing-m);
+  border-radius: var(--radius-m);
+  /* border: 1px solid var(--color-primary); */
+  height: auto;
+  width: auto;
+}
+
+.filtersMenu.open {
+  display: flex;
+}
+
+.bar {
+  width: 1.5rem;
+  height: 2px;
+  background: var(--color-primary);
 }
