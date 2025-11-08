@@ -46,6 +46,7 @@ body {
 .container {
   margin: var(--spacing-l) auto;
   max-width: 1440px;
+  width: 90%;
 }
 
 h1,
